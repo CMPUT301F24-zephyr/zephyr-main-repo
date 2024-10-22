@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="backgroundButton">#493971</color>
     <color name="backgroundColor">#11172A</color>
+    <color name="NavigationBar">#70648E</color>
+
 </resources>
