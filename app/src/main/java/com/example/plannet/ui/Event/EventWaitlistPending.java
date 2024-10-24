@@ -12,10 +12,14 @@ public class EventWaitlistPending {
     }
 
     public void addEntrant(Entrant entrant) {
-        this.waitlistEntrants.add(entrant);
+        if (entrant != null) {
+            this.waitlistEntrants.add(entrant);
+        }
     }
 
     public void removeEntrant(Entrant entrant) {
-        this.waitlistEntrants.remove(entrant);
+        if (entrant != null) {
+            this.waitlistEntrants.remove(entrant);
+        }
     }
 }
