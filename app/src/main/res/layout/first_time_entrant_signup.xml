@@ -6,11 +6,12 @@
     android:layout_height="match_parent"
     android:background="@color/backgroundColor">
 
+
     <ImageView
         android:id="@+id/imageView3"
-        android:layout_width="540dp"
-        android:layout_height="926dp"
-        android:layout_marginTop="76dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/SignUp"
@@ -20,140 +21,217 @@
         android:id="@+id/SignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="104dp"
+        android:layout_marginTop="56dp"
+        android:fontFamily="@font/poppins"
         android:text="Sign Up"
         android:textColor="@color/white"
         android:textSize="50sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <EditText
         android:id="@+id/first_name_edittext"
-        android:layout_width="209dp"
-        android:layout_height="64dp"
+        android:layout_width="200dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="27dp"
+        android:layout_marginEnd="13dp"
         android:backgroundTint="#000000"
         android:hint="First Name"
         android:importantForAccessibility="yes"
         android:inputType="textPersonName"
         android:padding="12dp"
         android:textColor="#000000"
-        android:textSize="20sp"
-        tools:layout_editor_absoluteX="296dp"
-        tools:layout_editor_absoluteY="281dp" />
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/imageView3"
+        app:layout_constraintTop_toTopOf="@+id/imageView3" />
 
     <TextView
         android:id="@+id/text_first_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="20dp"
         android:text="First Name:"
         android:textColor="@color/white"
-        android:textSize="23sp"
-        tools:layout_editor_absoluteX="156dp"
-        tools:layout_editor_absoluteY="299dp" />
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/first_name_edittext"
+        app:layout_constraintTop_toTopOf="@+id/imageView3" />
 
     <TextView
         android:id="@+id/text_last_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="20dp"
         android:text="Last Name:"
         android:textColor="@color/white"
-        android:textSize="23sp"
-        tools:layout_editor_absoluteX="157dp"
-        tools:layout_editor_absoluteY="387dp" />
-
-    <EditText
-        android:id="@+id/last_name_edittext"
-        android:layout_width="209dp"
-        android:layout_height="64dp"
-        android:backgroundTint="#000000"
-        android:hint="Last Name"
-        android:importantForAccessibility="yes"
-        android:inputType="textPersonName"
-        android:padding="12dp"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        tools:layout_editor_absoluteX="297dp"
-        tools:layout_editor_absoluteY="369dp" />
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/last_name_edittext"
+        app:layout_constraintTop_toBottomOf="@+id/text_first_name" />
 
     <EditText
         android:id="@+id/phone_edittext"
-        android:layout_width="209dp"
-        android:layout_height="64dp"
+        android:layout_width="200dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="148dp"
+        android:layout_marginEnd="12dp"
         android:backgroundTint="#000000"
         android:hint="Phone Number"
         android:importantForAccessibility="yes"
         android:inputType="textPersonName"
         android:padding="12dp"
         android:textColor="#000000"
-        android:textSize="20sp"
-        tools:layout_editor_absoluteX="297dp"
-        tools:layout_editor_absoluteY="457dp" />
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/imageView3"
+        app:layout_constraintTop_toTopOf="@+id/imageView3" />
 
     <TextView
         android:id="@+id/text_phone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="20dp"
         android:text="Phone:"
         android:textColor="@color/white"
-        android:textSize="23sp"
-        tools:layout_editor_absoluteX="157dp"
-        tools:layout_editor_absoluteY="475dp" />
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/phone_edittext"
+        app:layout_constraintTop_toBottomOf="@+id/text_last_name" />
+
+    <TextView
+        android:id="@+id/text_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="20dp"
+        android:text="Email:"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/email_edittext"
+        app:layout_constraintTop_toBottomOf="@+id/text_phone" />
 
     <EditText
         android:id="@+id/email_edittext"
-        android:layout_width="209dp"
-        android:layout_height="64dp"
+        android:layout_width="200dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="204dp"
+        android:layout_marginEnd="12dp"
         android:backgroundTint="#000000"
         android:hint="\@email"
         android:importantForAccessibility="yes"
         android:inputType="textPersonName"
         android:padding="12dp"
         android:textColor="#000000"
-        android:textSize="20sp"
-        tools:layout_editor_absoluteX="297dp"
-        tools:layout_editor_absoluteY="548dp" />
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/imageView3"
+        app:layout_constraintTop_toTopOf="@+id/imageView3" />
 
     <TextView
-        android:id="@+id/text_email"
+        android:id="@+id/text_locationservices"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Email:"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="36dp"
+        android:fontFamily="@font/poppins"
+        android:text="Location Services:"
         android:textColor="@color/white"
-        android:textSize="23sp"
-        tools:layout_editor_absoluteX="157dp"
-        tools:layout_editor_absoluteY="566dp" />
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/button_locationserv"
+        app:layout_constraintHorizontal_bias="0.15"
+        app:layout_constraintStart_toStartOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/text_email" />
+
+    <Button
+        android:id="@+id/button_locationserv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="12dp"
+        android:text="Get Location"
+        app:layout_constraintEnd_toEndOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/email_edittext" />
+
+    <TextView
+        android:id="@+id/textView2_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/poppins"
+        android:text="*Some events may require your location"
+        app:layout_constraintStart_toStartOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/text_locationservices" />
 
     <ImageView
         android:id="@+id/imageView4"
-        android:layout_width="490dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/line_separator"
-        tools:layout_editor_absoluteX="155dp"
-        tools:layout_editor_absoluteY="653dp" />
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintEnd_toEndOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/textView2_location"
+        app:srcCompat="@drawable/line_separator" />
 
     <TextView
         android:id="@+id/text_addprofilepic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginBottom="180dp"
         android:fontFamily="@font/poppins"
         android:text="Add a profile picture"
         android:textColor="@color/white"
-        android:textSize="25sp"
-        tools:layout_editor_absoluteX="271dp"
-        tools:layout_editor_absoluteY="844dp" />
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+        app:layout_constraintStart_toStartOf="@+id/imageView3" />
 
-    <TextView
-        android:id="@+id/text_locationservices"
-        android:layout_width="450dp"
-        android:layout_height="82dp"
+    <EditText
+        android:id="@+id/last_name_edittext"
+        android:layout_width="200dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="88dp"
+        android:layout_marginEnd="12dp"
+        android:backgroundTint="#000000"
+        android:hint="Last Name"
+        android:importantForAccessibility="yes"
+        android:inputType="textPersonName"
+        android:padding="12dp"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/imageView3"
+        app:layout_constraintTop_toTopOf="@+id/imageView3" />
+
+    <Button
+        android:id="@+id/button_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="12dp"
+        android:text="Back"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+        app:layout_constraintStart_toStartOf="@+id/imageView3" />
+
+    <Button
+        android:id="@+id/button_continue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="12dp"
         android:fontFamily="@font/poppins"
-        android:text="Some events may require location\nservices. Accept?"
-        android:textColor="@color/white"
-        android:textSize="25sp"
-        tools:layout_editor_absoluteX="175dp"
-        tools:layout_editor_absoluteY="679dp" />
+        android:text="Continue"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
+        app:layout_constraintEnd_toEndOf="@+id/imageView3" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="88dp"
+        android:layout_height="85dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="116dp"
+        app:layout_constraintEnd_toEndOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/text_addprofilepic"
+        app:srcCompat="@drawable/sign_up_avatar2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
