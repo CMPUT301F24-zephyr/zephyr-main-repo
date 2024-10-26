@@ -11,8 +11,6 @@ public class OrganizerCreatedEvents {
         this.eventNames = new ArrayList<>();
     }
 
-    // Add/remove an event
-    public void addEvent(String eventName) {
-        eventNames.add(eventName);
-    }
+    // Event class should call this class to add the eventname/eventID
+    // into eventNames list
 }
