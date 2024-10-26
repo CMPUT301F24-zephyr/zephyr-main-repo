@@ -1,31 +1,41 @@
 package com.example.plannet.ui.Event;
 
+import android.media.Image;
+
+import java.util.Date;
+
 public class Event {
     private String eventName;
-    private String imageURL;
+    private Image image;
     private int price;
     private int maxEntrants;
     // we can add a condition in MainActivity or another class where if
     // limitWaitlist != 0, we choose that number instead for max waitlist
     private int limitWaitlist = 0; // default value
 
+    private Date eventDate;
+    private Date registrationDateDeadline;
+    private Date registrationStartDate;
     private String description;
     private boolean geolocation;
     private int facilityID;
 
-
-    Event(String eventName, String imageURL, int price, int maxEntrants,
-          int limitWaitlist, String description, boolean geolocation, int facilityID) {
-
+    // Constructor
+    public Event(String eventName, Image image, int price, int maxEntrants,
+                 int limitWaitlist, Date eventDate, Date registrationDateDeadline,
+                 Date registrationStartDate, String description, boolean geolocation,
+                 int facilityID) {
         this.eventName = eventName;
-        this.imageURL = imageURL;
+        this.image = image;
         this.price = price;
         this.maxEntrants = maxEntrants;
         this.limitWaitlist = limitWaitlist;
+        this.eventDate = eventDate;
+        this.registrationDateDeadline = registrationDateDeadline;
+        this.registrationStartDate = registrationStartDate;
         this.description = description;
         this.geolocation = geolocation;
         this.facilityID = facilityID;
-
     }
 
     public String getEventName() {
@@ -36,12 +46,12 @@ public class Event {
         this.eventName = eventName;
     }
 
-    public String getImageURL() {
-        return imageURL;
+    public Image getImage() {
+        return image;
     }
 
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
+    public void setImage(Image image) {
+        this.image = image;
     }
 
     public int getPrice() {
@@ -66,6 +76,30 @@ public class Event {
 
     public void setLimitWaitlist(int limitWaitlist) {
         this.limitWaitlist = limitWaitlist;
+    }
+
+    public Date getEventDate() {
+        return eventDate;
+    }
+
+    public void setEventDate(Date eventDate) {
+        this.eventDate = eventDate;
+    }
+
+    public Date getRegistrationDateDeadline() {
+        return registrationDateDeadline;
+    }
+
+    public void setRegistrationDateDeadline(Date registrationDateDeadline) {
+        this.registrationDateDeadline = registrationDateDeadline;
+    }
+
+    public Date getRegistrationStartDate() {
+        return registrationStartDate;
+    }
+
+    public void setRegistrationStartDate(Date registrationStartDate) {
+        this.registrationStartDate = registrationStartDate;
     }
 
     public String getDescription() {
