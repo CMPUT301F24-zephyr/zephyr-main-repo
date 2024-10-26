@@ -64,17 +64,4 @@ public class FirebaseConnector {
         return eventRef.addSnapshotListener(listener);
     }
 
-
-    /** This is for Events class */
-    // Add a specific event to a "events" collection using the event's ID
-    // this is essentially addData but more specific to Events
-    public void addEvent(String eventID, String name) {
-        Map<String, Object> eventData = new HashMap<>();
-        eventData.put("name", name);
-
-        db.collection("events").document(eventID)
-                .set(eventData)
-                .addOnSuccessListener(aVoid -> Log.d("FirebaseConnector", "Event added successfully"))
-                .addOnFailureListener(e -> Log.e("FirebaseConnector", "Error adding event", e));
-    }
 }
