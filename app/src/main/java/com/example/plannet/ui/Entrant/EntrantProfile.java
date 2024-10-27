@@ -5,17 +5,19 @@ public class EntrantProfile {
     private String name;
     private String email;
     private String phoneNumber;
-    private String profilePictureUrl;  // URL to store the profile picture
+    private String profilePictureUrl; // URL to store the profile picture
+    private String deviceID;
 
     // Empty constructor for Firebase
     public EntrantProfile() {}
 
-    public EntrantProfile(String userId, String name, String email, String phoneNumber, String profilePictureUrl) {
+    public EntrantProfile(String userId, String name, String email, String phoneNumber, String profilePictureUrl, String deviceID) {
         this.userId = userId;
         this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.profilePictureUrl = profilePictureUrl;
+        this.deviceID = deviceID;
     }
 
     // Getters and setters
@@ -28,7 +30,7 @@ public class EntrantProfile {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public void setName(String name) {
@@ -57,5 +59,13 @@ public class EntrantProfile {
 
     public void setProfilePictureUrl(String profilePictureUrl) {
         this.profilePictureUrl = profilePictureUrl;
+    }
+
+    public void setDeviceID(String deviceID) {
+        this.deviceID = deviceID;
+    }
+
+    public String getDeviceID() {
+        return deviceID;
     }
 }

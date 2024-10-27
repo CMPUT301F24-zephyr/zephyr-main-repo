@@ -13,7 +13,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FirebaseConnector {
+public class    FirebaseConnector {
     // Connect to firebase
     // Navigate firebase database using tags provided by DBConnector classes
     private FirebaseFirestore db;

@@ -1,17 +1,17 @@
 package com.example.plannet.ui.Event;
 
-import com.example.plannet.ui.Entrant.Entrant;
+import com.example.plannet.ui.Entrant.EntrantProfile;
 
 import java.util.ArrayList;
 
 public class EventWaitlistRejected {
-    private ArrayList<Entrant> rejectedEntrants;
+    private ArrayList<EntrantProfile> rejectedEntrants;
 
     public EventWaitlistRejected() {
         this.rejectedEntrants = new ArrayList<>();
     }
 
-    public void addEntrant(Entrant entrant) {
+    public void addEntrant(EntrantProfile entrant) {
         if (entrant != null) {
             this.rejectedEntrants.add(entrant);
         }
