@@ -25,7 +25,7 @@
 
     <fragment
         android:id="@+id/navigation_events"
-        android:name="com.example.plannet.ui.notifications.NotificationsFragment"
+        android:name="com.example.plannet.ui.events.EventsFragment"
         android:label="@string/title_events"
         tools:layout="@layout/fragment_events" />
 </navigation>

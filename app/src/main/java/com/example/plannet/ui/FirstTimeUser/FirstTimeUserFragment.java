@@ -1,4 +1,4 @@
-package com.example.plannet.ui;
+package com.example.plannet.ui.FirstTimeUser;
 
 import android.os.Bundle;
 
