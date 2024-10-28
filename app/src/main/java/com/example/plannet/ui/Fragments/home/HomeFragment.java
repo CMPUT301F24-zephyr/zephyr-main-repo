@@ -1,4 +1,4 @@
-package com.example.plannet.ui.events;
+package com.example.plannet.ui.Fragments.home;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,22 +10,22 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.plannet.databinding.FragmentEventsBinding;
+import com.example.plannet.databinding.FragmentHomeBinding;
 
-public class EventsFragment extends Fragment {
+public class HomeFragment extends Fragment {
 
-    private FragmentEventsBinding binding;
+    private FragmentHomeBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        EventsViewModel eventsViewModel =
-                new ViewModelProvider(this).get(EventsViewModel.class);
+        HomeViewModel homeViewModel =
+                new ViewModelProvider(this).get(HomeViewModel.class);
 
-        binding = FragmentEventsBinding.inflate(inflater, container, false);
+        binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textEvents;
-        eventsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        final TextView textView = binding.textHome;
+        homeViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 

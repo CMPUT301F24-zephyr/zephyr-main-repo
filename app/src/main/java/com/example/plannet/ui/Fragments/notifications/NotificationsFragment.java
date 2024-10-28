@@ -1,4 +1,4 @@
-package com.example.plannet.ui.notifications;
+package com.example.plannet.ui.Fragments.notifications;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
