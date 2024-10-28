@@ -1,4 +1,4 @@
-package com.example.plannet.ui.Organizer;
+package com.example.plannet.Organizer;
 
 import java.util.ArrayList;
 import java.util.List;

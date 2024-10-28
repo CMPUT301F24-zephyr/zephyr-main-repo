@@ -1,6 +1,6 @@
-package com.example.plannet.ui.Event;
+package com.example.plannet.Event;
 
-import com.example.plannet.ui.Entrant.Entrant;
+import com.example.plannet.Entrant.Entrant;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.example.plannet.ui.Event;
+package com.example.plannet.Event;
 
 import android.media.Image;
 

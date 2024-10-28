@@ -2,7 +2,6 @@ package com.example.plannet;
 
 import android.os.Bundle;
 
-import com.example.plannet.ui.Firebase.FirebaseConnector;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,8 +11,6 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.plannet.databinding.ActivityMainBinding;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
 
@@ -21,8 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
 
-    private FirebaseConnector firebaseConnector;
-    private ListenerRegistration listenerRegistration;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-        // Initialize FirebaseConnector
-        firebaseConnector = new FirebaseConnector();
+        // Initialize db
+        db = FirebaseFirestore.getInstance();
 
 
 
