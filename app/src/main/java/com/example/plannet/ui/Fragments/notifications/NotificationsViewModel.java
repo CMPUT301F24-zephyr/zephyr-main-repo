@@ -1,4 +1,6 @@
-package com.example.plannet.ui.notifications;
+package com.example.plannet.ui.Fragments.notifications;
+
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -11,6 +13,7 @@ public class NotificationsViewModel extends ViewModel {
     public NotificationsViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is notifications fragment");
+        Log.d("NotificationsViewModel", "Text value: " + mText.getValue());
     }
 
     public LiveData<String> getText() {

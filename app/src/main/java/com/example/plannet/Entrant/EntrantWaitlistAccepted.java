@@ -1,7 +1,6 @@
-package com.example.plannet.ui.Entrant;
+package com.example.plannet.Entrant;
 
-import com.example.plannet.ui.Event.EventWaitlistAccepted;
-import com.example.plannet.ui.Event.EventWaitlistPending;
+import com.example.plannet.Event.EventWaitlistAccepted;
 
 import java.util.ArrayList;
 

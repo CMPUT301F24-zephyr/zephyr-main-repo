@@ -1,4 +1,4 @@
-package com.example.plannet.ui.Event;
+package com.example.plannet.Event;
 
 public class EventData {
     private String eventName;

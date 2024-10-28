@@ -1,4 +1,4 @@
-package com.example.plannet.ui.home;
+package com.example.plannet.ui.Fragments.home;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

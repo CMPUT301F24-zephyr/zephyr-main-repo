@@ -1,4 +1,4 @@
-package com.example.plannet.ui.Entrant;
+package com.example.plannet.Entrant;
 
 public class EntrantProfile {
     private String userId;

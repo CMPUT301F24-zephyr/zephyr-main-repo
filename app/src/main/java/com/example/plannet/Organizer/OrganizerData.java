@@ -1,4 +1,4 @@
-package com.example.plannet.ui.Organizer;
+package com.example.plannet.Organizer;
 
 public class OrganizerData {
     private String userID;

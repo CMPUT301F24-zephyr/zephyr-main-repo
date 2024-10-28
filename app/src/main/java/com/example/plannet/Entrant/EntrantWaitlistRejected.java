@@ -1,6 +1,6 @@
-package com.example.plannet.ui.Entrant;
+package com.example.plannet.Entrant;
 
-import com.example.plannet.ui.Event.EventWaitlistRejected;
+import com.example.plannet.Event.EventWaitlistRejected;
 
 import java.util.ArrayList;
 

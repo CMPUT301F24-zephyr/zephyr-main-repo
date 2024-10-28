@@ -1,4 +1,4 @@
-package com.example.plannet.ui.Admin;
+package com.example.plannet.Admin;
 
 public class AdminProfileList {
 
