@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:text="Facility: FACILITYNAME"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.05"/>
+
+    <ImageView
+        android:id="@+id/title_underline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/line_separator"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title"/>
+
+    <ImageView
+        android:id="@+id/purple_box"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.55"
+        app:srcCompat="@drawable/rectangle_long" />
+
+    <ImageView
+        android:id="@+id/line1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/purple_box"
+        app:layout_constraintStart_toStartOf="@+id/purple_box"
+        app:layout_constraintTop_toTopOf="@+id/purple_box"
+        app:layout_constraintBottom_toTopOf="@id/line2"
+        app:srcCompat="@drawable/line_separator" />
+
+    <ImageView
+        android:id="@+id/line2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/purple_box"
+        app:layout_constraintStart_toStartOf="@+id/purple_box"
+        app:layout_constraintTop_toBottomOf="@+id/line1"
+        app:layout_constraintBottom_toTopOf="@id/line3"
+        app:srcCompat="@drawable/line_separator" />
+
+    <ImageView
+        android:id="@+id/line3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/purple_box"
+        app:layout_constraintStart_toStartOf="@+id/purple_box"
+        app:layout_constraintTop_toBottomOf="@+id/line2"
+        app:layout_constraintBottom_toTopOf="@id/line4"
+        app:srcCompat="@drawable/line_separator" />
+
+    <ImageView
+        android:id="@+id/line4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/purple_box"
+        app:layout_constraintStart_toStartOf="@+id/purple_box"
+        app:layout_constraintTop_toBottomOf="@+id/line3"
+        app:layout_constraintBottom_toTopOf="@id/line5"
+        app:srcCompat="@drawable/line_separator" />
+
+    <ImageView
+        android:id="@+id/line5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/purple_box"
+        app:layout_constraintStart_toStartOf="@+id/purple_box"
+        app:layout_constraintTop_toBottomOf="@+id/line4"
+        app:layout_constraintBottom_toTopOf="@id/line6"
+        app:srcCompat="@drawable/line_separator" />
+
+    <ImageView
+        android:id="@+id/line6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/purple_box"
+        app:layout_constraintStart_toStartOf="@+id/purple_box"
+        app:layout_constraintTop_toBottomOf="@+id/line5"
+        app:layout_constraintBottom_toBottomOf="@id/purple_box"
+        app:srcCompat="@drawable/line_separator" />
+
+    <TextView
+        android:id="@+id/price_prompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:text="Price: "
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/line2"
+        app:layout_constraintEnd_toEndOf="@+id/purple_box"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toStartOf="@+id/purple_box"
+        app:layout_constraintTop_toBottomOf="@+id/line1" />
+
+    <TextView
+        android:id="@+id/name_prompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:text="Name: "
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/line1"
+        app:layout_constraintEnd_toEndOf="@+id/purple_box"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toStartOf="@+id/purple_box"
+        app:layout_constraintTop_toTopOf="@+id/purple_box" />
+
+    <EditText
+        android:id="@+id/price_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="4"
+        android:fontFamily="@font/poppins"
+        android:hint="(optional)"
+        android:backgroundTint="@color/white"
+        android:inputType="text"
+        android:textColorHint="@color/buttonGrey"
+        app:layout_constraintBottom_toTopOf="@+id/line2"
+        app:layout_constraintEnd_toEndOf="@+id/purple_box"
+        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintStart_toEndOf="@+id/price_prompt"
+        app:layout_constraintTop_toBottomOf="@+id/line1" />
+
+    <EditText
+        android:id="@+id/name_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="4"
+        android:fontFamily="@font/poppins"
+        android:hint="(optional)"
+        android:inputType="text"
+        android:textColorHint="@color/buttonGrey"
+        app:layout_constraintBottom_toTopOf="@+id/line2"
+        app:layout_constraintEnd_toEndOf="@+id/purple_box"
+        app:layout_constraintHorizontal_bias="0.931"
+        app:layout_constraintStart_toEndOf="@+id/price_prompt"
+        app:layout_constraintTop_toBottomOf="@+id/line1"
+        app:layout_constraintVertical_bias="0.0" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
