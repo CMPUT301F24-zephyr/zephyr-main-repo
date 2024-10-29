@@ -28,4 +28,13 @@
         android:name="com.example.plannet.ui.Fragments.events.EventsFragment"
         android:label="@string/title_events"
         tools:layout="@layout/fragment_events" />
+    <fragment
+        android:id="@+id/navigation_first_time_user"
+        android:name="com.example.plannet.ui.Fragments.FirstTimeUser.FirstTimeUserFragment"
+        android:label="Welcome"
+        tools:layout="@layout/fragment_first_time_user">
+<!--        <action-->
+<!--            android:id="@+id/action_firstTimeUser_to_home"-->
+<!--            app:destination="@id/navigation_home" />-->
+    </fragment>
 </navigation>
