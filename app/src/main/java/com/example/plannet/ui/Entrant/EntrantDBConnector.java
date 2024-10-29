@@ -15,6 +15,7 @@ public class EntrantDBConnector {
     public void addEntrantToWaitlist(EntrantProfile entrant, EventWaitlistPending waitlist) {
         HashMap<String, Object> data = new HashMap<>();
         data.put(entrant.getName(), entrant);
+
         //fireCon.addData("waitlists", entrant.getDeviceID(), data);
 
     }
