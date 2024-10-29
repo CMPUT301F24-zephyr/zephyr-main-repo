@@ -1,66 +1,64 @@
 package com.example.plannet.ui.Fragments.FirstTimeUser;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.example.plannet.R;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FirstTimeUserFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 public class FirstTimeUserFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public FirstTimeUserFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FirstTimeUserFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FirstTimeUserFragment newInstance(String param1, String param2) {
-        FirstTimeUserFragment fragment = new FirstTimeUserFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private FirebaseFirestore db;
+    private SharedPreferences sharedPreferences;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_first_time_user, container, false);
+
+        // Initialize Firestore and SharedPreferences
+        db = FirebaseFirestore.getInstance();
+        sharedPreferences = requireActivity().getSharedPreferences("app_preferences", Context.MODE_PRIVATE);
+        Log.d("FirstTimeUserFragment", "CHECKPOINT");
+        // Set up button click listener
+        Button getStartedButton = view.findViewById(R.id.button_welcome);
+        getStartedButton.setOnClickListener(v -> {
+            String uniqueID = UUID.randomUUID().toString();
+
+            // Save UUID to SharedPreferences
+            sharedPreferences.edit().putString("unique_id", uniqueID).apply();
+
+            // Send UUID to Firestore
+            SendUUIDtoDB(uniqueID);
+            // Send user to home fragment
+            NavController navController = Navigation.findNavController(view);
+            navController.navigate(R.id.navigation_home);
+        });
+
+        return view;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_first_time_user, container, false);
+    public void SendUUIDtoDB(String uniqueID) {
+        Map<String, Object> user = new HashMap<>();
+        user.put("UUID", uniqueID);
+
+        db.collection("users").document(uniqueID)
+                .set(user)
+                .addOnSuccessListener(aVoid -> Log.d("Firestore", "UUID successfully sent to Firebase"))
+                .addOnFailureListener(e -> Log.e("Firestore", "Error saving UUID", e));
     }
 }
