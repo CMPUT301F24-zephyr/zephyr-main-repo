@@ -12,13 +12,13 @@ public class EntrantWaitlistPending {
     }
 
     public void addWaitlist(EventWaitlistPending waitlist){
-        if (waitlist != null) {
+        if (waitlist != null && !joinedWaitLists.contains(waitlist)) {
             joinedWaitLists.add(waitlist);
         }
     }
 
     public void removeWaitlist(EventWaitlistPending waitlist){
-        if (waitlist != null) {
+        if (waitlist != null && joinedWaitLists.contains(waitlist)) {
             joinedWaitLists.remove(waitlist);
         }
     }

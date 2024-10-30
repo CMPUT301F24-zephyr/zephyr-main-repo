@@ -19,6 +19,8 @@ public class Event {
     private String description;
     private boolean geolocation;
     private int facilityID;
+    private String eventID;
+    private EventWaitlistPending eventPending;
 
     // Constructor
     public Event(String eventName, Image image, int price, int maxEntrants,
@@ -36,6 +38,22 @@ public class Event {
         this.description = description;
         this.geolocation = geolocation;
         this.facilityID = facilityID;
+        this.eventID = generateEventID();
+
+        this.eventPending = new EventWaitlistPending(this.eventID);
+
+    }
+
+    //Called whenever an event is created
+    public String generateEventID() {
+        long timestamp = System.currentTimeMillis();   //https://currentmillis.com/tutorials/system-currentTimeMillis.html
+        String EventIDName = this.eventName.replaceAll(" ", "").toLowerCase();
+        String FinalEventID = (EventIDName.length() > 10 ? EventIDName.substring(0, 10) : EventIDName) + timestamp;
+        return FinalEventID;
+    }
+
+    public String getEventID() {
+        return eventID;
     }
 
     public String getEventName() {
@@ -125,4 +143,7 @@ public class Event {
     public void setFacilityID(int facilityID) {
         this.facilityID = facilityID;
     }
+
 }
+
+
