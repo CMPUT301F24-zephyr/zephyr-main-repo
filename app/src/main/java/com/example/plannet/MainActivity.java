@@ -5,6 +5,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.example.plannet.Entrant.EntrantDBConnector;
+import com.example.plannet.Entrant.EntrantManager;
+import com.example.plannet.Entrant.EntrantProfile;
+import com.example.plannet.Event.EventWaitlistPending;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -63,6 +67,29 @@ public class MainActivity extends AppCompatActivity {
             navController.navigate(R.id.navigation_first_time_user);
             //navView.setVisibility(View.GONE);
         }
+
+        //dummy event id for testing
+        String eventId = "event_test_123";
+
+        //c reate an instance of EventWaitlistPending for this event
+        EventWaitlistPending waitlist = new EventWaitlistPending(eventId);
+
+        //dummy entrant data
+        EntrantProfile entrant = new EntrantProfile(
+                "John Doe",
+                "john.doe@example.com",
+                "1234567890",
+                "123 Main St",
+                "path/to/profilePic.jpg",
+                "deviceID123"
+        );
+
+        // Create EntrantManager and add entrant to waitlist
+        EntrantDBConnector dbConnector = new EntrantDBConnector();
+        EntrantManager entrantManager = new EntrantManager(dbConnector);
+
+        // Join waitlist
+        entrantManager.joinWaitlist(this, entrant, waitlist);
 
     }
 
