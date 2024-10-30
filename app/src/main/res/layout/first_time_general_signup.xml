@@ -8,7 +8,7 @@
 
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/line1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -46,8 +46,8 @@
         android:padding="12dp"
         android:textColor="#000000"
         android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="@+id/imageView3"
-        app:layout_constraintTop_toTopOf="@+id/imageView3" />
+        app:layout_constraintEnd_toEndOf="@+id/line1"
+        app:layout_constraintTop_toTopOf="@+id/line1" />
 
     <TextView
         android:id="@+id/text_first_name"
@@ -59,7 +59,7 @@
         android:textColor="@color/white"
         android:textSize="16sp"
         app:layout_constraintEnd_toStartOf="@+id/first_name_edittext"
-        app:layout_constraintTop_toTopOf="@+id/imageView3" />
+        app:layout_constraintTop_toTopOf="@+id/line1" />
 
     <TextView
         android:id="@+id/text_last_name"
@@ -71,7 +71,7 @@
         android:textColor="@color/white"
         android:textSize="16sp"
         app:layout_constraintEnd_toStartOf="@+id/last_name_edittext"
-        app:layout_constraintTop_toTopOf="@+id/imageView3" />
+        app:layout_constraintTop_toTopOf="@+id/line1" />
 
     <EditText
         android:id="@+id/phone_edittext"
@@ -86,8 +86,8 @@
         android:padding="12dp"
         android:textColor="#000000"
         android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="@+id/imageView3"
-        app:layout_constraintTop_toTopOf="@+id/imageView3" />
+        app:layout_constraintEnd_toEndOf="@+id/line1"
+        app:layout_constraintTop_toTopOf="@+id/line1" />
 
     <TextView
         android:id="@+id/text_phone"
@@ -99,7 +99,7 @@
         android:textColor="@color/white"
         android:textSize="16sp"
         app:layout_constraintEnd_toStartOf="@+id/phone_edittext"
-        app:layout_constraintTop_toTopOf="@+id/imageView3" />
+        app:layout_constraintTop_toTopOf="@+id/line1" />
 
     <TextView
         android:id="@+id/text_email"
@@ -111,7 +111,7 @@
         android:textColor="@color/white"
         android:textSize="16sp"
         app:layout_constraintEnd_toStartOf="@+id/email_edittext"
-        app:layout_constraintTop_toTopOf="@+id/imageView3" />
+        app:layout_constraintTop_toTopOf="@+id/line1" />
 
     <EditText
         android:id="@+id/email_edittext"
@@ -126,8 +126,8 @@
         android:padding="12dp"
         android:textColor="#000000"
         android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="@+id/imageView3"
-        app:layout_constraintTop_toTopOf="@+id/imageView3" />
+        app:layout_constraintEnd_toEndOf="@+id/line1"
+        app:layout_constraintTop_toTopOf="@+id/line1" />
 
     <TextView
         android:id="@+id/text_locationservices"
@@ -141,7 +141,7 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toStartOf="@+id/button_locationserv"
         app:layout_constraintHorizontal_bias="0.15"
-        app:layout_constraintStart_toStartOf="@+id/imageView3"
+        app:layout_constraintStart_toStartOf="@+id/line1"
         app:layout_constraintTop_toBottomOf="@+id/text_email" />
 
     <Button
@@ -151,7 +151,7 @@
         android:layout_marginTop="12dp"
         android:layout_marginEnd="12dp"
         android:text="Get Location"
-        app:layout_constraintEnd_toEndOf="@+id/imageView3"
+        app:layout_constraintEnd_toEndOf="@+id/line1"
         app:layout_constraintTop_toBottomOf="@+id/email_edittext" />
 
     <TextView
@@ -162,18 +162,18 @@
         android:layout_marginTop="12dp"
         android:fontFamily="@font/poppins"
         android:text="*Some events may require your location"
-        app:layout_constraintStart_toStartOf="@+id/imageView3"
+        app:layout_constraintStart_toStartOf="@+id/line1"
         app:layout_constraintTop_toBottomOf="@+id/text_locationservices" />
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/line2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="9dp"
         app:layout_constraintBottom_toTopOf="@+id/text_addprofilepic"
-        app:layout_constraintEnd_toEndOf="@+id/imageView3"
+        app:layout_constraintEnd_toEndOf="@+id/line1"
         app:layout_constraintTop_toBottomOf="@+id/textView2_location"
         app:srcCompat="@drawable/line_separator" />
 
@@ -187,8 +187,8 @@
         android:text="Add a profile picture"
         android:textColor="@color/white"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
-        app:layout_constraintStart_toStartOf="@+id/imageView3" />
+        app:layout_constraintBottom_toBottomOf="@+id/line1"
+        app:layout_constraintStart_toStartOf="@+id/line1" />
 
     <EditText
         android:id="@+id/last_name_edittext"
@@ -203,8 +203,8 @@
         android:padding="12dp"
         android:textColor="#000000"
         android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="@+id/imageView3"
-        app:layout_constraintTop_toTopOf="@+id/imageView3" />
+        app:layout_constraintEnd_toEndOf="@+id/line1"
+        app:layout_constraintTop_toTopOf="@+id/line1" />
 
     <Button
         android:id="@+id/button_back"
@@ -215,8 +215,8 @@
         android:background="@android:color/transparent"
         android:backgroundTint="@android:color/transparent"
         android:text="@string/underlined_text"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
-        app:layout_constraintStart_toStartOf="@+id/imageView3" />
+        app:layout_constraintBottom_toBottomOf="@+id/line1"
+        app:layout_constraintStart_toStartOf="@+id/line1" />
 
     <Button
         android:id="@+id/button_continue"
@@ -226,8 +226,8 @@
         android:layout_marginBottom="12dp"
         android:fontFamily="@font/poppins"
         android:text="Continue"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView3"
-        app:layout_constraintEnd_toEndOf="@+id/imageView3" />
+        app:layout_constraintBottom_toBottomOf="@+id/line1"
+        app:layout_constraintEnd_toEndOf="@+id/line1" />
 
     <ImageView
         android:id="@+id/imageView5"
@@ -235,7 +235,7 @@
         android:layout_height="85dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="116dp"
-        app:layout_constraintEnd_toEndOf="@+id/imageView3"
+        app:layout_constraintEnd_toEndOf="@+id/line1"
         app:layout_constraintTop_toBottomOf="@+id/text_addprofilepic"
         app:srcCompat="@drawable/sign_up_avatar2" />
 
