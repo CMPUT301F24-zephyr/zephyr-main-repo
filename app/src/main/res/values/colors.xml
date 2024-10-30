@@ -6,10 +6,14 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="white">#FFFFFF</color>
     <color name="buttonPurple">#493971</color>
     <color name="buttonGrey">#9395a8</color>
     <color name="backgroundColor">#11172A</color>
     <color name="NavigationBar">#70648E</color>
+    <color name="chosen">#b58213</color>
+    <color name="enrolled">#138b1f</color>
+    <color name="rejected">#8b1513</color>
+    <color name="waitlist">#79747e</color>
 
 </resources>

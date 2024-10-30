@@ -11,14 +11,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins"
-        android:text="Facility: FACILITYNAME"
+        android:text="Create New Event"
         android:textColor="@color/white"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.05"/>
+        app:layout_constraintVertical_bias="0.02"/>
 
     <ImageView
         android:id="@+id/title_underline"
@@ -36,8 +36,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.55"
+        app:layout_constraintTop_toBottomOf="@id/title_underline"
+        app:layout_constraintVertical_bias="0.05"
         app:srcCompat="@drawable/rectangle_long" />
 
     <ImageView
@@ -105,7 +105,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins"
-        android:text="Price: "
+        android:text="Price:"
         android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/line2"
@@ -115,11 +115,202 @@
         app:layout_constraintTop_toBottomOf="@+id/line1" />
 
     <TextView
+        android:id="@+id/max_entrants_prompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:text="Maximum Entrants\n(Event Capacity):"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/line3"
+        app:layout_constraintEnd_toEndOf="@+id/purple_box"
+        app:layout_constraintHorizontal_bias="0.15"
+        app:layout_constraintStart_toStartOf="@+id/purple_box"
+        app:layout_constraintTop_toBottomOf="@+id/line2" />
+
+    <TextView
+        android:id="@+id/last_reg_prompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:text="Last Day of\nRegistrations:"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/line4"
+        app:layout_constraintEnd_toEndOf="@+id/purple_box"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toStartOf="@+id/purple_box"
+        app:layout_constraintTop_toBottomOf="@+id/line3" />
+
+    <TextView
+        android:id="@+id/to"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:text="to"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/line5"
+        app:layout_constraintEnd_toEndOf="@+id/purple_box"
+        app:layout_constraintStart_toStartOf="@+id/purple_box"
+        app:layout_constraintTop_toBottomOf="@+id/line4"
+        app:layout_constraintVertical_bias="0.8" />
+
+    <TextView
+        android:id="@+id/runtime_prompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:text="Event Run-Time:"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/line5"
+        app:layout_constraintEnd_toEndOf="@+id/purple_box"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toStartOf="@+id/purple_box"
+        app:layout_constraintTop_toBottomOf="@+id/line4"
+        app:layout_constraintVertical_bias="0.2" />
+
+    <EditText
+        android:id="@+id/price_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="4"
+        android:fontFamily="@font/poppins"
+        android:hint="(optional)"
+        android:textSize="20sp"
+        android:backgroundTint="@color/white"
+        android:inputType="text"
+        android:textColorHint="@color/buttonGrey"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/line2"
+        app:layout_constraintEnd_toEndOf="@+id/purple_box"
+        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintStart_toEndOf="@+id/price_prompt"
+        app:layout_constraintTop_toBottomOf="@+id/line1" />
+
+    <EditText
+        android:id="@+id/max_entrants_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        android:ems="2"
+        android:fontFamily="@font/poppins"
+        android:hint="100"
+        android:inputType="text"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textColorHint="@color/buttonGrey"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/line3"
+        app:layout_constraintEnd_toEndOf="@+id/purple_box"
+        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintStart_toEndOf="@+id/max_entrants_prompt"
+        app:layout_constraintTop_toBottomOf="@+id/line2" />
+
+    <!-- Make this appear when they click the checkbox.
+     You can set the visibility programmatically. -->
+    <EditText
+        android:id="@+id/waitlist_limit_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        android:ems="5"
+        android:textAlignment="center"
+        android:fontFamily="@font/poppins"
+        android:hint="How many?"
+        android:inputType="number"
+        android:textColor="@color/white"
+        android:textColorHint="@color/buttonGrey"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/purple_box"
+        app:layout_constraintEnd_toEndOf="@+id/purple_box"
+        app:layout_constraintStart_toEndOf="@+id/waitlist_limit_checkbox"
+        app:layout_constraintTop_toBottomOf="@+id/line6" />
+
+    <EditText
+        android:id="@+id/description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        android:ems="8"
+        android:fontFamily="@font/poppins"
+        android:hint="Event Description..."
+        android:inputType="text"
+        android:textColor="@color/white"
+        android:textColorHint="@color/buttonGrey"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/line6"
+        app:layout_constraintEnd_toEndOf="@+id/purple_box"
+        app:layout_constraintStart_toStartOf="@+id/purple_box"
+        app:layout_constraintTop_toBottomOf="@+id/line5" />
+
+    <!-- Check how to make a calendar when they tap -->
+    <EditText
+        android:id="@+id/last_reg_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        android:ems="5"
+        android:fontFamily="@font/poppins"
+        android:textColor="@color/white"
+        android:hint="Select Date"
+        android:textAlignment="center"
+        android:focusable="false"
+        android:textColorHint="@color/buttonGrey"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/line4"
+        app:layout_constraintEnd_toEndOf="@+id/purple_box"
+        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintStart_toEndOf="@+id/last_reg_prompt"
+        app:layout_constraintTop_toBottomOf="@+id/line3" />
+
+    <EditText
+        android:id="@+id/runtime_start_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        android:ems="5"
+        android:focusable="false"
+        android:fontFamily="@font/poppins"
+        android:hint="Start Date"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textColorHint="@color/buttonGrey"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/line5"
+        app:layout_constraintEnd_toStartOf="@+id/to"
+        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintStart_toStartOf="@+id/purple_box"
+        app:layout_constraintTop_toBottomOf="@+id/line4"
+        app:layout_constraintVertical_bias="0.9" />
+
+    <EditText
+        android:id="@+id/runtime_end_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        android:textColor="@color/white"
+        android:ems="5"
+        android:focusable="false"
+        android:textAlignment="center"
+        android:fontFamily="@font/poppins"
+        android:hint="End Date"
+        android:textColorHint="@color/buttonGrey"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/line5"
+        app:layout_constraintEnd_toEndOf="@+id/purple_box"
+        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintStart_toEndOf="@+id/to"
+        app:layout_constraintTop_toBottomOf="@+id/line4"
+        app:layout_constraintVertical_bias="0.9" />
+
+    <TextView
         android:id="@+id/name_prompt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins"
-        android:text="Name: "
+        android:text="Name:"
         android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/line1"
@@ -129,35 +320,86 @@
         app:layout_constraintTop_toTopOf="@+id/purple_box" />
 
     <EditText
-        android:id="@+id/price_edit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="4"
-        android:fontFamily="@font/poppins"
-        android:hint="(optional)"
-        android:backgroundTint="@color/white"
-        android:inputType="text"
-        android:textColorHint="@color/buttonGrey"
-        app:layout_constraintBottom_toTopOf="@+id/line2"
-        app:layout_constraintEnd_toEndOf="@+id/purple_box"
-        app:layout_constraintHorizontal_bias="0.05"
-        app:layout_constraintStart_toEndOf="@+id/price_prompt"
-        app:layout_constraintTop_toBottomOf="@+id/line1" />
-
-    <EditText
         android:id="@+id/name_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="4"
+        android:ems="7"
         android:fontFamily="@font/poppins"
-        android:hint="(optional)"
+        android:hint="New Event"
+        android:textSize="20sp"
+        android:backgroundTint="@color/white"
+        android:textColor="@color/white"
         android:inputType="text"
         android:textColorHint="@color/buttonGrey"
-        app:layout_constraintBottom_toTopOf="@+id/line2"
+        app:layout_constraintBottom_toTopOf="@+id/line1"
         app:layout_constraintEnd_toEndOf="@+id/purple_box"
-        app:layout_constraintHorizontal_bias="0.931"
-        app:layout_constraintStart_toEndOf="@+id/price_prompt"
-        app:layout_constraintTop_toBottomOf="@+id/line1"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintStart_toEndOf="@+id/name_prompt"
+        app:layout_constraintTop_toTopOf="@+id/purple_box" />
+
+    <ImageView
+        android:id="@+id/add_poster"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:layout_constraintBottom_toTopOf="@id/line2"
+        app:layout_constraintEnd_toEndOf="@+id/purple_box"
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintStart_toStartOf="@+id/purple_box"
+        app:layout_constraintTop_toBottomOf="@id/line1"
+        app:srcCompat="@drawable/add_photo" />
+
+    <CheckBox
+        android:id="@+id/waitlist_limit_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:buttonTint="@color/white"
+        android:checked="false"
+        android:text="Limit\nWaitlist?"
+        android:textColor="@color/buttonGrey"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/purple_box"
+        app:layout_constraintEnd_toEndOf="@+id/purple_box"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/geolocation_checkbox"
+        app:layout_constraintTop_toBottomOf="@+id/line6" />
+
+    <CheckBox
+        android:id="@+id/geolocation_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:buttonTint="@color/white"
+        android:checked="false"
+        android:text="Require\nGeolocation?"
+        android:textColor="@color/buttonGrey"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/purple_box"
+        app:layout_constraintEnd_toEndOf="@+id/purple_box"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/purple_box"
+        app:layout_constraintTop_toBottomOf="@+id/line6" />
+
+    <Button
+        android:id="@+id/cancel_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:fontFamily="@font/poppins"
+        android:textAllCaps="false"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/purple_box"
+        app:layout_constraintEnd_toStartOf="@id/generate_qr_button"/>
+
+    <Button
+        android:id="@+id/generate_qr_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Generate QR"
+        android:fontFamily="@font/poppins"
+        android:textAllCaps="false"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@id/cancel_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/purple_box"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
