@@ -1,19 +1,16 @@
-package com.example.plannet.ui.Fragments.events;
-
-import android.util.Log;
+package com.example.plannet.ui.home;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class EventsViewModel extends ViewModel {
+public class HomeViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;
 
-    public EventsViewModel() {
+    public HomeViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("Events go here!!");
-        Log.d("EventsViewModel", "Text value: " + mText.getValue());
+        mText.setValue("This is home fragment");
     }
 
     public LiveData<String> getText() {

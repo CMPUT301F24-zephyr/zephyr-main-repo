@@ -1,4 +1,4 @@
-package com.example.plannet.ui.Fragments.dashboard;
+package com.example.plannet.ui.dashboard;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
