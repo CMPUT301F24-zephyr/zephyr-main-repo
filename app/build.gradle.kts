@@ -46,10 +46,11 @@ dependencies {
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
     implementation(libs.firebase.database)
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
+    //implementation("androidx.core:core-ktx:1.7.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
-
-    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
-    implementation("com.google.zxing:core:3.4.1")
+    //implementation("com.journeyapps:zxing-android-embedded:4.3.0")
+    //implementation("com.google.zxing:core:3.4.1")
 }
