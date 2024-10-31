@@ -18,7 +18,7 @@ public class EntrantDBConnector {
     public void addEntrantToWaitlist(String collectionPath, String eventID, EntrantProfile entrant,
                                      OnSuccessListener<Void> onSuccess, OnFailureListener onFailure) {
         HashMap<String, Object> data = new HashMap<>();
-        data.put("deviceID", entrant.getDeviceID()); //https://docs.oracle.com/javase/8/docs/api/java/util/HashMap.html
+        data.put("deviceID", entrant.getDeviceID());
         data.put("entrant", entrant);
         // add onsuccess and onfailure for addign data to firebase??
         fireCon.addData(collectionPath, eventID, data, onSuccess, onFailure);

@@ -1,4 +1,6 @@
 package com.example.plannet.Entrant;
+import android.content.Context;
+import android.provider.Settings;
 
 public class EntrantProfile {
     private String userId;
@@ -12,21 +14,19 @@ public class EntrantProfile {
     public EntrantProfile() {}
 
 
-    //DELETE. DUMMY CONSTRUCTOR
-    public EntrantProfile(String userId, String name) {
-        this.userId = userId;
-        this.name = name;
-    }
-
-
-    public EntrantProfile(String userId, String name, String email, String phoneNumber, String profilePictureUrl, String deviceID) {
+    public EntrantProfile(Context context, String userId, String name, String email, String phoneNumber, String profilePictureUrl, String deviceID) {
         this.userId = userId;
         this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.profilePictureUrl = profilePictureUrl;
-        this.deviceID = deviceID;
+        this.deviceID = getAndroidID(context);
     }
+
+    private String getAndroidID(Context context) {
+        return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+    }
+
 
     // Getters and setters
     public String getUserId() {
