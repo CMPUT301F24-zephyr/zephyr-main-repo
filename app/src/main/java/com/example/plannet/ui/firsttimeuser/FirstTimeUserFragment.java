@@ -1,4 +1,4 @@
-package com.example.plannet.ui.Fragments.FirstTimeUser;
+package com.example.plannet.ui.firsttimeuser;
 
 import android.content.Context;
 import android.content.SharedPreferences;

@@ -7,32 +7,41 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.example.plannet.ui.Fragments.home.HomeFragment"
+        android:name="com.example.plannet.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home">
+            <action
+                android:id="@+id/action_home_to_createEvent"
+                app:destination="@id/navigation_organizer_create_event" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.example.plannet.ui.Fragments.dashboard.DashboardFragment"
+        android:name="com.example.plannet.ui.dashboard.DashboardFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.example.plannet.ui.Fragments.notifications.NotificationsFragment"
+        android:name="com.example.plannet.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
 
     <fragment
         android:id="@+id/navigation_events"
-        android:name="com.example.plannet.ui.Fragments.events.EventsFragment"
+        android:name="com.example.plannet.ui.events.EventsFragment"
         android:label="@string/title_events"
         tools:layout="@layout/fragment_events" />
     <fragment
         android:id="@+id/navigation_first_time_user"
-        android:name="com.example.plannet.ui.Fragments.FirstTimeUser.FirstTimeUserFragment"
+        android:name="com.example.plannet.ui.firsttimeuser.FirstTimeUserFragment"
         android:label="Welcome"
-        tools:layout="@layout/fragment_first_time_user">
+        tools:layout="@layout/fragment_first_time_user"/>
+    <fragment
+        android:id="@+id/navigation_organizer_create_event"
+        android:name="com.example.plannet.OrganizerCreateEventFragment"
+        android:label="New Event"
+        tools:layout="@layout/organizer_create_event">
 <!--        <action-->
 <!--            android:id="@+id/action_firstTimeUser_to_home"-->
 <!--            app:destination="@id/navigation_home" />-->

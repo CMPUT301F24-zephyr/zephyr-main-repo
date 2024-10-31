@@ -1,10 +1,9 @@
-package com.example.plannet.ui.Fragments.home;
+package com.example.plannet.ui.home;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,6 +14,7 @@ import androidx.navigation.Navigation;
 
 import com.example.plannet.R;
 import com.example.plannet.databinding.FragmentHomeBinding;
+
 
 public class HomeFragment extends Fragment {
 
@@ -30,25 +30,26 @@ public class HomeFragment extends Fragment {
         View root = binding.getRoot();
 
         // Set up buttons with View Binding
-        binding.button_new_event.setOnClickListener(v -> {
+        binding.buttonNewEvent.setOnClickListener(v -> {
+            Toast.makeText(getContext(), "Create an event clicked", Toast.LENGTH_SHORT).show();
             NavController navController = Navigation.findNavController(v);
-            navController.navigate(R.id.action_homeFragment_to_organizerCreateEventFragment);
+            navController.navigate(R.id.action_home_to_createEvent);
         });
 
-        binding.button_qr_codes.setOnClickListener(v -> {
+        binding.buttonQrCodes.setOnClickListener(v -> {
             Toast.makeText(getContext(), "View Events clicked", Toast.LENGTH_SHORT).show();
             // You can replace this Toast with navigation action if needed
             // navController.navigate(R.id.action_homeFragment_to_viewEventsFragment);
         });
 
-        binding.button_draw.setOnClickListener(v -> {
+        binding.buttonDraw.setOnClickListener(v -> {
             Toast.makeText(getContext(), "Settings clicked", Toast.LENGTH_SHORT).show();
             // You can replace this Toast with navigation action if needed
             // navController.navigate(R.id.action_homeFragment_to_settingsFragment);
         });
 
         // Optional: Update UI with ViewModel data (e.g., updating a text field)
-        homeViewModel.getText().observe(getViewLifecycleOwner(), binding.textHome::setText);
+        //homeViewModel.getText().observe(getViewLifecycleOwner(), binding.textHome::setText);
 
         return root;
     }
