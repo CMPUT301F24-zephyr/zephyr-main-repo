@@ -28,14 +28,10 @@ import java.util.HashMap;
  * function to generate QR code and extract hash data to Firebase
  */
 public class QRGenerator {
-    private Context context;
-    private FirebaseFirestore db;
     FirebaseConnector fireCon;
-    // to display the QR bitmap (code)
-    private ImageView qrImageView;
 
     public QRGenerator() {
-        db = FirebaseFirestore.getInstance();
+        fireCon = new FirebaseConnector();
     }
 
     // Generate QR Code bitmap using zxing library
@@ -82,12 +78,9 @@ public class QRGenerator {
     }
 
     public void generateAndStoreQRCode(String eventData, String eventID) {
-        QRGenerator qrGenerator = new QRGenerator();
-        Bitmap qrBitmap = qrGenerator.generateQRCode(eventData);
+        Bitmap qrBitmap = generateQRCode(eventData);
 
         if (qrBitmap != null) {
-            qrImageView.setImageBitmap(qrBitmap);  // Display the generated QR code in the ImageView
-
             // Convert QR Bitmap to Byte Array and then Hash it
             byte[] byteArray = convertBitmapToByteArray(qrBitmap);
             String hashedData = hashBitmap(byteArray);

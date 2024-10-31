@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        // setContentView(R.layout.organizer_create_event);
 
         /**
          * initializations for event details
@@ -67,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
         waitlistLimitCheckbox = findViewById(R.id.waitlist_limit_checkbox);
         geolocationCheckbox = findViewById(R.id.geolocation_checkbox);
         qrImageView = findViewById(R.id.toast_qr_image);
-        generateQrButton = findViewById(R.id.generate_qr_button);
 
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
@@ -90,7 +90,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Initialize db
-        db = FirebaseFirestore.getInstance();
+        //db = FirebaseFirestore.getInstance();
+        FirebaseConnector db = new FirebaseConnector();
+
         SharedPreferences sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE);
         //Log.d("MainActivity", "CHECKPOINT");
         //sharedPreferences.edit().remove("unique_id").apply(); // this is just for testing..
@@ -99,18 +101,18 @@ public class MainActivity extends AppCompatActivity {
         // listener for id/generate_qr_button to generate QR and upload QR hashed data to Firebase
         generateQrButton = findViewById(R.id.generate_qr_button);
         qrGenerator = new QRGenerator();
+        generateQrButton.setOnClickListener(v -> {
+            String eventData = collectEventData();
+            String eventID = "uniqueEventID";  // Replace with a unique ID as needed
 
-        generateQrButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Collect data from input fields
-                String eventData = collectEventData();
-                if (eventData != null) {
-                    Bitmap qrBitmap = qrGenerator.generateQRCode(eventData);
-                    if (qrBitmap != null) {
-                        qrImageView.setImageBitmap(qrBitmap);
-                        showCustomToast(qrBitmap);
-                    }
+            if (eventData != null) {
+                qrGenerator.generateAndStoreQRCode(eventData, eventID);
+
+                // Display the QR code in qrImageView
+                Bitmap qrBitmap = qrGenerator.generateQRCode(eventData);
+                if (qrBitmap != null) {
+                    qrImageView.setImageBitmap(qrBitmap);
+                    showCustomToast(qrBitmap);
                 }
             }
         });
