@@ -1,39 +1,76 @@
 package com.example.plannet.ui;
 
-import android.graphics.Bitmap;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.plannet.R;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.WriterException;
-import com.journeyapps.barcodescanner.BarcodeEncoder;
+import com.journeyapps.barcodescanner.BarcodeCallback;
+import com.journeyapps.barcodescanner.BarcodeResult;
+import com.journeyapps.barcodescanner.BarcodeView;
 
 import java.util.HashMap;
 import java.util.Map;
 
+//Logic: onCreate -> single scan -> pass to fetch and validate -> display event
+// needs an EntrantViewEvent activity that is binded to the xml for it. Wil make onClickListener button there
 public class QRCodeScan extends AppCompatActivity {
-    private static int PERMISSION_REQUEST_CAMERA = 1;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+    private BarcodeView barcodeView;
+    private FirebaseFirestore firebaseDB;
+    private View EntrantViewEvent;
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_qr_code_scanner); //TO DO
 
-    public Bitmap generateQRCode(String data) {
-        BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-        try {
-            // Encode data as a QR code and return the Bitmap
-            return barcodeEncoder.encodeBitmap(data, BarcodeFormat.QR_CODE, 400, 400);
-        } catch (WriterException e) {
-            e.printStackTrace();
-            return null;
+        barcodeView = findViewById(R.id.barcode_scanner); //TO DO
+        firebaseDB = FirebaseFirestore.getInstance();
+
+        // Start scanning?
+        barcodeView.decodeSingle(new BarcodeCallback() {
+            @Override
+            public void barcodeResult(BarcodeResult result) {
+                String qrData = result.getText();
+                if (qrData != null) {
+                    fetchEventDetails(qrData);  // fetch method else looks messy
+                }
+            }
+        });
+    }
+
+    // Method to fetch event details from Firebase and start EventDetailsActivity
+    private void fetchEventDetails(String qrData) {
+        String eventId = extractEventId(qrData);
+        if (eventId != null) {
+            Intent intent = new Intent(this, EntrantViewEvent.class); //TO DO?
+            intent.putExtra("eventId", eventId);
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, "Invalid QR code", Toast.LENGTH_SHORT).show();
         }
     }
 
-
-
-    public void storeHashDataInFirebase(String hashData) {
-        Map<String, Object> data = new HashMap<>();
-        data.put("hash", hashData);
-
-        ///code here
+    // Utility method to extract and validate event ID from QR code data
+    private String extractEventId(String data) {
+        return (data != null && data.matches("[a-zA-Z0-9]+")) ? data : null;
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        barcodeView.pause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        barcodeView.resume();
+    }
+}
