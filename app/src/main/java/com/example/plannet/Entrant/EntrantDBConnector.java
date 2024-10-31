@@ -25,4 +25,8 @@ public class EntrantDBConnector {
 
     }
 
+    public void removeEntrantFromWaitlist(String collectionPath, String documentID,
+                                          OnSuccessListener<Void> onSuccess, OnFailureListener onFailure) {
+        fireCon.deleteData(collectionPath, documentID, onSuccess, onFailure);
+    }
 }
