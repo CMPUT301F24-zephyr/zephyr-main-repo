@@ -1,16 +1,18 @@
 package com.example.plannet.Event;
 
+import android.content.Context;
 import android.media.Image;
+import com.example.plannet.Entrant.EntrantProfile;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Event {
     private String eventName;
     private Image image;
     private int price;
     private int maxEntrants;
-    // we can add a condition in MainActivity or another class where if
-    // limitWaitlist != 0, we choose that number instead for max waitlist
     private int limitWaitlist = 0; // default value
 
     private Date eventDate;
@@ -21,6 +23,8 @@ public class Event {
     private int facilityID;
     private String eventID;
     private EventWaitlistPending eventPending;
+    private EventWaitlistAccepted eventAccepted;
+    private EventNotificationManager notificationManager; // New Notification Manager
 
     // Constructor
     public Event(String eventName, Image image, int price, int maxEntrants,
@@ -41,17 +45,30 @@ public class Event {
         this.eventID = generateEventID();
 
         this.eventPending = new EventWaitlistPending(this.eventID);
-
+        this.eventAccepted = new EventWaitlistAccepted(new ArrayList<>());
+        this.notificationManager = new EventNotificationManager(); // Initialize Notification Manager
     }
 
-    //Called whenever an event is created
+    // Method to generate unique Event ID
     public String generateEventID() {
-        long timestamp = System.currentTimeMillis();   //https://currentmillis.com/tutorials/system-currentTimeMillis.html
-        String EventIDName = this.eventName.replaceAll(" ", "").toLowerCase();
-        String FinalEventID = (EventIDName.length() > 10 ? EventIDName.substring(0, 10) : EventIDName) + timestamp;
-        return FinalEventID;
+        long timestamp = System.currentTimeMillis();
+        String eventIDName = this.eventName.replaceAll(" ", "").toLowerCase();
+        return (eventIDName.length() > 10 ? eventIDName.substring(0, 10) : eventIDName) + timestamp;
     }
 
+    // Method to notify all entrants on the waitlist
+    public void notifyWaitlist(String message, Context context) {
+        List<EntrantProfile> waitlist = eventPending.getWaitlistEntrants();
+        notificationManager.sendNotificationToWaitlist(waitlist, message, context);
+    }
+
+    // Method to notify all accepted entrants
+    public void notifyAcceptedEntrants(String message, Context context) {
+        List<EntrantProfile> acceptedList = eventAccepted.getAcceptedEntrants();
+        notificationManager.sendNotificationToAccepted(acceptedList, message, context);
+    }
+
+    // Getters and setters
     public String getEventID() {
         return eventID;
     }
@@ -132,18 +149,4 @@ public class Event {
         return geolocation;
     }
 
-    public void setGeolocation(boolean geolocation) {
-        this.geolocation = geolocation;
-    }
-
-    public int getFacilityID() {
-        return facilityID;
-    }
-
-    public void setFacilityID(int facilityID) {
-        this.facilityID = facilityID;
-    }
-
-}
-
-
+    public void set

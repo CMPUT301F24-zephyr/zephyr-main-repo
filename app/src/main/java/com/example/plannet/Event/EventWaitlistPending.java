@@ -1,17 +1,12 @@
 package com.example.plannet.Event;
 
 import com.example.plannet.Entrant.EntrantProfile;
-
 import java.util.ArrayList;
 
 public class EventWaitlistPending {
     private ArrayList<EntrantProfile> waitlistEntrants;
     private String eventID;
     private String type;
-
-    public String getType() {
-        return type;
-    }
 
     public EventWaitlistPending(String eventID) {
         this.waitlistEntrants = new ArrayList<>();
@@ -25,6 +20,10 @@ public class EventWaitlistPending {
             return true;
         }
         return false;
+    }
+
+    public ArrayList<EntrantProfile> getWaitlistEntrants() {
+        return waitlistEntrants;
     }
 
     public String getEventID() {

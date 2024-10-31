@@ -1,7 +1,6 @@
 package com.example.plannet.Event;
 
 import com.example.plannet.Entrant.EntrantProfile;
-
 import java.util.ArrayList;
 
 public class EventWaitlistRejected {
@@ -15,5 +14,9 @@ public class EventWaitlistRejected {
         if (entrant != null) {
             this.rejectedEntrants.add(entrant);
         }
+    }
+
+    public ArrayList<EntrantProfile> getRejectedEntrants() {
+        return rejectedEntrants;
     }
 }
