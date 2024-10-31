@@ -11,6 +11,14 @@ public class EntrantProfile {
     // Empty constructor for Firebase
     public EntrantProfile() {}
 
+
+    //DELETE. DUMMY CONSTRUCTOR
+    public EntrantProfile(String userId, String name) {
+        this.userId = userId;
+        this.name = name;
+    }
+
+
     public EntrantProfile(String userId, String name, String email, String phoneNumber, String profilePictureUrl, String deviceID) {
         this.userId = userId;
         this.name = name;
