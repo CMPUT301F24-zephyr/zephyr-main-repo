@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
 
     android:background="@color/backgroundColor"
-    tools:context=".ui.Fragments.FirstTimeUser.FirstTimeUserFragment">
+    tools:context=".ui.firsttimeuser.FirstTimeUserFragment">
 
     <ImageView
         android:id="@+id/imageView"

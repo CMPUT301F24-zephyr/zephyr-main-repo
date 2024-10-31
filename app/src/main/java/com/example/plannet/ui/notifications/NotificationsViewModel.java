@@ -1,4 +1,4 @@
-package com.example.plannet.ui.Fragments.notifications;
+package com.example.plannet.ui.notifications;
 
 import android.util.Log;
 
