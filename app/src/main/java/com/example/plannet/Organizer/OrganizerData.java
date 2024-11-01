@@ -1,15 +1,17 @@
 package com.example.plannet.Organizer;
 
+import java.util.ArrayList;
+
 public class OrganizerData {
     private String userID;
-    private String facility;
-    private String qrCodeHash;
+    private static String facility;
+    private ArrayList<String> qrCodeHashes;
 
     // Constructor
     public OrganizerData(String userID, String facility, String qrCodeHash) {
         this.userID = userID;
         this.facility = facility;
-        this.qrCodeHash = qrCodeHash;
+        this.qrCodeHashes = new ArrayList<>();
     }
 
     // Getter/Setter for userID
@@ -21,18 +23,25 @@ public class OrganizerData {
     }
 
     // Getter/Setter for facility
-    public String getFacility() {
+    public static String getFacility() {
         return facility;
     }
-    public void setFacility(String facility) {
-        this.facility = facility;
+    public static void setFacility(String facility) {
+        OrganizerData.facility = facility;
     }
 
-    // Getter/Setter for qrCodeHash
-    public String getQrCodeHash() {
-        return qrCodeHash;
+    // Getter for qrCodeHashes
+    public ArrayList<String> getQrCodeHashes() {
+        return qrCodeHashes;
     }
-    public void setQrCodeHash(String qrCodeHash) {
-        this.qrCodeHash = qrCodeHash;
+    // Add a QR code hash to the list
+    public void addQrCodeHash(String qrCodeHash) {
+        this.qrCodeHashes.add(qrCodeHash);
     }
+
+    // Remove a QR code hash from the list
+    public void removeQrCodeHash(String qrCodeHash) {
+        this.qrCodeHashes.remove(qrCodeHash);
+    }
+
 }

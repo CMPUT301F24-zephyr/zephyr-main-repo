@@ -13,17 +13,19 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.plannet.FirebaseConnector;
-import com.example.plannet.QRGenerator;
-import com.example.plannet.R;
-import com.example.plannet.databinding.OrganizerCreateEventBinding;
+import com.example.plannet.Event.Event;
+import com.example.plannet.Event.EventList;
+import com.example.plannet.Organizer.OrganizerData;
+import com.example.plannet.databinding.FragmentOrganizerCreateEventBinding;
+
+import java.util.Date;
 
 public class OrganizerCreateEventFragment extends Fragment {
+    private EventList eventList;
 
-    private OrganizerCreateEventBinding binding;
+    private FragmentOrganizerCreateEventBinding binding;
     // event information
     private EditText nameEdit, priceEdit, maxEntrantsEdit, descriptionEdit, lastRegEdit, runtimeStartEdit, runtimeEndEdit, waitlistMaxEdit;
     private CheckBox waitlistLimitCheckbox, geolocationCheckbox;
@@ -37,7 +39,7 @@ public class OrganizerCreateEventFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Initialize ViewBinding for this fragment
-        binding = OrganizerCreateEventBinding.inflate(inflater, container, false);
+        binding = FragmentOrganizerCreateEventBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         // Initialize views using binding
@@ -51,18 +53,34 @@ public class OrganizerCreateEventFragment extends Fragment {
         waitlistLimitCheckbox = binding.waitlistLimitCheckbox;
         geolocationCheckbox = binding.geolocationCheckbox;
 
+        // Initialize EventList
+        eventList = new EventList();
+
         // listener for id/generate_qr_button to generate QR and upload QR hashed data to Firebase
         generateQrButton = binding.generateQrButton;
         qrGenerator = new QRGenerator();
         generateQrButton.setOnClickListener(v -> {
             String eventData = collectEventData();
-            String eventID = "uniqueEventID";  // Replace with a unique ID as needed
-
-            if (eventData != null) {
-                qrGenerator.generateAndStoreQRCode(eventData, eventID);
+            Event event = new Event(
+                    nameEdit.getText().toString(),       // eventName
+                    null,                                // image (assuming null for now)
+                    Integer.parseInt(priceEdit.getText().toString()),  // price
+                    Integer.parseInt(maxEntrantsEdit.getText().toString()),  // maxEntrants
+                    waitlistLimitCheckbox.isChecked() ? Integer.parseInt(waitlistMaxEdit.getText().toString()) : 0,  // limitWaitlist
+                    new Date(),                          // eventDate (use actual date value)
+                    new Date(),                          // registrationDateDeadline (use actual date value)
+                    new Date(),                          // registrationStartDate (use actual date value)
+                    descriptionEdit.getText().toString(), // description
+                    geolocationCheckbox.isChecked(),      // geolocation
+                    OrganizerData.getFacility()           // facility
+            );
+            // grab eventID
+            String eventID = event.getEventID();
+            if (eventID != null) {
+                Bitmap qrBitmap = qrGenerator.generateQRCode(eventID);
+                qrGenerator.storeQRCode(qrBitmap, eventID);
 
                 // Display the QR code in qrImageView
-                Bitmap qrBitmap = qrGenerator.generateQRCode(eventData);
                 if (qrBitmap != null) {
                     showCustomToast(qrBitmap);
                 }
@@ -75,21 +93,30 @@ public class OrganizerCreateEventFragment extends Fragment {
     @NonNull
     private String collectEventData() {
         // Collect text inputs and convert to a single string
-        String name = nameEdit.getText().toString();
-        String price = priceEdit.getText().toString();
-        String maxEntrants = maxEntrantsEdit.getText().toString();
-        String description = descriptionEdit.getText().toString();
-        String lastReg = lastRegEdit.getText().toString();
-        String runtimeStart = runtimeStartEdit.getText().toString();
-        String runtimeEnd = runtimeEndEdit.getText().toString();
-        String waitlistMax = waitlistMaxEdit.getText().toString();
+        String name = binding.nameEdit.getText().toString();
+        String price = binding.priceEdit.getText().toString();
+
+        // If price is empty, set to "Free"
+        if (price.isEmpty()) {
+            price = "Free";
+        }
+
+        String maxEntrants = binding.maxEntrantsEdit.getText().toString();
+        String description = binding.description.getText().toString();
+        String lastReg = binding.lastRegEdit.getText().toString();
+        String runtimeStart = binding.runtimeStartEdit.getText().toString();
+        String runtimeEnd = binding.runtimeEndEdit.getText().toString();
+        String waitlistMax = binding.waitlistMaxEdit.getText().toString();
+
         // Collect checkbox values
-        boolean waitlistLimit = waitlistLimitCheckbox.isChecked();
-        // if waitlist limit is chosen, set maxEntrants to be the waitlistMax --- this might need clarification if waitlistLimit would also mean maxEntrants
-        if (waitlistLimit) {
+        boolean waitlistLimit = binding.waitlistLimitCheckbox.isChecked();
+
+        // If waitlist limit is chosen, set maxEntrants to the waitlistMax value
+        if (waitlistLimit && !waitlistMax.isEmpty()) {
             maxEntrants = waitlistMax;
         }
-        boolean geolocation = geolocationCheckbox.isChecked();
+
+        boolean geolocation = binding.geolocationCheckbox.isChecked();
 
         // Format data into a JSON-like string (or any desired format)
         return String.format(

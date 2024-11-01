@@ -18,15 +18,17 @@ public class Event {
     private Date registrationStartDate;
     private String description;
     private boolean geolocation;
-    private int facilityID;
+    private String facility;
     private String eventID;
     private EventWaitlistPending eventPending;
+
+
 
     // Constructor
     public Event(String eventName, Image image, int price, int maxEntrants,
                  int limitWaitlist, Date eventDate, Date registrationDateDeadline,
                  Date registrationStartDate, String description, boolean geolocation,
-                 int facilityID) {
+                 String facility) {
         this.eventName = eventName;
         this.image = image;
         this.price = price;
@@ -37,11 +39,10 @@ public class Event {
         this.registrationStartDate = registrationStartDate;
         this.description = description;
         this.geolocation = geolocation;
-        this.facilityID = facilityID;
+        this.facility = facility;
         this.eventID = generateEventID();
 
         this.eventPending = new EventWaitlistPending(this.eventID);
-
     }
 
     //Called whenever an event is created
@@ -136,12 +137,12 @@ public class Event {
         this.geolocation = geolocation;
     }
 
-    public int getFacilityID() {
-        return facilityID;
+    public String getFacility() {
+        return facility;
     }
 
-    public void setFacilityID(int facilityID) {
-        this.facilityID = facilityID;
+    public void setFacility(String facility) {
+        this.facility = facility;
     }
 
 }
