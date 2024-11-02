@@ -32,6 +32,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class OrganizerCreateEventFragment extends Fragment {
     // import data from mainActivityViewModel
@@ -70,27 +71,9 @@ public class OrganizerCreateEventFragment extends Fragment {
             }
         });
 
-//        // Initialize views using binding
-//        nameEdit = binding.nameEdit;
-//        priceEdit = binding.priceEdit;
-//        maxEntrantsEdit = binding.maxEntrantsEdit;
-//        descriptionEdit = binding.description;
-//        binding.lastRegEdit.setOnClickListener(view -> showDatePicker(binding.lastRegEdit));
-//        binding.runtimeStartEdit.setOnClickListener(view -> showDatePicker(binding.runtimeStartEdit));
-//        binding.runtimeEndEdit.setOnClickListener(view -> showDatePicker(binding.runtimeEndEdit));
-//        waitlistLimitCheckbox = binding.waitlistLimitCheckbox;
-//        geolocationCheckbox = binding.geolocationCheckbox;
-//
-//        // Initialize EventList
-//        eventList = new EventList();
-//
-//        // listener for id/generate_qr_button to generate QR and upload QR hashed data to Firebase
-//        generateQrButton = binding.generateQrButton;
-//        qrGenerator = new QRGenerator();
+
         initializeViews();
         eventList = new EventList();
-//        SharedPreferences sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE);
-//        String userID = sharedPreferences.getString("unique_id", null);
 
         generateQrButton.setOnClickListener(v -> createEvent(facility));
 
@@ -120,8 +103,12 @@ public class OrganizerCreateEventFragment extends Fragment {
         dbConnector.db.collection("users").document(userID).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
-                        String facility = documentSnapshot.getString("facility");
-                        if (facility == null) {
+                        // Check if facility is a String or a Map on DB
+                        Object facilityObj = documentSnapshot.get("facility");
+                        if (facilityObj instanceof Map) {
+                            Map<String, Object> facilityMap = (Map<String, Object>) facilityObj;
+                            facility = (String) facilityMap.get("name");
+                        } else {
                             Toast.makeText(getContext(), "Need to create facility first!", Toast.LENGTH_SHORT).show();
                             showCreateFacilityDialog();
                         }
@@ -144,7 +131,6 @@ public class OrganizerCreateEventFragment extends Fragment {
             return; // Exit early if parsing failed
         }
 
-        // Proceed with creating the event
         Event event = new Event(
                 nameEdit.getText().toString(),                     // eventName
                 null,                                              // image (assuming null for now)
@@ -160,7 +146,24 @@ public class OrganizerCreateEventFragment extends Fragment {
         );
 
         // Generate QR Code and upload
+        // Proceed with creating the event to ship to DB
+        Map<String, Object> eventDetails = new HashMap<>();
+        eventDetails.put("eventName", nameEdit.getText().toString());
+        eventDetails.put("eventPoster", null); // null for now!
+        eventDetails.put("eventPrice", binding.priceEdit.getText().toString());
+        eventDetails.put("eventMaxEntrants", Integer.parseInt(maxEntrantsEdit.getText().toString()));
+        eventDetails.put("eventLimitWaitlist", waitlistLimitCheckbox.isChecked() ? Integer.parseInt(waitlistMaxEdit.getText().toString()) : 0);
+        eventDetails.put("RunTimeStartDate", runtimeStartDate);
+        eventDetails.put("LastRegDate", lastRegDate);
+        eventDetails.put("RunTimeEndDate", runtimeEndDate);
+        eventDetails.put("description", descriptionEdit.getText().toString());
+        eventDetails.put("geolocation", geolocationCheckbox.isChecked());
+        eventDetails.put("facility", facility);
+
         String eventID = event.getEventID();
+
+        eventDetails.put("eventID", eventID);
+        dbConnector.addEventToDB(userID1, eventID, eventDetails);
         if (eventID != null) {
             Bitmap qrBitmap = qrGenerator.generateQRCode(eventID);
             qrGenerator.storeQRCodeEventID(eventID);
@@ -198,54 +201,20 @@ public class OrganizerCreateEventFragment extends Fragment {
             return null;
         }
     }
-//    @NonNull
-//    private String collectEventData() {
-//        // Collect text inputs and convert to a single string
-//        String name = binding.nameEdit.getText().toString();
-//        String price = binding.priceEdit.getText().toString();
-//
-//        // If price is empty, set to "Free"
-//        if (price.isEmpty()) {
-//            price = "Free";
-//        }
-//
-//        String maxEntrants = binding.maxEntrantsEdit.getText().toString();
-//        String description = binding.description.getText().toString();
-//        String lastReg = binding.lastRegEdit.getText().toString();
-//        String runtimeStart = binding.runtimeStartEdit.getText().toString();
-//        String runtimeEnd = binding.runtimeEndEdit.getText().toString();
-//        String waitlistMax = binding.waitlistMaxEdit.getText().toString();
-//
-//        // Collect checkbox values
-//        boolean waitlistLimit = binding.waitlistLimitCheckbox.isChecked();
-//
-//        // If waitlist limit is chosen, set maxEntrants to the waitlistMax value
-//        if (waitlistLimit && !waitlistMax.isEmpty()) {
-//            maxEntrants = waitlistMax;
-//        }
-//
-//        boolean geolocation = binding.geolocationCheckbox.isChecked();
-//
-//        // Format data into a JSON-like string (or any desired format)
-//        return String.format(
-//                "Name: %s\nPrice: %s\nMax Entrants: %s\nDescription: %s\nLast Registration: %s\nRuntime Start: %s\nRuntime End: %s\nWaitlist Limit: %b\nGeolocation: %b",
-//                name, price, maxEntrants, description, lastReg, runtimeStart, runtimeEnd, waitlistLimit, geolocation
-//        );
-//    }
 
     // method to show toast notification with QR code
     private void showCustomToast(Bitmap qrBitmap) {
         // Inflate custom toast layout
         LayoutInflater inflater = getLayoutInflater();
         View layout = inflater.inflate(R.layout.custom_toast_layout,
-                (ViewGroup) binding.getRoot().findViewById(R.id.custom_toast_xml));  // Use binding.getRoot()
+                (ViewGroup) binding.getRoot().findViewById(R.id.custom_toast_xml));
 
         // Set the QR code image in the toast layout
         ImageView toastQrImage = layout.findViewById(R.id.toast_qr_image);
         toastQrImage.setImageBitmap(qrBitmap);
 
         // Create and show the custom toast
-        Toast toast = new Toast(requireContext());  // Use requireContext() for context in a fragment
+        Toast toast = new Toast(requireContext());
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.setDuration(Toast.LENGTH_LONG);
         toast.setView(layout);
@@ -277,8 +246,11 @@ public class OrganizerCreateEventFragment extends Fragment {
 
                     if (!facilityName.isEmpty() && !facilityLocation.isEmpty()) {
                         // Save facility data
-                        saveFacilityData(facilityName, facilityLocation);
-                        checkIfFacilityDataIsValid(userID1);
+                        //saveFacilityData(facilityName, facilityLocation);
+                        //checkIfFacilityDataIsValid(userID1);
+
+                        // add facility to firebase
+                        dbConnector.addFacilityToDB(userID1, facilityName, facilityLocation);
                     } else {
                         Toast.makeText(getContext(), "Please fill all fields", Toast.LENGTH_SHORT).show();
                     }
@@ -291,16 +263,7 @@ public class OrganizerCreateEventFragment extends Fragment {
                 .show();
     }
 
-    private void saveFacilityData(String facilityName, String facilityLocation) {
-        //String userID = "user123";  // Replace with actual user ID
-        HashMap<String, Object> facilityData = new HashMap<>();
-        facilityData.put("facility", facilityName);
-        facilityData.put("location", facilityLocation);
-        facility = facilityName;
-        dbConnector.addData("users", userID1, facilityData,
-                aVoid -> Toast.makeText(getContext(), "Facility saved!", Toast.LENGTH_SHORT).show(),
-                e -> Toast.makeText(getContext(), "Error saving facility", Toast.LENGTH_SHORT).show());
-    }
+
 
     @Override
     public void onDestroyView() {
