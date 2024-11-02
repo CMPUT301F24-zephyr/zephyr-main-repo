@@ -7,7 +7,7 @@ import java.util.Date;
 public class Event {
     private String eventName;
     private Image image;
-    private int price;
+    private String price;
     private int maxEntrants;
     // we can add a condition in MainActivity or another class where if
     // limitWaitlist != 0, we choose that number instead for max waitlist
@@ -25,7 +25,7 @@ public class Event {
 
 
     // Constructor
-    public Event(String eventName, Image image, int price, int maxEntrants,
+    public Event(String eventName, Image image, String price, int maxEntrants,
                  int limitWaitlist, Date eventDate, Date registrationDateDeadline,
                  Date registrationStartDate, String description, boolean geolocation,
                  String facility) {
@@ -73,11 +73,11 @@ public class Event {
         this.image = image;
     }
 
-    public int getPrice() {
+    public String getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(String price) {
         this.price = price;
     }
 

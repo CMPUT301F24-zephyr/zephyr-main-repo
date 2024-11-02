@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class OrganizerData {
     private String userID;
-    private static String facility;
+    private String facility;
     private String location;
     private ArrayList<String> qrCodeHashes;
 
@@ -29,7 +29,7 @@ public class OrganizerData {
         return facility;
     }
     public void setFacility(String facility) {
-        OrganizerData.facility = facility;
+        this.facility = facility;
     }
 
     // Getter for qrCodeHashes

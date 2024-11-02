@@ -1,5 +1,6 @@
 package com.example.plannet;
 
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -28,6 +29,11 @@ public class FirebaseConnector {
         db.collection(collectionPath)
                 .document(documentID)
                 .delete()
+                .addOnSuccessListener(onSuccess)
+                .addOnFailureListener(onFailure);
+    }
+    public void checkIfDeviceExists(String deviceID, OnSuccessListener<DocumentSnapshot> onSuccess, OnFailureListener onFailure) {
+        db.collection("users").document(deviceID).get()
                 .addOnSuccessListener(onSuccess)
                 .addOnFailureListener(onFailure);
     }
