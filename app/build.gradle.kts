@@ -47,6 +47,8 @@ dependencies {
     implementation(libs.navigation.ui)
     implementation(libs.firebase.database)
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
+    implementation(libs.firebase.storage)
+    implementation(libs.firebase.auth)
     //implementation("androidx.core:core-ktx:1.7.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

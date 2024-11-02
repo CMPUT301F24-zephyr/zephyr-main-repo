@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 public class FirebaseConnector {
 
-    private FirebaseFirestore db;
+    FirebaseFirestore db;
 
     public FirebaseConnector() {
         db = FirebaseFirestore.getInstance(); // lab5

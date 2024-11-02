@@ -256,7 +256,7 @@
         android:fontFamily="@font/poppins"
         android:textColor="@color/white"
         android:hint="Select Date"
-        android:inputType="date"
+        android:inputType="none"
         android:textAlignment="center"
         android:focusable="false"
         android:textColorHint="@color/buttonGrey"

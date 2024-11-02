@@ -2,6 +2,7 @@ package com.example.plannet;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 
@@ -47,10 +48,12 @@ public class MainActivity extends AppCompatActivity {
                 navView.setVisibility(View.VISIBLE);
             }
         });
-
+        Log.d("MainActivity", "CHECKPOINT");
         // Handle unique ID and navigate to welcome screen if necessary
         SharedPreferences sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE);
         String uniqueID = sharedPreferences.getString("unique_id", null);
+        // this deletes your UUID -- for testing......
+        //sharedPreferences.edit().remove("unique_id").apply();
 
         if (uniqueID == null) {
             // Navigate to the welcome screen if no unique ID is found

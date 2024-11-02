@@ -5,12 +5,14 @@ import java.util.ArrayList;
 public class OrganizerData {
     private String userID;
     private static String facility;
+    private String location;
     private ArrayList<String> qrCodeHashes;
 
     // Constructor
-    public OrganizerData(String userID, String facility, String qrCodeHash) {
+    public OrganizerData(String userID, String facility, String qrCodeHash, String location) {
         this.userID = userID;
         this.facility = facility;
+        this.location = location;
         this.qrCodeHashes = new ArrayList<>();
     }
 
@@ -23,10 +25,10 @@ public class OrganizerData {
     }
 
     // Getter/Setter for facility
-    public static String getFacility() {
+    public String getFacility() {
         return facility;
     }
-    public static void setFacility(String facility) {
+    public void setFacility(String facility) {
         OrganizerData.facility = facility;
     }
 
@@ -44,4 +46,11 @@ public class OrganizerData {
         this.qrCodeHashes.remove(qrCodeHash);
     }
 
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
 }
