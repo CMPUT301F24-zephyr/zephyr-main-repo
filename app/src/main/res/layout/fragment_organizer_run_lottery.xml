@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:text="Lottery Manager"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.02" />
+
+    <ImageView
+        android:id="@+id/title_underline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/line_separator"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title"/>
+
+    <TextView
+        android:id="@+id/event_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:text="EVENT NAME"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/title_underline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.01"/>
+
+    <ImageView
+        android:id="@+id/purple_box"
+        android:layout_width="390dp"
+        android:layout_height="249dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/event_name"
+        app:layout_constraintVertical_bias="0.35"
+        app:srcCompat="@drawable/rectangle" />
+
+    <Button
+        android:id="@+id/draw_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:text="Draw"
+        android:textAllCaps="false"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/purple_box"
+        app:layout_constraintEnd_toEndOf="@+id/purple_box"
+        app:layout_constraintStart_toStartOf="@+id/purple_box"
+        app:layout_constraintTop_toBottomOf="@id/clarification"/>
+
+    <TextView
+        android:id="@+id/amount_prompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:text="Amount:"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/purple_box"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toStartOf="@+id/purple_box"
+        app:layout_constraintTop_toTopOf="@+id/purple_box"
+        app:layout_constraintBottom_toTopOf="@id/checkbox_add_chosen"/>
+
+    <CheckBox
+        android:id="@+id/checkbox_add_chosen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:buttonTint="@color/buttonPurple"
+        android:fontFamily="@font/poppins"
+        android:text="Add to &quot;Chosen&quot; list"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/purple_box"
+        app:layout_constraintStart_toStartOf="@+id/purple_box"
+        app:layout_constraintTop_toBottomOf="@+id/amount_prompt"
+        app:layout_constraintBottom_toTopOf="@id/clarification"/>
+
+    <TextView
+        android:id="@+id/clarification"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:text="Entrants will be chosen from current waiting list."
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="@+id/purple_box"
+        app:layout_constraintStart_toStartOf="@+id/purple_box"
+        app:layout_constraintTop_toBottomOf="@+id/checkbox_add_chosen"
+        app:layout_constraintBottom_toTopOf="@id/draw_button"/>
+
+    <EditText
+        android:id="@+id/editTextNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        android:ems="2"
+        android:fontFamily="@font/poppins"
+        android:hint="10"
+        android:inputType="number"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textColorHint="@color/buttonGrey"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/amount_prompt"
+        app:layout_constraintEnd_toEndOf="@+id/purple_box"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toEndOf="@+id/amount_prompt"
+        app:layout_constraintTop_toTopOf="@+id/amount_prompt" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

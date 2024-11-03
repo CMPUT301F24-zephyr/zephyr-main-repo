@@ -224,14 +224,14 @@
 
     <TextView
         android:id="@+id/description_writing"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="308dp"
+        android:layout_height="84dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:fontFamily="@font/poppins"
         android:text="The description should go here. I am writing a lot to try to see how much space I can take up. Maybe we should add a click listener to view the full description if the description is longer than what fits in this box?"
         android:textColor="@color/buttonGrey"
         android:textSize="14dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
         app:layout_constraintBottom_toBottomOf="@id/purple_box"
         app:layout_constraintEnd_toEndOf="@+id/purple_box"
         app:layout_constraintHorizontal_bias="0.1"
