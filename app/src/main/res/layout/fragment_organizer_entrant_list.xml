@@ -44,7 +44,7 @@
         app:layout_constraintVertical_bias="0.01"/>
 
     <ListView
-        android:id="@+id/qr_list"
+        android:id="@+id/event_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
@@ -59,7 +59,7 @@
 
     <Button
         android:id="@+id/waitlisted_button"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins"
         android:text="Waiting"
@@ -72,7 +72,7 @@
 
     <Button
         android:id="@+id/chosen_button"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins"
         android:text="Chosen"
@@ -85,12 +85,12 @@
 
     <Button
         android:id="@+id/enrolled_button"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins"
         android:text="Enrolled"
         android:textAllCaps="false"
-        android:textSize="14sp"
+        android:textSize="13sp"
         android:backgroundTint="@color/buttonGrey"
         app:layout_constraintEnd_toStartOf="@id/cancelled_button"
         app:layout_constraintStart_toEndOf="@id/chosen_button"
@@ -98,7 +98,7 @@
 
     <Button
         android:id="@+id/cancelled_button"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins"
         android:text="Cancelled"

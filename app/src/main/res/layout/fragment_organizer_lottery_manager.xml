@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins"
-        android:text="Facility: FACILITYNAME"
+        android:text="Lottery Manager"
         android:textColor="@color/white"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -30,11 +30,11 @@
         app:layout_constraintTop_toBottomOf="@id/title"/>
 
     <TextView
-        android:id="@+id/hashed_qrcodes_title"
+        android:id="@+id/event_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins"
-        android:text="Hashed QR Codes"
+        android:text="Choose an event"
         android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintTop_toBottomOf="@id/title_underline"
@@ -44,7 +44,7 @@
         app:layout_constraintVertical_bias="0.01"/>
 
     <ListView
-        android:id="@+id/qr_list"
+        android:id="@+id/event_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
@@ -54,19 +54,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hashed_qrcodes_title"
+        app:layout_constraintTop_toBottomOf="@+id/event_name"
         android:background="@drawable/listview_border"/>
-
-    <ImageView
-        android:id="@+id/back_arrow"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        app:layout_constraintBottom_toBottomOf="@+id/title"
-        app:layout_constraintEnd_toStartOf="@+id/title"
-        app:layout_constraintHorizontal_bias="0.2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/back_arrow" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
