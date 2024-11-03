@@ -41,7 +41,7 @@
         android:id="@+id/navigation_organizer_create_event"
         android:name="com.example.plannet.OrganizerCreateEventFragment"
         android:label="New Event"
-        tools:layout="@layout/organizer_create_event">
+        tools:layout="@layout/fragment_organizer_create_event">
 <!--        <action-->
 <!--            android:id="@+id/action_firstTimeUser_to_home"-->
 <!--            app:destination="@id/navigation_home" />-->

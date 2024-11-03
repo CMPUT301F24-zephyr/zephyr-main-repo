@@ -3,6 +3,8 @@ package com.example.plannet.Organizer;
 import java.util.ArrayList;
 import java.util.List;
 
+
+// i dont think we need this class since EventList contains a hashmap of facility -> events
 public class OrganizerCreatedEvents {
     private List<String> eventNames;
 
@@ -11,6 +13,4 @@ public class OrganizerCreatedEvents {
         this.eventNames = new ArrayList<>();
     }
 
-    // Event class should call this class to add the eventname/eventID
-    // into eventNames list
 }

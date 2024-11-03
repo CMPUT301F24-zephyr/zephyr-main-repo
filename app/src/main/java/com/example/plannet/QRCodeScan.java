@@ -34,23 +34,23 @@ public class QRCodeScan extends AppCompatActivity {
             public void barcodeResult(BarcodeResult result) {
                 String qrData = result.getText();
                 if (qrData != null) {
-                    fetchEventDetails(qrData);  // fetch method else looks messy
+                    //fetchEventDetails(qrData);  // fetch method else looks messy
                 }
             }
         });
     }
 
     // Method to fetch event details from Firebase and start EventDetailsActivity
-    private void fetchEventDetails(String qrData) {
-        String eventId = extractEventId(qrData);
-        if (eventId != null) {
-            Intent intent = new Intent(this, EntrantViewEvent.class); //TO DO?
-            intent.putExtra("eventId", eventId);
-            startActivity(intent);
-        } else {
-            Toast.makeText(this, "Invalid QR code", Toast.LENGTH_SHORT).show();
-        }
-    }
+//    private void fetchEventDetails(String qrData) {
+//        String eventId = extractEventId(qrData);
+//        if (eventId != null) {
+//            Intent intent = new Intent(this, EntrantViewEvent.class); //TO DO?
+//            intent.putExtra("eventId", eventId);
+//            startActivity(intent);
+//        } else {
+//            Toast.makeText(this, "Invalid QR code", Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
     // Utility method to extract and validate event ID from QR code data
     private String extractEventId(String data) {
