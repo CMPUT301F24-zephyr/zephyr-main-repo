@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -58,24 +59,14 @@ public class OrganizerCreateEventFragment extends Fragment {
         binding = FragmentOrganizerCreateEventBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        // Get SharedViewModel instance
-        mainActivityViewModel = new ViewModelProvider(requireActivity()).get(MainActivityViewModel.class);
-
-        mainActivityViewModel.getUniqueID().observe(getViewLifecycleOwner(), userID -> {
-            if (userID != null) {
-                Log.d("OrganizerCreateEventFragment", "Received userID: " + userID);
-                userID1 = userID;
-
-                // checks and creates facility if needed
-                checkIfFacilityDataIsValid(userID);
-            }
-        });
-
+        userID1 = Settings.Secure.getString(requireContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        // checks and creates facility if needed
+        checkIfFacilityDataIsValid(userID1);
 
         initializeViews();
         eventList = new EventList();
 
-        generateQrButton.setOnClickListener(v -> createEvent(facility));
+        generateQrButton.setOnClickListener(v -> createEvent());
 
         return root;
     }
@@ -117,19 +108,14 @@ public class OrganizerCreateEventFragment extends Fragment {
                 .addOnFailureListener(e -> Toast.makeText(getContext(), "Failed to fetch facility data", Toast.LENGTH_SHORT).show());
     }
 
-    private void createEvent(String facility) {
+    private void createEvent() {
+        Log.d("createEvent", "facility: " + facility);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()); // Adjust this format if needed
 
         // Parse date fields
         Date lastRegDate = parseDate(lastRegEdit.getText().toString(), dateFormat);
         Date runtimeStartDate = parseDate(runtimeStartEdit.getText().toString(), dateFormat);
         Date runtimeEndDate = parseDate(runtimeEndEdit.getText().toString(), dateFormat);
-
-        // Check if any required fields are null, showing a toast to inform the user
-        if (lastRegDate == null || runtimeStartDate == null || runtimeEndDate == null) {
-            Toast.makeText(getContext(), "Please enter all required dates in the correct format (dd/MM/yyyy)", Toast.LENGTH_SHORT).show();
-            return; // Exit early if parsing failed
-        }
 
         Event event = new Event(
                 nameEdit.getText().toString(),                     // eventName
@@ -251,8 +237,9 @@ public class OrganizerCreateEventFragment extends Fragment {
 
                         // add facility to firebase
                         dbConnector.addFacilityToDB(userID1, facilityName, facilityLocation);
+                        Toast.makeText(getContext(), "Facility saved!", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(getContext(), "Please fill all fields", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Error saving facility info", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton("Cancel", (dialog, which) -> {

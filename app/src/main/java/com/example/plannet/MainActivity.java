@@ -60,10 +60,6 @@ public class MainActivity extends AppCompatActivity {
         });
         Log.d("MainActivity", "CHECKPOINT");
 
-
-        /**
-         * temporary method for UUID
-         */
         // Handle unique ID and navigate to welcome screen if necessary
         SharedPreferences sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE);
         String uniqueID = sharedPreferences.getString("unique_id", null);
@@ -74,44 +70,6 @@ public class MainActivity extends AppCompatActivity {
             navController.navigate(R.id.navigation_first_time_user);
         }
         mainActivityViewModel.setUniqueID(uniqueID);
-
-        /**
-         * production method for UUID
-         */
-//        // Get or store the Android ID
-//        String androidID = getStoredAndroidID();
-//        db = new FirebaseConnector();
-//
-//        // Check if the device ID exists and navigate if necessary
-//        navigateIfDeviceNotInDB(androidID, navController);
-    }
-
-    private String getStoredAndroidID() {
-        SharedPreferences sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        String androidID = sharedPreferences.getString(KEY_ANDROID_ID, null);
-
-        if (androidID == null) {
-            androidID = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-            sharedPreferences.edit().putString(KEY_ANDROID_ID, androidID).apply();
-        }
-        // Set the unique ID in ViewModel
-        String uniqueID = androidID;  // Replace with actual value
-        mainActivityViewModel.setUniqueID(uniqueID);
-        Log.d("MainActivity", "viewmodel set");
-        return androidID;
-    }
-    private void navigateIfDeviceNotInDB(String deviceID, NavController navController) {
-        db.checkIfDeviceExists(deviceID,
-                documentSnapshot -> {
-                    if (!documentSnapshot.exists()) {
-                        Log.d("MainActivity", "Device ID not found in Firestore, navigating to FirstTimeUserFragment");
-                        navController.navigate(R.id.navigation_first_time_user);
-                    } else {
-                        Log.d("MainActivity", "Device ID exists in Firestore");
-                    }
-                },
-                e -> Log.e("MainActivity", "Error checking device ID in Firestore", e)
-        );
     }
 }
 
