@@ -2,6 +2,7 @@ package com.example.plannet;
 
 import android.util.Log;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -15,7 +16,7 @@ import java.util.Map;
 
 public class FirebaseConnector {
 
-    FirebaseFirestore db;
+    private FirebaseFirestore db;
 
     public FirebaseConnector() {
         db = FirebaseFirestore.getInstance(); // lab5
@@ -102,5 +103,23 @@ public class FirebaseConnector {
                 .set(user)
                 .addOnSuccessListener(aVoid -> Log.d("Firestore", "User added to Firestore"))
                 .addOnFailureListener(e -> Log.e("Firestore", "Error saving user", e));
+    }
+
+    public void checkIfFacilityDataIsValid(String userID, OnSuccessListener<Map<String, Object>> onSuccess, OnFailureListener onFailure) {
+        db.collection("users").document(userID).get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        Object facilityObj = documentSnapshot.get("facility");
+                        if (facilityObj instanceof Map) {
+                            Map<String, Object> facilityMap = (Map<String, Object>) facilityObj;
+                            onSuccess.onSuccess(facilityMap);  // Pass facility data to the success listener
+                        } else {
+                            onFailure.onFailure(new Exception("Facility data is missing or not in expected format"));
+                        }
+                    } else {
+                        onFailure.onFailure(new Exception("No document found for userID: " + userID));
+                    }
+                })
+                .addOnFailureListener(onFailure);
     }
 }

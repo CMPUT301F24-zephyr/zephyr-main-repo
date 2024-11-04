@@ -9,18 +9,20 @@ public class EntrantProfile {
     private String phoneNumber;
     private String profilePictureUrl; // URL to store the profile picture
     private String deviceID;
+    private boolean notifsActivated;
 
     // Empty constructor for Firebase
     public EntrantProfile() {}
 
 
-    public EntrantProfile(Context context, String userId, String name, String email, String phoneNumber, String profilePictureUrl, String deviceID) {
+    public EntrantProfile(Context context, String userId, String name, String email, String phoneNumber, String profilePictureUrl, String deviceID, boolean notifsActivated) {
         this.userId = userId;
         this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.profilePictureUrl = profilePictureUrl;
         this.deviceID = getAndroidID(context);
+        this.notifsActivated = notifsActivated;
     }
 
     private String getAndroidID(Context context) {
@@ -75,5 +77,13 @@ public class EntrantProfile {
 
     public String getDeviceID() {
         return deviceID;
+    }
+
+    public boolean isNotifsActivated() {
+        return notifsActivated;
+    }
+
+    public void setNotifsActivated(boolean notifsActivated) {
+        this.notifsActivated = notifsActivated;
     }
 }

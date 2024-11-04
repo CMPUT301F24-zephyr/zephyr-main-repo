@@ -1,4 +1,4 @@
-package com.example.plannet;
+package com.example.plannet.ui.home;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -18,13 +18,16 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.plannet.Event.Event;
 import com.example.plannet.Event.EventList;
-import com.example.plannet.Organizer.OrganizerData;
+import com.example.plannet.FirebaseConnector;
+import com.example.plannet.MainActivityViewModel;
+import com.example.plannet.Organizer.Facility;
+import com.example.plannet.QRGenerator;
+import com.example.plannet.R;
 import com.example.plannet.databinding.FragmentOrganizerCreateEventBinding;
 
 import java.text.ParseException;
@@ -41,7 +44,9 @@ public class OrganizerCreateEventFragment extends Fragment {
     private EventList eventList;
     private String userID1;
 
-    private String facility;
+//    private String facility;
+    private Facility facilityDetails;
+
     private FragmentOrganizerCreateEventBinding binding;
     // event information
     private EditText nameEdit, priceEdit, maxEntrantsEdit, descriptionEdit, lastRegEdit, runtimeStartEdit, runtimeEndEdit, waitlistMaxEdit;
@@ -53,6 +58,7 @@ public class OrganizerCreateEventFragment extends Fragment {
 
     //private OrganizerData orgData;
     private FirebaseConnector dbConnector = new FirebaseConnector();
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Initialize ViewBinding for this fragment
@@ -91,29 +97,38 @@ public class OrganizerCreateEventFragment extends Fragment {
     }
 
     private void checkIfFacilityDataIsValid(String userID) {
-        dbConnector.db.collection("users").document(userID).get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        // Check if facility is a String or a Map on DB
-                        Object facilityObj = documentSnapshot.get("facility");
-                        if (facilityObj instanceof Map) {
-                            Map<String, Object> facilityMap = (Map<String, Object>) facilityObj;
-                            facility = (String) facilityMap.get("name");
-                        } else {
-                            Toast.makeText(getContext(), "Need to create facility first!", Toast.LENGTH_SHORT).show();
-                            showCreateFacilityDialog();
-                        }
+        dbConnector.checkIfFacilityDataIsValid(userID,
+                facilityMap -> {
+                    // Initialize facilityDetails if null
+                    if (facilityDetails == null) {
+                        facilityDetails = new Facility("", "");
                     }
-                })
-                .addOnFailureListener(e -> Toast.makeText(getContext(), "Failed to fetch facility data", Toast.LENGTH_SHORT).show());
+                    // Set facility details from the fetched data
+                    facilityDetails.setFacilityName((String) facilityMap.get("name"));
+                    facilityDetails.setFacilityLocation((String) facilityMap.get("location"));
+
+                    // Update the facility name for use in createEvent
+                    String facility = facilityDetails.getFacilityName();
+                    Log.d("checkIfFacilityDataIsValid", "Facility data loaded successfully: " + facility);
+                },
+                e -> {
+                    // Handle the error or missing data
+                    Log.e("checkIfFacilityDataIsValid", "Failed to fetch facility data", e);
+                    Toast.makeText(getContext(), "Failed to fetch facility data", Toast.LENGTH_SHORT).show();
+                    showCreateFacilityDialog();
+                });
     }
 
     private void createEvent() {
-        Log.d("createEvent", "facility: " + facility);
+        if (facilityDetails.getFacilityName() == null) {
+            Toast.makeText(getContext(), "Facility data is missing. Please create or select a facility.", Toast.LENGTH_SHORT).show();
+            return;  // Exit the method to avoid the NullPointerException
+        }
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()); // Adjust this format if needed
 
         // Parse date fields
         Date lastRegDate = parseDate(lastRegEdit.getText().toString(), dateFormat);
+        Log.d("createEvent", "createfragment last Reg date = " + lastRegDate);
         Date runtimeStartDate = parseDate(runtimeStartEdit.getText().toString(), dateFormat);
         Date runtimeEndDate = parseDate(runtimeEndEdit.getText().toString(), dateFormat);
 
@@ -128,7 +143,7 @@ public class OrganizerCreateEventFragment extends Fragment {
                 runtimeEndDate,                                    // registrationStartDate (runtime end)
                 descriptionEdit.getText().toString(),              // description
                 geolocationCheckbox.isChecked(),                   // geolocation
-                facility                                           // facility
+                facilityDetails.getFacilityName()                  // facility
         );
 
         // Generate QR Code and upload
@@ -144,7 +159,7 @@ public class OrganizerCreateEventFragment extends Fragment {
         eventDetails.put("RunTimeEndDate", runtimeEndDate);
         eventDetails.put("description", descriptionEdit.getText().toString());
         eventDetails.put("geolocation", geolocationCheckbox.isChecked());
-        eventDetails.put("facility", facility);
+        eventDetails.put("facility", facilityDetails.getFacilityName());
 
         String eventID = event.getEventID();
 
@@ -219,27 +234,36 @@ public class OrganizerCreateEventFragment extends Fragment {
         EditText facilityNameEdit = dialogView.findViewById(R.id.facility_name_edit);
         EditText facilityLocationEdit = dialogView.findViewById(R.id.facility_location_edit);
 
-        //dialogView.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.backgroundColor));
-
         // Build and display the AlertDialog
         new AlertDialog.Builder(getContext(), R.style.CustomAlertDialog)
                 .setTitle("Create Your Facility")
                 .setView(dialogView)
                 .setPositiveButton("Save", (dialog, which) -> {
-                    // Retrieve input values
-                    String facilityName = facilityNameEdit.getText().toString().trim();
-                    String facilityLocation = facilityLocationEdit.getText().toString().trim();
+                    try {
+                        // retrieve input values
+                        String facilityName = facilityNameEdit.getText().toString().trim();
+                        String facilityLocation = facilityLocationEdit.getText().toString().trim();
 
-                    if (!facilityName.isEmpty() && !facilityLocation.isEmpty()) {
-                        // Save facility data
-                        //saveFacilityData(facilityName, facilityLocation);
-                        //checkIfFacilityDataIsValid(userID1);
+                        // ensure facilityDetails is initialized
+                        if (facilityDetails == null) {
+                            facilityDetails = new Facility("", "");
+                        }
 
-                        // add facility to firebase
-                        dbConnector.addFacilityToDB(userID1, facilityName, facilityLocation);
+                        // set facility details
+                        facilityDetails.setFacilityName(facilityName);
+                        facilityDetails.setFacilityLocation(facilityLocation);
+
+                        // add facility details to Firebase
+                        dbConnector.addFacilityToDB(userID1, facilityDetails.getFacilityName(), facilityDetails.getFacilityLocation());
                         Toast.makeText(getContext(), "Facility saved!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getContext(), "Error saving facility info", Toast.LENGTH_SHORT).show();
+
+                    } catch (NullPointerException e) {
+                        Toast.makeText(getContext(), "Facility information is incomplete. Please enter all fields.", Toast.LENGTH_SHORT).show();
+                        Log.e("OrganizerCreateEvent", "NullPointerException: Missing facility details", e);
+
+                    } catch (Exception e) {
+                        Toast.makeText(getContext(), "An error occurred while saving facility info.", Toast.LENGTH_SHORT).show();
+                        Log.e("OrganizerCreateEvent", "Exception while saving facility info", e);
                     }
                 })
                 .setNegativeButton("Cancel", (dialog, which) -> {
@@ -249,7 +273,6 @@ public class OrganizerCreateEventFragment extends Fragment {
                 })
                 .show();
     }
-
 
 
     @Override

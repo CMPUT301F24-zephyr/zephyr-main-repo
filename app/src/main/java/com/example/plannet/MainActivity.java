@@ -26,10 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private MainActivityViewModel mainActivityViewModel;
 
     private ActivityMainBinding binding;
-    private FirebaseConnector db;
-    // for androidID
-    private static final String PREFS_NAME = "app_preferences";
-    private static final String KEY_ANDROID_ID = "android_id";
+//    private FirebaseConnector db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
                 navView.setVisibility(View.VISIBLE);
             }
         });
-        Log.d("MainActivity", "CHECKPOINT");
+        //Log.d("MainActivity", "CHECKPOINT");
 
         // Handle unique ID and navigate to welcome screen if necessary
         SharedPreferences sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE);
