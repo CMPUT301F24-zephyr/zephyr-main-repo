@@ -21,13 +21,4 @@ public class EventsViewModel extends ViewModel {
     public LiveData<String> getText() {
         return mText;
     }
-
-    // Setter method for event data for QRCodeScan
-    public void setEventDetails(Event event) {
-        eventLiveData.setValue(event);
-    }
-
-    // Getter method for event data from QRCodeScan
-    public LiveData<Event> getEventDetails() {
-        return eventLiveData;}
 }
