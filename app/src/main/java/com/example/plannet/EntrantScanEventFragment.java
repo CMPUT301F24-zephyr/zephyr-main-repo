@@ -17,18 +17,17 @@ import com.journeyapps.barcodescanner.BarcodeView;
 
 import java.io.Serializable;
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 //Logic: onCreate -> single scan -> pass to fetch and validate -> display event
 // needs an EntrantViewEvent activity that is binded to the xml for it. Wil make onClickListener button there
 public class EntrantScanEventFragment extends Fragment {
 
-    private FirebaseFirestore firebaseDB;
+    FirebaseFirestore firebaseDB;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_qr_code_scanner, container, false);
+        View view = inflater.inflate(R.layout.fragment_qr_code_scanner, container, false);
         BarcodeView barcodeView = view.findViewById(R.id.barcode_scanner);
         firebaseDB = FirebaseFirestore.getInstance();
 
@@ -46,7 +45,7 @@ public class EntrantScanEventFragment extends Fragment {
     }
 
     // Method to fetch event details from Firebase and start EventDetailsActivity
-    private void fetchEventDetails(String qrData) {
+    void fetchEventDetails(String qrData) {
         firebaseDB.collection("events").document(qrData).get().addOnSuccessListener(documentSnapshot -> {
             Event event = documentSnapshot.toObject(Event.class);
             if (event != null) {

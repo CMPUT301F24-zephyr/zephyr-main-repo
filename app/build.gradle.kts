@@ -49,6 +49,7 @@ dependencies {
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
     implementation(libs.firebase.storage)
     implementation(libs.firebase.auth)
+    implementation(libs.fragment.testing)
     testImplementation ("junit:junit:4.13.2")
     testImplementation(libs.junit)
     testImplementation(libs.ext.junit)
@@ -61,5 +62,12 @@ dependencies {
     androidTestImplementation("androidx.test:core:1.5.0")
     androidTestImplementation("androidx.test:runner:1.5.2")
     androidTestImplementation("androidx.test:rules:1.5.0")
+    androidTestImplementation ("androidx.fragment:fragment-testing:1.3.6")
+    androidTestImplementation ("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation ("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation ("org.mockito:mockito-core:4.6.1")
+    androidTestImplementation ("org.mockito:mockito-android:4.6.1")
+
+
     testImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }

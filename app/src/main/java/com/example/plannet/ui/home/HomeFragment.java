@@ -45,6 +45,11 @@ public class HomeFragment extends Fragment {
             // navController.navigate(R.id.action_homeFragment_to_settingsFragment);
         });
 
+        binding.buttonSwitch.setOnClickListener(v -> {
+            NavController navController = Navigation.findNavController(v);
+            navController.navigate(R.id.action_home_to_entrant);
+        });
+
         // Optional: Update UI with ViewModel data (e.g., updating a text field)
         //homeViewModel.getText().observe(getViewLifecycleOwner(), binding.textHome::setText);
 
