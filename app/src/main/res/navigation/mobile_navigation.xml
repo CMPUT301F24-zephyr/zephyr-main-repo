@@ -39,7 +39,7 @@
         tools:layout="@layout/fragment_first_time_user"/>
     <fragment
         android:id="@+id/navigation_organizer_create_event"
-        android:name="com.example.plannet.OrganizerCreateEventFragment"
+        android:name="com.example.plannet.ui.home.OrganizerCreateEventFragment"
         android:label="New Event"
         tools:layout="@layout/fragment_organizer_create_event">
 <!--        <action-->

@@ -18,7 +18,6 @@ import java.util.HashMap;
 
 public class QRGenerator {
     //FirebaseConnector fireCon;
-    FirebaseStorage storage = FirebaseStorage.getInstance();
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public QRGenerator() {
@@ -47,14 +46,13 @@ public class QRGenerator {
     }
 
     /**
-     * Add eventID in database
+     * Add hashed eventID in database
      */
     public void storeQRCodeEventID(String eventID) {
         if (eventID == null || eventID.isEmpty()) {
             Log.e("QRGenerator", "Event ID is null or empty, cannot store.");
             return;
         }
-
         // Create a new document in the "qr_codes" collection using the eventID as the document ID
         db.collection("qr_codes").document(eventID)
                 .set(new HashMap<String, Object>() {{

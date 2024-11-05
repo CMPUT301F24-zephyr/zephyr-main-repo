@@ -2,14 +2,14 @@ package com.example.plannet.Organizer;
 
 import java.util.ArrayList;
 
-public class OrganizerData {
+public class OrganizerProfile {
     private String userID;
     private String facility;
     private String location;
     private ArrayList<String> qrCodeHashes;
 
     // Constructor
-    public OrganizerData(String userID, String facility, String qrCodeHash, String location) {
+    public OrganizerProfile(String userID, String facility, String qrCodeHash, String location) {
         this.userID = userID;
         this.facility = facility;
         this.location = location;
