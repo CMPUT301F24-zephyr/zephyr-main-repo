@@ -54,6 +54,8 @@ public class OrganizerCreateEventFragment extends Fragment {
     private ImageView qrImageView;
 
     private Button generateQrButton;
+    private Button cancelButton;
+
     private QRGenerator qrGenerator;
 
     //private OrganizerData orgData;
@@ -71,7 +73,13 @@ public class OrganizerCreateEventFragment extends Fragment {
 
         initializeViews();
         eventList = new EventList();
+        // cancel button
+        cancelButton.setOnClickListener(v -> {
+            NavController navController = Navigation.findNavController(v);
+            navController.navigate(R.id.action_createEvent_to_home);
+        });
 
+        // generate QR button (create event)
         generateQrButton.setOnClickListener(v -> createEvent());
 
         return root;
@@ -90,6 +98,8 @@ public class OrganizerCreateEventFragment extends Fragment {
         geolocationCheckbox = binding.geolocationCheckbox;
         generateQrButton = binding.generateQrButton;
         qrGenerator = new QRGenerator();
+
+        cancelButton = binding.cancelButton;
 
         lastRegEdit.setOnClickListener(view -> showDatePicker(lastRegEdit));
         runtimeStartEdit.setOnClickListener(view -> showDatePicker(runtimeStartEdit));
@@ -171,6 +181,9 @@ public class OrganizerCreateEventFragment extends Fragment {
 
             if (qrBitmap != null) {
                 showCustomToast(qrBitmap);
+                // redirect to homefragment
+                NavController navController = Navigation.findNavController(requireView());
+                navController.navigate(R.id.action_createEvent_to_home);
             } else {
                 Toast.makeText(getContext(), "Error creating QR", Toast.LENGTH_SHORT).show();
             }
