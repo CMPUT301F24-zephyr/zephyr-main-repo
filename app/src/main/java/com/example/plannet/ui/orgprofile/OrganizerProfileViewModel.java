@@ -1,4 +1,4 @@
-package com.example.plannet.ui.organizerProfile;
+package com.example.plannet.ui.orgprofile;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;

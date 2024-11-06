@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.example.plannet.ui.home.HomeFragment"
+        android:name="com.example.plannet.ui.orghome.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home">
             <action
@@ -17,19 +17,19 @@
 
     <fragment
         android:id="@+id/navigation_orgprofile"
-        android:name="com.example.plannet.ui.organizerProfile.OrganizerProfileFragment"
+        android:name="com.example.plannet.ui.orgprofile.OrganizerProfileFragment"
         android:label="@string/title_orgprofile"
         tools:layout="@layout/fragment_organizer_profile" />
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.example.plannet.ui.notifications.NotificationsFragment"
+        android:name="com.example.plannet.ui.orgnotifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
 
     <fragment
         android:id="@+id/navigation_events"
-        android:name="com.example.plannet.ui.events.EventsFragment"
+        android:name="com.example.plannet.ui.orgevents.EventsFragment"
         android:label="@string/title_events"
         tools:layout="@layout/fragment_events" />
     <fragment
@@ -39,7 +39,7 @@
         tools:layout="@layout/fragment_first_time_user"/>
     <fragment
         android:id="@+id/navigation_organizer_create_event"
-        android:name="com.example.plannet.ui.home.OrganizerCreateEventFragment"
+        android:name="com.example.plannet.ui.orghome.OrganizerCreateEventFragment"
         android:label="New Event"
         tools:layout="@layout/fragment_organizer_create_event">
             <action

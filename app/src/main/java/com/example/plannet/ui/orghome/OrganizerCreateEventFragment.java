@@ -1,4 +1,4 @@
-package com.example.plannet.ui.home;
+package com.example.plannet.ui.orghome;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;

@@ -1,4 +1,4 @@
-package com.example.plannet.ui.events;
+package com.example.plannet.ui.orgevents;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
