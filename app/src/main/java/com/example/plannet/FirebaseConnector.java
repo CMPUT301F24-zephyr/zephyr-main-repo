@@ -46,6 +46,15 @@ public class FirebaseConnector {
                 .addOnFailureListener(onFailure);
     }
 
+    /**
+     * add OR update a facility name/location to DB
+     * @param deviceID
+     * device ID information
+     * @param facilityName
+     * name of facility
+     * @param facilityLocation
+     * location of facility
+     */
     public void addFacilityToDB(String deviceID, String facilityName, String facilityLocation) {
         Map<String, Object> facilityDetails = new HashMap<>();
         facilityDetails.put("name", facilityName);

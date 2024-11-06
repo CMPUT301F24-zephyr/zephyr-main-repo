@@ -2,8 +2,6 @@ package com.example.plannet;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.util.Log;
 import android.view.View;
 
 
@@ -15,10 +13,6 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import com.example.plannet.databinding.ActivityMainBinding;
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import com.google.firebase.firestore.FirebaseFirestore;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -40,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView navView = binding.navView;
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications,
+                R.id.navigation_home, R.id.navigation_orgprofile, R.id.navigation_notifications,
                 R.id.navigation_events, R.id.navigation_first_time_user)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);

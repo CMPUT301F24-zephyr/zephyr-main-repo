@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:context=".ui.orgprofile.OrganizerProfileFragment"
     android:background="@color/backgroundColor">
 
     <ImageView
@@ -17,11 +18,11 @@
         app:srcCompat="@drawable/rectangle" />
 
     <TextView
-        android:id="@+id/SignUp"
+        android:id="@+id/facilityHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins"
-        android:text="New Organizer"
+        android:text="Facility Profile"
         android:textColor="@color/white"
         android:textSize="40sp"
         android:textStyle="bold"
@@ -32,33 +33,18 @@
         app:layout_constraintVertical_bias="0.15" />
 
     <Button
-        android:id="@+id/button_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/buttonGrey"
-        android:text="@string/back_button"
-        android:textAllCaps="false"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView6"
-        app:layout_constraintEnd_toEndOf="@+id/imageView6"
-        app:layout_constraintHorizontal_bias="0.2"
-        app:layout_constraintStart_toStartOf="@+id/imageView6"
-        app:layout_constraintTop_toTopOf="@+id/imageView6"
-        app:layout_constraintVertical_bias="0.9" />
-
-    <Button
         android:id="@+id/button_continue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/buttonPurple"
         android:fontFamily="@font/poppins"
-        android:text="@string/continue_button"
+        android:text="Save"
         android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="@+id/imageView6"
         app:layout_constraintEnd_toEndOf="@+id/imageView6"
-        app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintStart_toStartOf="@+id/imageView6"
         app:layout_constraintTop_toTopOf="@+id/imageView6"
-        app:layout_constraintVertical_bias="0.9" />
+        app:layout_constraintVertical_bias="0.915" />
 
     <TextView
         android:id="@+id/facility_prompt"
