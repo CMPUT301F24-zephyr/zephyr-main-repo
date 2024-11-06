@@ -10,9 +10,12 @@
         android:name="com.example.plannet.ui.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home">
-            <action
-                android:id="@+id/action_home_to_createEvent"
-                app:destination="@id/navigation_organizer_create_event" />
+        <action
+            android:id="@+id/action_home_to_createEvent"
+            app:destination="@id/navigation_organizer_create_event" />
+        <action
+            android:id="@+id/action_navigation_home_to_organizerEventListFragment"
+            app:destination="@id/organizerEventListFragment" />
     </fragment>
 
     <fragment
@@ -42,8 +45,17 @@
         android:name="com.example.plannet.ui.home.OrganizerCreateEventFragment"
         android:label="New Event"
         tools:layout="@layout/fragment_organizer_create_event">
-<!--        <action-->
-<!--            android:id="@+id/action_firstTimeUser_to_home"-->
-<!--            app:destination="@id/navigation_home" />-->
+        <!--        <action-->
+        <!--            android:id="@+id/action_firstTimeUser_to_home"-->
+        <!--            app:destination="@id/navigation_home" />-->
+    </fragment>
+    <fragment
+        android:id="@+id/organizerEventListFragment"
+        android:name="com.example.plannet.ui.home.OrganizerEventListFragment"
+        android:label="fragment_organizer_qrcodes_list"
+        tools:layout="@layout/fragment_organizer_qrcodes_list" >
+        <action
+            android:id="@+id/action_organizerEventListFragment_to_navigation_home"
+            app:destination="@id/navigation_home" />
     </fragment>
 </navigation>

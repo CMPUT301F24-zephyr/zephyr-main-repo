@@ -129,7 +129,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/event_item"
         app:layout_constraintVertical_bias="0.671"
-        app:srcCompat="@drawable/scan_qr_code_4" />
+        app:srcCompat="@drawable/logo_plannet1" /> <!-- Sorry, I changed this cuz I was getting an error -Jon -->
 
     <ImageView
         android:id="@+id/imageView9"

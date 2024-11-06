@@ -36,8 +36,8 @@ public class HomeFragment extends Fragment {
         });
 
         binding.buttonQrCodes.setOnClickListener(v -> {
-            // You can replace this Toast with navigation action if needed
-            // navController.navigate(R.id.action_homeFragment_to_viewEventsFragment);
+            NavController navController = Navigation.findNavController(v);
+            navController.navigate(R.id.action_navigation_home_to_organizerEventListFragment);
         });
 
         binding.buttonDraw.setOnClickListener(v -> {
