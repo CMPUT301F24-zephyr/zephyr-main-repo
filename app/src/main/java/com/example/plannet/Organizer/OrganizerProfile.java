@@ -2,21 +2,22 @@ package com.example.plannet.Organizer;
 
 import android.provider.Settings;
 
+import com.example.plannet.Event.Event;
+
 import java.util.ArrayList;
 
 public class OrganizerProfile {
     private String userID;
     private Facility facility;
     private ArrayList<String> qrCodeHashes;
+    private ArrayList<Event> events;
 
     // Constructor
-    // example for calling this class:
-    //    Facility facility = new Facility("Example Facility", "Example Location");
-    //    OrganizerProfile profile = new OrganizerProfile("userID123", facility);
     public OrganizerProfile(String userID, Facility facility) {
         this.userID = userID;
         this.facility = facility;
         this.qrCodeHashes = new ArrayList<>();
+        this.events = new ArrayList<>();
     }
 
     // Getter for userID
@@ -44,6 +45,17 @@ public class OrganizerProfile {
     // Remove a QR code hash from the list
     public void removeQrCodeHash(String qrCodeHash) {
         this.qrCodeHashes.remove(qrCodeHash);
+    }
+
+    public void addEvent(Event event) {
+        events.add(event);
+    }
+    public void removeEvent(Event event) {
+        events.remove(event);
+    }
+
+    public ArrayList<Event> getEvents() {
+        return events;
     }
 
     // Additional methods to access facility details directly
