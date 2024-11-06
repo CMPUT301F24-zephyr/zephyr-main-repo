@@ -37,12 +37,12 @@ public class HomeFragment extends Fragment {
 
         binding.buttonQrCodes.setOnClickListener(v -> {
             // You can replace this Toast with navigation action if needed
-            // navController.navigate(R.id.action_homeFragment_to_viewEventsFragment);
+            // navController.navigate(R.id.action_homeFragment_to_hashedQrFragment);
         });
 
         binding.buttonDraw.setOnClickListener(v -> {
             // You can replace this Toast with navigation action if needed
-            // navController.navigate(R.id.action_homeFragment_to_settingsFragment);
+            // navController.navigate(R.id.action_homeFragment_to_drawFragment);
         });
 
         // Optional: Update UI with ViewModel data (e.g., updating a text field)
