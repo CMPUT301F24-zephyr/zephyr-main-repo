@@ -56,7 +56,7 @@
     </fragment>
     <fragment
         android:id="@+id/organizerEventListFragment"
-        android:name="com.example.plannet.ui.orghome.OrganizerEventListFragment"
+        android:name="com.example.plannet.ui.orghome.OrganizerHashedQrListFragment"
         android:label="fragment_organizer_qrcodes_list"
         tools:layout="@layout/fragment_organizer_qrcodes_list" >
         <action
