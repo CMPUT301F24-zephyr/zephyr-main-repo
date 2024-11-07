@@ -13,7 +13,11 @@
             <action
                 android:id="@+id/action_home_to_createEvent"
                 app:destination="@id/navigation_organizer_create_event" />
+            <action
+                android:id="@+id/action_navigation_home_to_organizerEventListFragment"
+                app:destination="@id/organizerEventListFragment" />
     </fragment>
+
 
     <fragment
         android:id="@+id/navigation_orgprofile"
@@ -36,14 +40,27 @@
         android:id="@+id/navigation_first_time_user"
         android:name="com.example.plannet.ui.firsttimeuser.FirstTimeUserFragment"
         android:label="Welcome"
-        tools:layout="@layout/fragment_first_time_user"/>
+        tools:layout="@layout/fragment_first_time_user">
+        <action
+            android:id="@+id/action_firstTimeUser_to_home"
+            app:destination="@id/navigation_home" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_organizer_create_event"
         android:name="com.example.plannet.ui.orghome.OrganizerCreateEventFragment"
         android:label="New Event"
         tools:layout="@layout/fragment_organizer_create_event">
-            <action
-                android:id="@+id/action_createEvent_to_home"
-                app:destination="@id/navigation_home" />
+                <action
+                    android:id="@+id/action_createEvent_to_home"
+                    app:destination="@id/navigation_home" />
+    </fragment>
+    <fragment
+        android:id="@+id/organizerEventListFragment"
+        android:name="com.example.plannet.ui.orghome.OrganizerEventListFragment"
+        android:label="fragment_organizer_qrcodes_list"
+        tools:layout="@layout/fragment_organizer_qrcodes_list" >
+        <action
+            android:id="@+id/action_organizerEventListFragment_to_navigation_home"
+            app:destination="@id/navigation_home" />
     </fragment>
 </navigation>
