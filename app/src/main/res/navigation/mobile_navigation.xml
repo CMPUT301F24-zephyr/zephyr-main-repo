@@ -15,7 +15,7 @@
                 app:destination="@id/navigation_organizer_create_event" />
             <action
                 android:id="@+id/action_navigation_home_to_organizerEventListFragment"
-                app:destination="@id/organizerEventListFragment" />
+                app:destination="@id/organizerHashedQrListFragment" />
     </fragment>
 
 
@@ -55,9 +55,9 @@
                     app:destination="@id/navigation_home" />
     </fragment>
     <fragment
-        android:id="@+id/organizerEventListFragment"
+        android:id="@+id/organizerHashedQrListFragment"
         android:name="com.example.plannet.ui.orghome.OrganizerHashedQrListFragment"
-        android:label="fragment_organizer_qrcodes_list"
+        android:label="@string/title_orgqrcodes"
         tools:layout="@layout/fragment_organizer_qrcodes_list" >
         <action
             android:id="@+id/action_organizerEventListFragment_to_navigation_home"
