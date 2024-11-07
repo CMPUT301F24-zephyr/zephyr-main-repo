@@ -70,6 +70,9 @@ public class OrganizerEventListFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Hide the system back arrow
+
+
         // Initialize ViewBinding for this fragment
         binding = FragmentOrganizerQrcodesListBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -95,7 +98,7 @@ public class OrganizerEventListFragment extends Fragment {
         binding.backArrow.setOnClickListener(v -> {
             // Functionality for the back arrow
             NavController navController = Navigation.findNavController(v);
-            navController.navigate(R.id.action_navigation_home_to_organizerEventListFragment);
+            navController.navigate(R.id.action_organizerEventListFragment_to_navigation_home);
         });
 
         return root;
