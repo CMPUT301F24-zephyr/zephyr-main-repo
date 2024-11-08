@@ -7,6 +7,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class EntrantDBConnector {
     private FirebaseConnector fireCon;
@@ -28,5 +29,15 @@ public class EntrantDBConnector {
     public void removeEntrantFromWaitlist(String collectionPath, String documentID,
                                           OnSuccessListener<Void> onSuccess, OnFailureListener onFailure) {
         fireCon.deleteData(collectionPath, documentID, onSuccess, onFailure);
+    }
+    public void saveUserInfo(String userID, String firstName, String lastName, String phone, String email,
+                             OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
+
+        Map<String, Object> userInfo = new HashMap<>();
+        userInfo.put("firstName", firstName);
+        userInfo.put("lastName", lastName);
+        userInfo.put("phone", phone);
+        userInfo.put("email", email);
+        fireCon.addUserInfoToFirestore(userID, userInfo, onSuccessListener, onFailureListener);
     }
 }
