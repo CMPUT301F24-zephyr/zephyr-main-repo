@@ -33,6 +33,7 @@ public class EntrantScanEventFragment extends Fragment {
         BarcodeView barcodeView = view.findViewById(R.id.barcode_scanner);
         firebaseDB = FirebaseFirestore.getInstance();
 
+        //bypass the scanning for now
         view.findViewById(R.id.bypass_scan_button).setOnClickListener(v -> {
             String testHashedData = "codesensei1731040010535";  // Replace with your actual hashed data in Firebase
             fetchEventDetails(testHashedData);
