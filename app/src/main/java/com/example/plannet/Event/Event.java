@@ -4,6 +4,10 @@ import android.media.Image;
 
 import java.util.Date;
 
+/**
+ * Stores event attributes such as name, image, price, maximum entrants,
+ * waitlist limit, dates, description, geolocation status, and facility information.
+ */
 public class Event {
     private String eventName;
     private Image image;
@@ -24,7 +28,33 @@ public class Event {
 
 
 
-    // Constructor
+    /**
+     * Constructor. Creates an event and fills all the attributes.
+     * NOTE for part 4 polishing: add default values for optional attributes
+     *
+     * @param eventName
+     *      The name of the event.
+     * @param image
+     *      The event poster.
+     * @param price
+     *      The price for the event as a String (optional).
+     * @param maxEntrants
+     *      The maximum number of entrants allowed (optional).
+     * @param limitWaitlist
+     *      The limit for waitlist entries (optional).
+     * @param eventDate
+     *      The date the event will happen.
+     * @param registrationDateDeadline
+     *      The registration deadline.
+     * @param registrationStartDate
+     *      The start date for registration.
+     * @param description
+     *      A description of the event (String).
+     * @param geolocation
+     *      True if geolocation is required, false if not.
+     * @param facility
+     *      The facility where the event is.
+     */
     public Event(String eventName, Image image, String price, int maxEntrants,
                  int limitWaitlist, Date eventDate, Date registrationDateDeadline,
                  Date registrationStartDate, String description, boolean geolocation,
@@ -45,7 +75,13 @@ public class Event {
         this.eventPending = new EventWaitlistPending(this.eventID);
     }
 
-    //Called whenever an event is created
+    /**
+     * Called whenever an event is created. Generates a unique event ID by combining the event
+     * name and the current time.
+     *
+     * @return
+     *      The generated unique event ID as a String.
+     */
     public String generateEventID() {
         long timestamp = System.currentTimeMillis();   //https://currentmillis.com/tutorials/system-currentTimeMillis.html
         String EventIDName = this.eventName.replaceAll(" ", "").toLowerCase();
