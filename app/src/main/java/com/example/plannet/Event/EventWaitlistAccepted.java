@@ -10,26 +10,39 @@ import java.util.ArrayList;
  */
 public class EventWaitlistAccepted {
     private ArrayList<EntrantProfile> acceptedEntrants;
+    private String eventID;
+    private String type;
 
-    /**
-     * Constructor. Initializes an empty ArrayList.
-     *
-     * @param acceptedEntrants
-     *      ArrayList of entrant profiles that have accepted the event invite.
-     */
-    public EventWaitlistAccepted(ArrayList<EntrantProfile> acceptedEntrants) {
+
+    public EventWaitlistAccepted(String eventID) {
         this.acceptedEntrants = new ArrayList<>();
+        this.eventID = eventID;
+        this.type = "accepted";
     }
 
-    /**
-     * Add an entrant to the list of accepted entrants when they accept the invite.
-     *
-     * @param entrant
-     *      The entrant profile to add to the accepted list.
-     */
-    public void addEntrant(EntrantProfile entrant) {
-        if (entrant != null) {
-            this.acceptedEntrants.add(entrant);
-        }
+
+    public String getEventID() {
+        return eventID;
     }
+
+    public String getType() {
+        return type;
+    }
+
+    public boolean addEntrant(EntrantProfile entrant) {
+        if (entrant != null && !this.acceptedEntrants.contains(entrant)) {
+
+            this.acceptedEntrants.add(entrant);
+            return true;
+        }
+        return false;
+    }
+    public boolean removeEntrant(EntrantProfile entrant) {
+        if (entrant != null && this.acceptedEntrants.contains(entrant)) {
+            this.acceptedEntrants.remove(entrant);
+            return true;
+        }
+        return false;
+    }
+
 }

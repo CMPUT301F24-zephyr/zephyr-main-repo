@@ -4,19 +4,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
-
+/*
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.journeyapps.barcodescanner.BarcodeCallback;
-import com.journeyapps.barcodescanner.BarcodeResult;
-import com.journeyapps.barcodescanner.BarcodeView;
+//import com.journeyapps.barcodescanner.BarcodeCallback;
+//import com.journeyapps.barcodescanner.BarcodeResult;
+//import com.journeyapps.barcodescanner.BarcodeView;
 
 //Logic: onCreate -> single scan -> pass to fetch and validate -> display event
 // needs an EntrantViewEvent activity that is binded to the xml for it. Wil make onClickListener button there
 public class QRCodeScan extends AppCompatActivity {
 
-    private BarcodeView barcodeView;
+    //private BarcodeView barcodeView;
     private FirebaseFirestore firebaseDB;
     private View EntrantViewEvent;
 
@@ -69,3 +69,4 @@ public class QRCodeScan extends AppCompatActivity {
         barcodeView.resume();
     }
 }
+*/
