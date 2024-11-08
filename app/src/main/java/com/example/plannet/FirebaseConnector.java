@@ -142,7 +142,9 @@ public class FirebaseConnector {
     }
 
     public void getUserInfo(String userID, OnSuccessListener<Map<String, Object>> onSuccess, OnFailureListener onFailure) {
-        db.collection("users").document(userID).get()
+        db.collection("users").document(userID)
+                .collection("userInfo").document("profile")
+                .get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
                         onSuccess.onSuccess(documentSnapshot.getData()); // Pass user data to onSuccess listener

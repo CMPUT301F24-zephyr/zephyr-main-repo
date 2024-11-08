@@ -38,6 +38,7 @@ public class EntrantProfileFragment extends Fragment {
         phoneEdit = binding.phoneEdittext;
         emailEdit = binding.emailEdittext;
 
+        //https://developer.android.com/topic/libraries/architecture/viewmodel
         // Initialize ViewModel
         entrantProfileViewModel = new ViewModelProvider(this, new ViewModelProvider.Factory() {
             @NonNull
@@ -47,7 +48,6 @@ public class EntrantProfileFragment extends Fragment {
             }
         }).get(EntrantProfileViewModel.class);
 
-        // Observe entrant details
         entrantProfileViewModel.getEntrantDetails().observe(getViewLifecycleOwner(), this::updateUI);
 
         binding.buttonContinue.setOnClickListener(v -> saveUserProfile());
@@ -78,6 +78,7 @@ public class EntrantProfileFragment extends Fragment {
                     Log.e("EntrantProfileFragment", "Error saving profile");
                 });
     }
+
 
     @Override
     public void onDestroyView() {

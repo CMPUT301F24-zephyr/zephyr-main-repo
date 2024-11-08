@@ -50,7 +50,7 @@ public class EventDetailsFragment extends Fragment {
                 descriptionWriting.setText(eventBundle.getString("description"));
             }
 
-        // Setup listeners (e.g., back button)
+        // Setup listeners:
         backArrow.setOnClickListener(v -> requireActivity().onBackPressed());
 
         return root;
