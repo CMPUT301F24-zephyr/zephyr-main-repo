@@ -7,7 +7,9 @@ import com.example.plannet.Event.EventWaitlistAccepted;
 import com.example.plannet.Event.EventWaitlistPending;
 import com.example.plannet.Event.EventWaitlistRejected;
 
-
+/**
+ * Handles addition and removal of entrants to waitlists
+ */
 public class EntrantManager {
 
     private EntrantDBConnector DBConnector;
@@ -15,6 +17,12 @@ public class EntrantManager {
     private EntrantWaitlistAccepted EntrantAccepted;
     private EntrantWaitlistRejected EntrantRejected;
 
+    /**
+     * Constructor for EntrantManager.
+     *
+     * @param dbConnector
+     * stores the dbConnector object
+     */
     public EntrantManager(EntrantDBConnector dbConnector) {
         this.DBConnector = dbConnector;
         this.EntrantPending = new EntrantWaitlistPending();
@@ -22,6 +30,16 @@ public class EntrantManager {
         this.EntrantRejected = new EntrantWaitlistRejected();
     }
 
+    /**
+     * Add entrant to a specific pending waitlist
+     *
+     * @param context
+     *      Context for Toast
+     * @param entrant
+     *      Entrant object passes so it can be added to the waitlist
+     * @param waitlist
+     *  waitlist pending object passed so we can extract the eventID and determine collection path
+     */
     public void joinWaitlistPending(Context context, EntrantProfile entrant, EventWaitlistPending waitlist) {
 
         if (waitlist.addEntrant(entrant)) {
@@ -50,7 +68,16 @@ public class EntrantManager {
         }
     }
 
-
+    /**
+     * Adds entrant to the accepted waitlist
+     *
+     * @param context
+     *      Context for toast
+     * @param entrant
+     *      Stores the entrant object to be added to firebase
+     * @param waitlist
+     *      The waitlist object to extract the eventID and collection path
+     */
     public void joinWaitlistAccepted(Context context, EntrantProfile entrant, EventWaitlistAccepted waitlist) {
         if (waitlist.addEntrant(entrant)) {
             String collectionPath = "events/" + waitlist.getEventID() + "/waitlist_" + waitlist.getType();
@@ -73,6 +100,16 @@ public class EntrantManager {
         }
     }
 
+    /**
+     * Adds entrant to the rejected waitlist
+     *
+     * @param context
+     *      Context for toast
+     * @param entrant
+     *      entrant object to be added to firebase
+     * @param waitlist
+     *      waitlist object passed to extract eventID and collection path
+     */
     public void joinWaitlistRejected(Context context, EntrantProfile entrant, EventWaitlistRejected waitlist) {
         if (waitlist.addEntrant(entrant)) {
             String collectionPath = "events/" + waitlist.getEventID() + "/waitlist_" + waitlist.getType();
@@ -95,6 +132,16 @@ public class EntrantManager {
         }
     }
 
+    /**
+     * Removes entrant from waitlist Pending
+     *
+     * @param context
+     *      Context for Toast
+     * @param entrant
+     *      Entrant object to be removed from firebase
+     * @param waitlist
+     *      waitlist object passed to extract eventID and collection path of object to be removed
+     */
     public void leaveWaitlistPending(Context context, EntrantProfile entrant, EventWaitlistPending waitlist){
         if (waitlist.removeEntrant(entrant)) {
             // remove from firebase
@@ -115,7 +162,7 @@ public class EntrantManager {
             this.EntrantPending.removeWaitlist(waitlist);
         }
         else{
-            // not in waitlist
+            //not in waitlist
         }
     }
 }
