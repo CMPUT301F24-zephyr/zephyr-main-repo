@@ -5,7 +5,6 @@ import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -18,8 +17,6 @@ import com.example.plannet.databinding.FragmentHomeBinding;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.List;
-
 
 public class HomeFragment extends Fragment {
 
@@ -28,16 +25,14 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
 
+        binding = FragmentHomeBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
         // Using DocumentReference collection to retrieve DB info - lab5
         String userID1 = Settings.Secure.getString(requireContext().getContentResolver(), Settings.Secure.ANDROID_ID);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference userQrRef = db.collection("users").document(userID1);
 
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
 
         // Set up buttons with View Binding
         binding.buttonNewEvent.setOnClickListener(v -> {
@@ -56,17 +51,21 @@ public class HomeFragment extends Fragment {
         });
         // Setting Facility title if available
         userQrRef.get().addOnSuccessListener(documentSnapshot -> {
-            if (documentSnapshot.exists()) {
-                String facilityName = documentSnapshot.getString("facility.name");
-                if (facilityName != null) {
-                    binding.title.setText("Facility: " + facilityName);
+            if (binding != null) {
+                if (documentSnapshot.exists()) {
+                    String facilityName = documentSnapshot.getString("facility.name");
+                    if (facilityName != null) {
+                        binding.title.setText("Facility: " + facilityName);
+                    } else {
+                        binding.title.setText("Facility: null");
+                    }
                 }
             }
         }).addOnFailureListener(e -> {
             // Make a toast of error?
         });
 
-        return root;
+        return view;
     }
 
     @Override

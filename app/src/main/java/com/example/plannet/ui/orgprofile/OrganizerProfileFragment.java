@@ -17,6 +17,8 @@ import androidx.annotation.Nullable;
 
 import com.example.plannet.FirebaseConnector;
 import com.example.plannet.databinding.FragmentOrganizerProfileBinding;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class OrganizerProfileFragment extends Fragment {
 
@@ -32,7 +34,26 @@ public class OrganizerProfileFragment extends Fragment {
         userID = Settings.Secure.getString(requireContext().getContentResolver(), Settings.Secure.ANDROID_ID);
         facilityEdit = binding.facilityEdit;
         locationEdit = binding.locationEdit;
+        // Setting Facility title if available
+        // Using DocumentReference collection to retrieve DB info - lab5
+        FirebaseFirestore db1 = FirebaseFirestore.getInstance();
+        DocumentReference userQrRef = db1.collection("users").document(userID);
+        userQrRef.get().addOnSuccessListener(documentSnapshot -> {
+            if (binding != null) {
+                if (documentSnapshot.exists()) {
+                    String facilityName = documentSnapshot.getString("facility.name");
+                    String facilityLocation = documentSnapshot.getString("facility.location");
+                    if (facilityName != null) {
+                        facilityEdit.setText(facilityName);
 
+                    } if (facilityLocation != null) {
+                        locationEdit.setText(facilityLocation);
+                    }
+                }
+            }
+        }).addOnFailureListener(e -> {
+            // Make a toast of error?
+        });
         // Set up listener for Save button and call addFacilityToDB()
         binding.buttonContinue.setOnClickListener(v -> {
             db.addFacilityToDB(userID, facilityEdit.getText().toString(), locationEdit.getText().toString());
@@ -43,6 +64,7 @@ public class OrganizerProfileFragment extends Fragment {
 
         return root;
     }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

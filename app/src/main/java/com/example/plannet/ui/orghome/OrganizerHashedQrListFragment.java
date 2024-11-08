@@ -44,19 +44,23 @@ public class OrganizerHashedQrListFragment extends Fragment {
 
         // Fetch createdEvents from Firebase
         userQrRef.get().addOnSuccessListener(documentSnapshot -> {
-            if (documentSnapshot.exists()) {
-                List<String> createdEvents = (List<String>) documentSnapshot.get("createdEvents");
-                if (createdEvents != null) {
-                    qrCodeHashes.addAll(createdEvents);
-                }
-                // Set up ArrayAdapter and ListView
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, qrCodeHashes);
-                binding.eventList.setAdapter(adapter);
+            if (binding != null) {
+                if (documentSnapshot.exists()) {
+                    List<String> createdEvents = (List<String>) documentSnapshot.get("createdEvents");
+                    if (createdEvents != null) {
+                        qrCodeHashes.addAll(createdEvents);
+                    }
+                    // Set up ArrayAdapter and ListView
+                    ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, qrCodeHashes);
+                    binding.eventList.setAdapter(adapter);
 
-                // Set the facility name in the title
-                String facilityName = documentSnapshot.getString("facility.name");
-                if (facilityName != null) {
-                    binding.title.setText("Facility: " + facilityName);
+                    // Set the facility name in the title
+                    String facilityName = documentSnapshot.getString("facility.name");
+                    if (facilityName != null) {
+                        binding.title.setText("Facility: " + facilityName);
+                    } else {
+                        binding.title.setText("Facility: null");
+                    }
                 }
             }
         }).addOnFailureListener(e -> {

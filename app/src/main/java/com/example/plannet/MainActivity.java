@@ -54,7 +54,8 @@ public class MainActivity extends AppCompatActivity {
         // Handle unique ID and navigate to welcome screen if necessary
         SharedPreferences sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE);
         String uniqueID = sharedPreferences.getString("unique_id", null);
-        // this deletes your UUID -- for testing......
+
+        // this deletes your locally cached UUID -- for testing...... (must also delete UUID from DB if wanting to start over)
         //sharedPreferences.edit().remove("unique_id").apply();
         if (uniqueID == null) {
             // Navigate to the welcome screen if no unique ID is found
