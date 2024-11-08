@@ -7,14 +7,12 @@ import static org.junit.Assert.*;
 import com.example.plannet.Organizer.Facility;
 import com.example.plannet.Organizer.OrganizerProfile;
 
-import java.util.ArrayList;
-
 /**
  * Example local unit test, which will execute on the development machine (host).
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-public class ExampleUnitTest {
+public class ProjectUnitTest {
 
     private final Facility testFacility = new Facility("","");
 

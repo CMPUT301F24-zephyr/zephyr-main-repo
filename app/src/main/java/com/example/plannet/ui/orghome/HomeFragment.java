@@ -81,6 +81,9 @@ public class HomeFragment extends Fragment {
                 if (facilityName != null) {
                     binding.title.setText("Facility: " + facilityName);
                 }
+                else {
+                    binding.title.setText("Facility: null");
+                }
             }
         }).addOnFailureListener(e -> {
             // Make a toast of error?
