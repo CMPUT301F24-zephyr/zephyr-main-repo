@@ -22,7 +22,7 @@ public class Event {
     private String eventID;
     private EventWaitlistPending eventPending;
 
-
+    public Event() {}
 
     // Constructor
     public Event(String eventName, Image image, String price, int maxEntrants,

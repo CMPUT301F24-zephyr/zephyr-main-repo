@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.plannet.Event.Event;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
@@ -30,6 +31,11 @@ public class EntrantScanEventFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_qr_code_scanner, container, false);
         BarcodeView barcodeView = view.findViewById(R.id.barcode_scanner);
         firebaseDB = FirebaseFirestore.getInstance();
+
+        view.findViewById(R.id.bypass_scan_button).setOnClickListener(v -> {
+            String testHashedData = "codesensei1731040010535";  // Replace with your actual hashed data in Firebase
+            fetchEventDetails(testHashedData);
+        });
 
         // Start scanning
         barcodeView.decodeSingle(new BarcodeCallback() {
@@ -53,22 +59,27 @@ public class EntrantScanEventFragment extends Fragment {
                 Bundle eventBundle = new Bundle();
                 eventBundle.putString("eventName", event.getEventName());
                 eventBundle.putString("facility", event.getFacility());
-                eventBundle.putString("registrationDates", event.getRegistrationStartDate() + " - " + event.getRegistrationDateDeadline());
+
+                // Convert Timestamps to formatted dates if they are not null
+                DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
+
+                Timestamp startTimestamp = documentSnapshot.getTimestamp("RunTimeStartDate");
+                String startDate = (startTimestamp != null) ? dateFormat.format(startTimestamp.toDate()) : "Date not available";
+
+                Timestamp endTimestamp = documentSnapshot.getTimestamp("RunTimeEndDate");
+                String endDate = (endTimestamp != null) ? dateFormat.format(endTimestamp.toDate()) : "Date not available";
+
+                Timestamp regTimestamp = documentSnapshot.getTimestamp("LastRegDate");
+                String regDate = (regTimestamp != null) ? dateFormat.format(regTimestamp.toDate()) : "Date not available";
+
+                eventBundle.putString("registrationDates", regDate + " - " + startDate + " to " + endDate);
+
                 eventBundle.putInt("maxEntrants", event.getMaxEntrants());
                 eventBundle.putString("price", event.getPrice());
-                DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
-                String dateString = dateFormat.format(event.getEventDate());
-                eventBundle.putString("eventDate", dateString);
                 eventBundle.putString("description", event.getDescription());
 
-                // Instantiate the fragment and set the arguments
-                EventDetailsFragment eventDetailsFragment = new EventDetailsFragment();
-                eventDetailsFragment.setArguments(eventBundle);
-
-                requireActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, eventDetailsFragment)
-                        .addToBackStack(null)
-                        .commit();
+                NavHostFragment.findNavController(EntrantScanEventFragment.this)
+                        .navigate(R.id.action_qrCodeScan_to_eventDetailsFragment, eventBundle);
 
             } else {
                 Log.e("QRScan", "No event data found for this event ID.");
