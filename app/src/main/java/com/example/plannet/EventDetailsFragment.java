@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import com.example.plannet.R;
 import com.example.plannet.Event.Event;
-import com.example.plannet.ui.events.EventsViewModel;
+import com.example.plannet.ui.orgevents.EventsViewModel;
 
 public class EventDetailsFragment extends Fragment {
 

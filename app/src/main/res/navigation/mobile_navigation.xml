@@ -70,7 +70,7 @@
     <!--putting entrant nav here for now-->
     <fragment
         android:id="@+id/navigation_entrant_home"
-        android:name="com.example.plannet.ui.home.EntrantHomeFragment"
+        android:name="com.example.plannet.ui.entranthome.EntrantHomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/homescreen_entrant_fragment">
         <action

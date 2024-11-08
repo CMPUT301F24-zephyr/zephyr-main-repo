@@ -53,52 +53,54 @@ public class EntrantScanEventFragment extends Fragment {
     // Method to fetch event details from Firebase and start EventDetailsActivity
     void fetchEventDetails(String qrData) {
         firebaseDB.collection("events").document(qrData).get().addOnSuccessListener(documentSnapshot -> {
-            Event event = documentSnapshot.toObject(Event.class);
-            if (event != null) {
-                // Create a bundle with event data
-                Bundle eventBundle = new Bundle();
-                eventBundle.putString("eventName", event.getEventName());
-                eventBundle.putString("facility", event.getFacility());
+                            if (documentSnapshot.exists()) {
+                                // Manually create an Event object to handle mismatched field names
+                                Event event = new Event();
 
-                // Convert Timestamps to formatted dates if they are not null
-                DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
+                                // Set individual fields using document data due to naming incompatibility -- fix this later
+                                event.setEventName(documentSnapshot.getString("eventName"));
+                                event.setFacility(documentSnapshot.getString("facility"));
+                                event.setPrice(documentSnapshot.getString("eventPrice"));
+                                event.setMaxEntrants(documentSnapshot.getLong("eventMaxEntrants").intValue());
+                                event.setLimitWaitlist(documentSnapshot.getLong("eventLimitWaitlist").intValue());
+                                event.setDescription(documentSnapshot.getString("description"));
+                                event.setGeolocation(documentSnapshot.getBoolean("geolocation"));
 
-                Timestamp startTimestamp = documentSnapshot.getTimestamp("RunTimeStartDate");
-                String startDate = (startTimestamp != null) ? dateFormat.format(startTimestamp.toDate()) : "Date not available";
+                                // Convert Timestamps for date fields and set them
+                                Timestamp startTimestamp = documentSnapshot.getTimestamp("RunTimeStartDate");
+                                if (startTimestamp != null) event.setRegistrationStartDate(startTimestamp.toDate());
 
-                Timestamp endTimestamp = documentSnapshot.getTimestamp("RunTimeEndDate");
-                String endDate = (endTimestamp != null) ? dateFormat.format(endTimestamp.toDate()) : "Date not available";
+                                Timestamp endTimestamp = documentSnapshot.getTimestamp("RunTimeEndDate");
+                                if (endTimestamp != null) event.setEventDate(endTimestamp.toDate());
 
-                Timestamp regTimestamp = documentSnapshot.getTimestamp("LastRegDate");
-                String regDate = (regTimestamp != null) ? dateFormat.format(regTimestamp.toDate()) : "Date not available";
-
-                eventBundle.putString("registrationDates", regDate + " - " + startDate + " to " + endDate);
-
-                eventBundle.putInt("maxEntrants", event.getMaxEntrants());
-                eventBundle.putString("price", event.getPrice());
-                eventBundle.putString("description", event.getDescription());
-
-                NavHostFragment.findNavController(EntrantScanEventFragment.this)
-                        .navigate(R.id.action_qrCodeScan_to_eventDetailsFragment, eventBundle);
-
-            } else {
-                Log.e("QRScan", "No event data found for this event ID.");
-            }
-        }).addOnFailureListener(e -> {
-            Log.e("QRScan", "Error fetching event details", e);
-        });
-    }
+                                Timestamp regTimestamp = documentSnapshot.getTimestamp("LastRegDate");
+                                if (regTimestamp != null) event.setRegistrationDateDeadline(regTimestamp.toDate());
 
 
-    // Utility method to extract and validate event ID from QR code data
-    private String extractEventId(String data) {
-        return (data != null && data.matches("[a-zA-Z0-9]+")) ? data : null;
-    }
+                                Bundle eventBundle = new Bundle();
+                                eventBundle.putString("eventName", event.getEventName());
+                                eventBundle.putString("facility", event.getFacility());
 
-    private void navigateToEventDetailsFragment(Event event) {
-        // Use Navigation Component or FragmentTransaction to navigate
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("event", (Serializable) event);
-        NavHostFragment.findNavController(this).navigate(R.id.action_qrCodeScan_to_eventDetailsFragment, bundle);
-    }
-}
+                                DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
+                                String startDate = (startTimestamp != null) ? dateFormat.format(startTimestamp.toDate()) : "Date not available";
+                                String endDate = (endTimestamp != null) ? dateFormat.format(endTimestamp.toDate()) : "Date not available";
+                                String regDate = (regTimestamp != null) ? dateFormat.format(regTimestamp.toDate()) : "Date not available";
+
+                                eventBundle.putString("registrationDates", regDate + " - " + startDate + " to " + endDate);
+                                eventBundle.putInt("maxEntrants", event.getMaxEntrants());
+                                eventBundle.putString("price", event.getPrice());
+                                eventBundle.putString("description", event.getDescription());
+                                // Navigate to EventDetailsFragment with the event data
+                                NavHostFragment.findNavController(EntrantScanEventFragment.this)
+                                        .navigate(R.id.action_qrCodeScan_to_eventDetailsFragment, eventBundle);
+
+                            } else {
+                                Log.e("QRScan", "No event data found for this event ID.");
+                            }
+                        }).addOnFailureListener(e -> {
+                            Log.e("QRScan", "Error fetching event details", e);
+                        });
+                    }
+
+                }
+

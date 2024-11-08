@@ -2,9 +2,10 @@ package com.example.plannet.Event;
 
 import android.media.Image;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Event {
+public class Event implements Serializable {
     private String eventName;
     private Image image;
     private String price;

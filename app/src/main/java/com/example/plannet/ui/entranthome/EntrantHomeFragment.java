@@ -1,20 +1,17 @@
-package com.example.plannet.ui.orghome;
+package com.example.plannet.ui.entranthome;
 
 import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.plannet.R;
-import com.example.plannet.databinding.FragmentHomeBinding;
 import com.example.plannet.databinding.HomescreenEntrantFragmentBinding;
 import com.example.plannet.ui.orghome.HomeViewModel;
 
