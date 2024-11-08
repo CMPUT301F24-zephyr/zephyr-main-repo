@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">PlanNet</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
+    <string name="title_orgprofile">Organizer Profile</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_events">Events</string>
     <string name="continue_button">Continue</string>

@@ -1,4 +1,4 @@
-package com.example.plannet.ui.events;
+package com.example.plannet.ui.orgnotifications;
 
 import android.util.Log;
 
@@ -6,14 +6,14 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-public class EventsViewModel extends ViewModel {
+public class NotificationsViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;
 
-    public EventsViewModel() {
+    public NotificationsViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue("Events go here!!");
-        Log.d("EventsViewModel", "Text value: " + mText.getValue());
+        mText.setValue("This is notifications fragment");
+        Log.d("NotificationsViewModel", "Text value: " + mText.getValue());
     }
 
     public LiveData<String> getText() {
