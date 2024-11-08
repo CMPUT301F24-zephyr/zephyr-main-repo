@@ -6,16 +6,27 @@ import com.example.plannet.Event.EventWaitlistPending;
 
 import java.util.Date;
 
+/**
+ * Stores the info of an organizer's facility, including the name and location as Strings.
+ */
 public class Facility {
     private String facilityName;
     private String facilityLocation;
 
-    // Constructor
+    /**
+     * Constructor. Creates a facility with provided information.
+     *
+     * @param facilityName
+     *      (String) The name of the facility.
+     * @param facilityLocation
+     *      (String) The location of the facility.
+     */
     public Facility(String facilityName, String facilityLocation) {
         this.facilityName = facilityName;
         this.facilityLocation = facilityLocation;
     }
 
+    // Getters and setters
     public String getFacilityName() {
         return facilityName;
     }

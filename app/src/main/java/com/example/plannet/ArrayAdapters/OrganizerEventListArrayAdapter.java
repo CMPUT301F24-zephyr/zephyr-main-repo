@@ -10,27 +10,66 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.plannet.Event.Event;
 import com.example.plannet.R;
 
 import java.util.ArrayList;
 
+
 // Help creating this class was from labs and https://github.com/codepath/android_guides/wiki/using-an-arrayadapter-with-listview
-public class OrganizerEventListArrayAdapter extends ArrayAdapter<Event> {
 
-    public OrganizerEventListArrayAdapter(Context context, ArrayList<Event> events) { super(context, 0, events); }
+/**
+ * This is an ArrayAdapter class for the organizer event/QR code list.
+ * Each item in the list is adapted to fit the listitem_organizer_event_list xml, with the hashed qr code (Event ID)
+ * at the top and the event name at the bottom.
+ * Help creating this class was from labs and https://github.com/codepath/android_guides/wiki/using-an-arrayadapter-with-listview
+ */
+public class OrganizerEventListArrayAdapter extends ArrayAdapter<String> {
 
+    /**
+     * Constructor.
+     *
+     * @param context
+     *      The context of the fragment (The QR code list fragment)
+     * @param qrCodeHashes
+     *      ArrayList of the hashed qr codes as strings. NOTE FOR PART 4: This will be an ArrayList of events with all event info!
+     */
+    public OrganizerEventListArrayAdapter(@NonNull Context context, ArrayList<String> qrCodeHashes) {
+        super(context, 0, qrCodeHashes);
+    }
+
+    /**
+     * getView method that appears in every ArrayAdapter.
+     *
+     * @param position
+     *      The position of an item within the adapter's array.
+     * @param convertView
+     *      The view that we are adapting the info to.
+     * @param parent
+     *      The parent of this view (the list that the elements are in).
+     * @return
+     *      The view with adapted information that the ArrayAdapter is editing.
+     */
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        // Inflate the custom layout if convertView is null
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.listitem_organizer_event_list, parent, false);
         }
-        Event event = getItem(position);
-        TextView eventID = convertView.findViewById(R.id.hashed_qr_data);
-        TextView eventName = convertView.findViewById(R.id.event_details);
-        eventID.setText(event.getEventID());
-        eventName.setText(event.getEventName());
-        return super.getView(position, convertView, parent);
+
+        // Get the current QR code hash (The event ID)
+        String qrCodeHash = getItem(position);
+
+        // Set the data to show in the TextView
+        TextView qrData = convertView.findViewById(R.id.hashed_qr_data);
+        if (qrCodeHash != null) {
+            qrData.setText(qrCodeHash);
+        }
+
+        // NOT YET IMPLEMENTED: Set the event name under the hashed qr code data
+        TextView eventDetailsTextView = convertView.findViewById(R.id.event_details);
+        eventDetailsTextView.setText("EVENT NAME GOES HERE (WIP)");
+
+        return convertView;
     }
 }
