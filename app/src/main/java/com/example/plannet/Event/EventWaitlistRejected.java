@@ -6,14 +6,36 @@ import java.util.ArrayList;
 
 public class EventWaitlistRejected {
     private ArrayList<EntrantProfile> rejectedEntrants;
+    private String eventID;
+    private String type;
 
-    public EventWaitlistRejected() {
+    public EventWaitlistRejected(String eventID) {
         this.rejectedEntrants = new ArrayList<>();
+        this.eventID = eventID;
+        this.type = "rejected";
     }
 
-    public void addEntrant(EntrantProfile entrant) {
-        if (entrant != null) {
+    public String getEventID() {
+        return eventID;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public boolean addEntrant(EntrantProfile entrant) {
+        if (entrant != null && !this.rejectedEntrants.contains(entrant)) {
             this.rejectedEntrants.add(entrant);
+            return true;
         }
+        return false;
+    }
+
+    public boolean removeEntrant(EntrantProfile entrant) {
+        if (entrant != null && this.rejectedEntrants.contains(entrant)) {
+            this.rejectedEntrants.remove(entrant);
+            return true;
+        }
+        return false;
     }
 }
