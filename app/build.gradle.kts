@@ -50,7 +50,6 @@ dependencies {
     implementation(libs.firebase.storage)
     implementation(libs.firebase.auth)
     implementation(libs.fragment.testing)
-<<<<<<< HEAD
     testImplementation ("junit:junit:4.13.2")
     testImplementation(libs.junit)
     testImplementation(libs.ext.junit)
@@ -71,7 +70,6 @@ dependencies {
 
 
     testImplementation("androidx.test.espresso:espresso-core:3.5.1")
-=======
     implementation(libs.rules)
     //implementation("androidx.core:core-ktx:1.7.0")
 //    testImplementation(libs.junit)
@@ -88,5 +86,4 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
->>>>>>> 191fdca1a21cde3ad6ab27a808583d688783d0fd
 }

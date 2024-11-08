@@ -9,13 +9,33 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Handles connections to the Firestore database for entrant data, such as waitlist status and user info.
+ */
 public class EntrantDBConnector {
     private FirebaseConnector fireCon;
 
+    /**
+     * Constructor. Initializes a new FirebaseConnector class object.
+     */
     public EntrantDBConnector() {
         fireCon = new FirebaseConnector();
     }
 
+    /**
+     * Add an entrant to a specified waitlist in the Firestore database.
+     *
+     * @param collectionPath
+     *      The path of the collection in Firestore where waitlist is stored.
+     * @param eventID
+     *      The string ID of an event for joining the waitlist.
+     * @param entrant
+     *      The profile of the entrant to be added to a waitlist.
+     * @param onSuccess
+     *      Triggered if the operation is successful.
+     * @param onFailure
+     *      Triggered if the operation is unsuccessful.
+     */
     public void addEntrantToWaitlist(String collectionPath, String eventID, EntrantProfile entrant,
                                      OnSuccessListener<Void> onSuccess, OnFailureListener onFailure) {
         HashMap<String, Object> data = new HashMap<>();
@@ -26,10 +46,41 @@ public class EntrantDBConnector {
 
     }
 
+    /**
+     * Remove an entrant from a specified waitlist in the Firestore database.
+     *
+     * @param collectionPath
+     *      The path of the collection in Firestore where waitlist is stored.
+     * @param documentID
+     *      The string ID of the document to be removed.
+     * @param onSuccess
+     *      Triggered if the operation is successful.
+     * @param onFailure
+     *      Triggered if the operation is unsuccessful.
+     */
     public void removeEntrantFromWaitlist(String collectionPath, String documentID,
                                           OnSuccessListener<Void> onSuccess, OnFailureListener onFailure) {
         fireCon.deleteData(collectionPath, documentID, onSuccess, onFailure);
     }
+
+    /**
+     * Saves user information in the Firestore Database.
+     *
+     * @param userID
+     *      The unique ID of the user.
+     * @param firstName
+     *      The first name of the user.
+     * @param lastName
+     *      The last name of the user.
+     * @param phone
+     *      The phone number of the user.
+     * @param email
+     *      The email address of the user.
+     * @param onSuccessListener
+     *      Triggered if the operation is successful.
+     * @param onFailureListener
+     *      Triggered if the operation is unsuccessful.
+     */
     public void saveUserInfo(String userID, String firstName, String lastName, String phone, String email,
                              OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
 
