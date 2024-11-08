@@ -7,47 +7,64 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.example.plannet.ui.home.HomeFragment"
+        android:name="com.example.plannet.ui.orghome.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home">
             <action
                 android:id="@+id/action_home_to_createEvent"
                 app:destination="@id/navigation_organizer_create_event" />
             <action
-                android:id="@+id/action_home_to_entrant"
-                app:destination="@id/navigation_entrant_home" />
+                android:id="@+id/action_navigation_home_to_organizerEventListFragment"
+                app:destination="@id/organizerHashedQrListFragment" />
+        <action
+            android:id="@+id/action_home_to_entrant"
+            app:destination="@id/navigation_entrant_home" />
     </fragment>
 
+
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.plannet.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_orgprofile"
+        android:name="com.example.plannet.ui.orgprofile.OrganizerProfileFragment"
+        android:label="@string/title_orgprofile"
+        tools:layout="@layout/fragment_organizer_profile" />
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.example.plannet.ui.notifications.NotificationsFragment"
+        android:name="com.example.plannet.ui.orgnotifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
 
     <fragment
         android:id="@+id/navigation_events"
-        android:name="com.example.plannet.ui.events.EventsFragment"
+        android:name="com.example.plannet.ui.orgevents.EventsFragment"
         android:label="@string/title_events"
         tools:layout="@layout/fragment_events" />
     <fragment
         android:id="@+id/navigation_first_time_user"
         android:name="com.example.plannet.ui.firsttimeuser.FirstTimeUserFragment"
         android:label="Welcome"
-        tools:layout="@layout/fragment_first_time_user"/>
+        tools:layout="@layout/fragment_first_time_user">
+        <action
+            android:id="@+id/action_firstTimeUser_to_home"
+            app:destination="@id/navigation_home" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_organizer_create_event"
-        android:name="com.example.plannet.OrganizerCreateEventFragment"
+        android:name="com.example.plannet.ui.orghome.OrganizerCreateEventFragment"
         android:label="New Event"
         tools:layout="@layout/fragment_organizer_create_event">
-<!--        <action-->
-<!--            android:id="@+id/action_firstTimeUser_to_home"-->
-<!--            app:destination="@id/navigation_home" />-->
+                <action
+                    android:id="@+id/action_createEvent_to_home"
+                    app:destination="@id/navigation_home" />
+    </fragment>
+    <fragment
+        android:id="@+id/organizerHashedQrListFragment"
+        android:name="com.example.plannet.ui.orghome.OrganizerHashedQrListFragment"
+        android:label="@string/title_orgqrcodes"
+        tools:layout="@layout/fragment_organizer_qrcodes_list" >
+        <action
+            android:id="@+id/action_organizerEventListFragment_to_navigation_home"
+            app:destination="@id/navigation_home" />
     </fragment>
 
     <!--putting entrant nav here for now-->

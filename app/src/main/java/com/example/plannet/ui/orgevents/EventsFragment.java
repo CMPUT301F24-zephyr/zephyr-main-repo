@@ -1,4 +1,4 @@
-package com.example.plannet.ui.notifications;
+package com.example.plannet.ui.orgevents;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,22 +10,22 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.plannet.databinding.FragmentNotificationsBinding;
+import com.example.plannet.databinding.FragmentEventsBinding;
 
-public class NotificationsFragment extends Fragment {
+public class EventsFragment extends Fragment {
 
-    private FragmentNotificationsBinding binding;
+    private FragmentEventsBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        NotificationsViewModel notificationsViewModel =
-                new ViewModelProvider(this).get(NotificationsViewModel.class);
+        EventsViewModel eventsViewModel =
+                new ViewModelProvider(this).get(EventsViewModel.class);
 
-        binding = FragmentNotificationsBinding.inflate(inflater, container, false);
+        binding = FragmentEventsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textNotifications;
-        notificationsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        final TextView textView = binding.textEvents;
+        eventsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 

@@ -1,10 +1,12 @@
-package com.example.plannet.ui.home;
+package com.example.plannet.ui.orghome;
 
 import android.os.Bundle;
+import android.provider.Settings;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -14,6 +16,13 @@ import androidx.navigation.Navigation;
 
 import com.example.plannet.R;
 import com.example.plannet.databinding.FragmentHomeBinding;
+import com.example.plannet.ui.orghome.HomeViewModel;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.List;
 
 
 public class HomeFragment extends Fragment {
@@ -26,6 +35,11 @@ public class HomeFragment extends Fragment {
         HomeViewModel homeViewModel =
                 new ViewModelProvider(this).get(HomeViewModel.class);
 
+        // Using DocumentReference collection to retrieve DB info - lab5
+        String userID1 = Settings.Secure.getString(requireContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference userQrRef = db.collection("users").document(userID1);
+
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
@@ -36,22 +50,30 @@ public class HomeFragment extends Fragment {
         });
 
         binding.buttonQrCodes.setOnClickListener(v -> {
-            // You can replace this Toast with navigation action if needed
-            // navController.navigate(R.id.action_homeFragment_to_viewEventsFragment);
+            NavController navController = Navigation.findNavController(v);
+            navController.navigate(R.id.action_navigation_home_to_organizerEventListFragment);
         });
 
         binding.buttonDraw.setOnClickListener(v -> {
-            // You can replace this Toast with navigation action if needed
-            // navController.navigate(R.id.action_homeFragment_to_settingsFragment);
+            // for future reference
+            // navController.navigate(R.id.action_homeFragment_to_drawFragment);
+        });
+        // Setting Facility title if available
+        userQrRef.get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                String facilityName = documentSnapshot.getString("facility.name");
+                if (facilityName != null) {
+                    binding.title.setText("Facility: " + facilityName);
+                }
+            }
+        }).addOnFailureListener(e -> {
+            // Make a toast of error?
         });
 
         binding.buttonSwitch.setOnClickListener(v -> {
             NavController navController = Navigation.findNavController(v);
             navController.navigate(R.id.action_home_to_entrant);
         });
-
-        // Optional: Update UI with ViewModel data (e.g., updating a text field)
-        //homeViewModel.getText().observe(getViewLifecycleOwner(), binding.textHome::setText);
 
         return root;
     }

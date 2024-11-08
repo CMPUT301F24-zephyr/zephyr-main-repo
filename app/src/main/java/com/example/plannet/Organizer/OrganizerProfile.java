@@ -1,34 +1,35 @@
 package com.example.plannet.Organizer;
 
+import android.provider.Settings;
+
+import com.example.plannet.Event.Event;
+
 import java.util.ArrayList;
 
-public class OrganizerData {
+public class OrganizerProfile {
     private String userID;
-    private String facility;
-    private String location;
+    private Facility facility;
     private ArrayList<String> qrCodeHashes;
+    private ArrayList<Event> events;
 
     // Constructor
-    public OrganizerData(String userID, String facility, String qrCodeHash, String location) {
+    public OrganizerProfile(String userID, Facility facility) {
         this.userID = userID;
         this.facility = facility;
-        this.location = location;
         this.qrCodeHashes = new ArrayList<>();
+        this.events = new ArrayList<>();
     }
 
-    // Getter/Setter for userID
+    // Getter for userID
     public String getUserID() {
         return userID;
     }
-    public void setUserID(String userID) {
-        this.userID = userID;
-    }
 
     // Getter/Setter for facility
-    public String getFacility() {
+    public Facility getFacility() {
         return facility;
     }
-    public void setFacility(String facility) {
+    public void setFacility(Facility facility) {
         this.facility = facility;
     }
 
@@ -46,11 +47,23 @@ public class OrganizerData {
         this.qrCodeHashes.remove(qrCodeHash);
     }
 
-    public String getLocation() {
-        return location;
+    public void addEvent(Event event) {
+        events.add(event);
+    }
+    public void removeEvent(Event event) {
+        events.remove(event);
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public ArrayList<Event> getEvents() {
+        return events;
+    }
+
+    // Additional methods to access facility details directly
+    public String getFacilityName() {
+        return facility.getFacilityName();
+    }
+
+    public String getLocation() {
+        return facility.getFacilityLocation();
     }
 }

@@ -1,4 +1,4 @@
-package com.example.plannet.ui.home;
+package com.example.plannet.ui.orghome;
 
 import androidx.fragment.app.Fragment;
 import android.os.Bundle;
@@ -16,6 +16,7 @@ import androidx.navigation.Navigation;
 import com.example.plannet.R;
 import com.example.plannet.databinding.FragmentHomeBinding;
 import com.example.plannet.databinding.HomescreenEntrantFragmentBinding;
+import com.example.plannet.ui.orghome.HomeViewModel;
 
 public class EntrantHomeFragment extends Fragment {
 
