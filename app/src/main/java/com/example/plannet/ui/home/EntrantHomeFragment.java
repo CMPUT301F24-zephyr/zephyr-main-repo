@@ -37,7 +37,8 @@ public class EntrantHomeFragment extends Fragment {
         });
 
         binding.viewEventsButton.setOnClickListener(v -> {
-            //todo
+            NavController navController = Navigation.findNavController(v);
+            navController.navigate(R.id.action_home_to_viewEvents);
         });
         return root;
     }

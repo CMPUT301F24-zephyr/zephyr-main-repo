@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:text="Event: EVENT NAME"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.02" />
+
+    <ImageView
+        android:id="@+id/title_underline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/line_separator"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title"/>
+
+    <TextView
+        android:id="@+id/entrant_list_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:text="Entrants"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/title_underline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_bias="0.01"/>
+
+    <ListView
+        android:id="@+id/qr_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chosen_button"
+        android:background="@drawable/listview_border"/>
+
+    <Button
+        android:id="@+id/waitlisted_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:text="Waiting"
+        android:textAllCaps="false"
+        android:textSize="14sp"
+        android:backgroundTint="@color/buttonGrey"
+        app:layout_constraintEnd_toStartOf="@id/chosen_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/entrant_list_title" />
+
+    <Button
+        android:id="@+id/chosen_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:text="Chosen"
+        android:textAllCaps="false"
+        android:textSize="14sp"
+        android:backgroundTint="@color/buttonGrey"
+        app:layout_constraintEnd_toStartOf="@id/enrolled_button"
+        app:layout_constraintStart_toEndOf="@id/waitlisted_button"
+        app:layout_constraintTop_toBottomOf="@+id/entrant_list_title" />
+
+    <Button
+        android:id="@+id/enrolled_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:text="Enrolled"
+        android:textAllCaps="false"
+        android:textSize="14sp"
+        android:backgroundTint="@color/buttonGrey"
+        app:layout_constraintEnd_toStartOf="@id/cancelled_button"
+        app:layout_constraintStart_toEndOf="@id/chosen_button"
+        app:layout_constraintTop_toBottomOf="@+id/entrant_list_title" />
+
+    <Button
+        android:id="@+id/cancelled_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:text="Cancelled"
+        android:textAllCaps="false"
+        android:textSize="13sp"
+        android:backgroundTint="@color/buttonGrey"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/enrolled_button"
+        app:layout_constraintTop_toBottomOf="@+id/entrant_list_title" />
+
+    <ImageView
+        android:id="@+id/back_arrow"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="@+id/title"
+        app:layout_constraintEnd_toStartOf="@+id/title"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/back_arrow" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
