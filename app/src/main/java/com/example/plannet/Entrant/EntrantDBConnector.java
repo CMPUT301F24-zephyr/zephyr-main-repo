@@ -40,4 +40,9 @@ public class EntrantDBConnector {
         userInfo.put("email", email);
         fireCon.addUserInfoToFirestore(userID, userInfo, onSuccessListener, onFailureListener);
     }
+
+    public void getUserInfo(String userID, OnSuccessListener<Map<String, Object>> onSuccess, OnFailureListener onFailure) {
+        fireCon.getUserInfo(userID, onSuccess, onFailure);
+    }
+
 }

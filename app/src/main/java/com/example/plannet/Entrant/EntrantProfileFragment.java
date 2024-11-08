@@ -1,73 +1,87 @@
 package com.example.plannet.Entrant;
 
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 
-import com.example.plannet.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.example.plannet.databinding.FirstTimeGeneralSignupBinding;
+import com.example.plannet.Entrant.EntrantProfileViewModel;
+
+import java.util.Map;
 
 public class EntrantProfileFragment extends Fragment {
 
-    private EditText firstNameEditText, lastNameEditText, phoneEditText, emailEditText;
-    private Button saveButton;
+    private EditText firstNameEdit, lastNameEdit, phoneEdit, emailEdit;
+    private FirstTimeGeneralSignupBinding binding;
+    private EntrantProfileViewModel entrantProfileViewModel;
+    private String userID;
 
-    private EntrantDBConnector entrantDBConnector;
-    private String uniqueUserID;
-
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.first_time_general_signup, container, false);
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        binding = FirstTimeGeneralSignupBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
 
-        // Initialize EntrantDBConnector
-        entrantDBConnector = new EntrantDBConnector();
+        userID = Settings.Secure.getString(requireContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        firstNameEdit = binding.firstNameEdittext;
+        lastNameEdit = binding.lastNameEdittext;
+        phoneEdit = binding.phoneEdittext;
+        emailEdit = binding.emailEdittext;
 
-        // Initialize UI components
-        firstNameEditText = view.findViewById(R.id.first_name_edittext);
-        lastNameEditText = view.findViewById(R.id.last_name_edittext);
-        phoneEditText = view.findViewById(R.id.phone_edittext);
-        emailEditText = view.findViewById(R.id.email_edittext);
-        saveButton = view.findViewById(R.id.button_continue);
+        // Initialize ViewModel
+        entrantProfileViewModel = new ViewModelProvider(this, new ViewModelProvider.Factory() {
+            @NonNull
+            @Override
+            public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+                return (T) new EntrantProfileViewModel(userID);
+            }
+        }).get(EntrantProfileViewModel.class);
 
-        // Set up click listener for save button
-        saveButton.setOnClickListener(v -> saveUserProfile());
+        // Observe entrant details
+        entrantProfileViewModel.getEntrantDetails().observe(getViewLifecycleOwner(), this::updateUI);
 
-        return view;
+        binding.buttonContinue.setOnClickListener(v -> saveUserProfile());
+
+        return root;
+    }
+
+    private void updateUI(Map<String, Object> entrantInfo) {
+        if (entrantInfo != null) {
+            firstNameEdit.setText((String) entrantInfo.get("firstName"));
+            lastNameEdit.setText((String) entrantInfo.get("lastName"));
+            phoneEdit.setText((String) entrantInfo.get("phone"));
+            emailEdit.setText((String) entrantInfo.get("email"));
+        }
     }
 
     private void saveUserProfile() {
-        // Retrieve input from EditTexts!
-        String firstName = firstNameEditText.getText().toString().trim();
-        String lastName = lastNameEditText.getText().toString().trim();
-        String phone = phoneEditText.getText().toString().trim();
-        String email = emailEditText.getText().toString().trim();
+        String firstName = firstNameEdit.getText().toString();
+        String lastName = lastNameEdit.getText().toString();
+        String phone = phoneEdit.getText().toString();
+        String email = emailEdit.getText().toString();
 
-        // Check if required fields are filled, phone number is NOT required
-        if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty()) {
-            Toast.makeText(getContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Save user info to Firestore using EntrantDBConnector
-        entrantDBConnector.saveUserInfo(uniqueUserID, firstName, lastName, phone, email,
-                aVoid -> {
-                    Toast.makeText(getContext(), "Profile saved successfully", Toast.LENGTH_SHORT).show();
-                    Log.d("EntrantProfileFragment", "Profile saved for userID: " + uniqueUserID);
-                },
+        EntrantDBConnector entrantDBConnector = new EntrantDBConnector();
+        entrantDBConnector.saveUserInfo(userID, firstName, lastName, phone, email,
+                aVoid -> Toast.makeText(getContext(), "Profile saved successfully", Toast.LENGTH_SHORT).show(),
                 e -> {
                     Toast.makeText(getContext(), "Failed to save profile", Toast.LENGTH_SHORT).show();
-                    Log.e("EntrantProfileFragment", "Error saving profile", e);
+                    Log.e("EntrantProfileFragment", "Error saving profile");
                 });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

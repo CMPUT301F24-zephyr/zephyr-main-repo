@@ -19,6 +19,7 @@
         <action
             android:id="@+id/action_home_to_entrant"
             app:destination="@id/navigation_entrant_home" />
+
     </fragment>
 
 
@@ -76,7 +77,14 @@
         <action
             android:id="@+id/action_home_to_qrCodeScan"
             app:destination="@id/navigation_qr_code_scan" />
+        <action
+            android:id="@+id/action_home_to_profile"
+            app:destination="@id/navigation_entrant_profile" />
     </fragment>
+
+    <fragment
+        android:id="@+id/navigation_entrant_profile"
+        android:name="com.example.plannet.Entrant.EntrantProfileFragment"/>
 
     <fragment
         android:id="@+id/navigation_qr_code_scan"
