@@ -18,6 +18,7 @@ import com.journeyapps.barcodescanner.BarcodeView;
 
 import java.io.Serializable;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 //Logic: onCreate -> single scan -> pass to fetch and validate -> display event
@@ -71,22 +72,24 @@ public class EntrantScanEventFragment extends Fragment {
                                 if (startTimestamp != null) event.setRegistrationStartDate(startTimestamp.toDate());
 
                                 Timestamp endTimestamp = documentSnapshot.getTimestamp("RunTimeEndDate");
-                                if (endTimestamp != null) event.setEventDate(endTimestamp.toDate());
+                                if (endTimestamp != null) event.setRegistrationDateDeadline(endTimestamp.toDate());
 
                                 Timestamp regTimestamp = documentSnapshot.getTimestamp("LastRegDate");
-                                if (regTimestamp != null) event.setRegistrationDateDeadline(regTimestamp.toDate());
+                                if (regTimestamp != null) event.setEventDate(regTimestamp.toDate());
 
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                                String startDate = (startTimestamp != null) ? dateFormat.format(startTimestamp.toDate()) : "Date not available";
+                                String endDate = (endTimestamp != null) ? dateFormat.format(endTimestamp.toDate()) : "Date not available";
+                                String regDate = (regTimestamp != null) ? dateFormat.format(regTimestamp.toDate()) : "Date not available";
 
                                 Bundle eventBundle = new Bundle();
                                 eventBundle.putString("eventName", event.getEventName());
                                 eventBundle.putString("facility", event.getFacility());
 
-                                DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
-                                String startDate = (startTimestamp != null) ? dateFormat.format(startTimestamp.toDate()) : "Date not available";
-                                String endDate = (endTimestamp != null) ? dateFormat.format(endTimestamp.toDate()) : "Date not available";
-                                String regDate = (regTimestamp != null) ? dateFormat.format(regTimestamp.toDate()) : "Date not available";
-
-                                eventBundle.putString("registrationDates", regDate + " - " + startDate + " to " + endDate);
+                                //eventBundle.putString("registrationDates", regDate + " - " + startDate + " to " + endDate);
+                                eventBundle.putString("registrationStartDate", startDate);
+                                eventBundle.putString("registrationDateDeadline", regDate);
+                                eventBundle.putString("eventDate", endDate);
                                 eventBundle.putInt("maxEntrants", event.getMaxEntrants());
                                 eventBundle.putString("price", event.getPrice());
                                 eventBundle.putString("description", event.getDescription());

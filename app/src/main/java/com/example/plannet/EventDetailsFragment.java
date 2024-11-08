@@ -16,7 +16,7 @@ import com.example.plannet.ui.orgevents.EventsViewModel;
 
 public class EventDetailsFragment extends Fragment {
 
-    private TextView title, facilityName, facilityAddress, eventDates, capacity, cost, registrationEnds, descriptionWriting;
+    private TextView title, facilityName, facilityAddress, eventDates, capacity, cost, end_date, descriptionWriting;
     private Button registerButton;
     private ImageView backArrow, poster;
 
@@ -30,7 +30,7 @@ public class EventDetailsFragment extends Fragment {
         eventDates = root.findViewById(R.id.event_dates);
         capacity = root.findViewById(R.id.capacity);
         cost = root.findViewById(R.id.cost);
-        registrationEnds = root.findViewById(R.id.registration_ends);
+        end_date = root.findViewById(R.id.end_date);
         descriptionWriting = root.findViewById(R.id.description_writing);
         registerButton = root.findViewById(R.id.entrants_button);
         backArrow = root.findViewById(R.id.back_arrow);
@@ -42,10 +42,11 @@ public class EventDetailsFragment extends Fragment {
                 title.setText("Event: " + eventBundle.getString("eventName"));
                 facilityName.setText(eventBundle.getString("facility"));
                 facilityAddress.setText(eventBundle.getString("address"));
-                eventDates.setText("Event Dates: " + eventBundle.getString("eventDates"));
+                end_date.setText(eventBundle.getString("registrationDateDeadline"));
+                eventDates.setText("Event Dates: " + eventBundle.getString("registrationStartDate") + " to " + eventBundle.getString("eventDate"));
                 capacity.setText("Capacity: " + eventBundle.getInt("maxEntrants"));
                 cost.setText("Cost: " + eventBundle.getString("price"));
-                registrationEnds.setText(eventBundle.getString("registrationDeadline"));
+                end_date.setText(eventBundle.getString("registrationDateDeadline"));
                 descriptionWriting.setText(eventBundle.getString("description"));
             }
 
