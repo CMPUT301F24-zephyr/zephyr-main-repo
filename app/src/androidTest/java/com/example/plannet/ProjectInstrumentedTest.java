@@ -17,7 +17,6 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.rule.GrantPermissionRule;
 
 // fragment classes used
-import com.example.plannet.ui.orghome.OrganizerCreateEventFragment;
 //import com.example.plannet.ui.orghome.AnotherFragmentToTest;
 
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -31,7 +30,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.*;
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 
-public class ExampleInstrumentedTest {
+public class ProjectInstrumentedTest {
     @Rule
     public ActivityScenarioRule<MainActivity> activityRule = new ActivityScenarioRule<>(MainActivity.class);
 
