@@ -4,6 +4,7 @@
     <string name="title_orgprofile">Organizer Profile</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_events">Events</string>
+    <string name="title_orgqrcodes">Hashed QR Codes</string>
     <string name="continue_button">Continue</string>
     <string name="back_button">Back</string>
     <!-- TODO: Remove or change this placeholder text -->

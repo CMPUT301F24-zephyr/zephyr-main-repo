@@ -1,7 +1,11 @@
 package com.example.plannet.Organizer;
 import com.example.plannet.Event.Event;
 import java.util.ArrayList;
-import java.util.List;
+
+/**
+ * A class that stores the created events by an organizer.
+ * PART 4 NOTE: We may not need this class. Discuss as a group and potentially remove.
+ */
 public class OrganizerCreatedEvents {
     private String organizationName;
     private ArrayList<Event> events;

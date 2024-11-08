@@ -5,16 +5,21 @@ import com.example.plannet.Entrant.EntrantProfile;
 
 import java.util.ArrayList;
 
+/**
+ * Stores a list of all accepted entrants for an events waitlist.
+ */
 public class EventWaitlistAccepted {
     private ArrayList<EntrantProfile> acceptedEntrants;
     private String eventID;
     private String type;
+
 
     public EventWaitlistAccepted(String eventID) {
         this.acceptedEntrants = new ArrayList<>();
         this.eventID = eventID;
         this.type = "accepted";
     }
+
 
     public String getEventID() {
         return eventID;
@@ -26,6 +31,7 @@ public class EventWaitlistAccepted {
 
     public boolean addEntrant(EntrantProfile entrant) {
         if (entrant != null && !this.acceptedEntrants.contains(entrant)) {
+
             this.acceptedEntrants.add(entrant);
             return true;
         }
