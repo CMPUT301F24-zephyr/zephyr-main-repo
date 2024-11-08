@@ -47,7 +47,7 @@
         tools:layout="@layout/fragment_first_time_user">
         <action
             android:id="@+id/action_firstTimeUser_to_home"
-            app:destination="@id/navigation_home" />
+            app:destination="@id/navigation_entrant_home" />
     </fragment>
     <fragment
         android:id="@+id/navigation_organizer_create_event"
@@ -80,6 +80,9 @@
         <action
             android:id="@+id/action_home_to_profile"
             app:destination="@id/navigation_entrant_profile" />
+        <action
+            android:id="@+id/action_navigation_entrant_home_to_navigation_home"
+            app:destination="@id/navigation_home" />
     </fragment>
 
     <fragment

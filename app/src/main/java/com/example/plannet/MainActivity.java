@@ -34,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView navView = binding.navView;
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_orgprofile, R.id.navigation_notifications,
-                R.id.navigation_events, R.id.navigation_first_time_user, R.id.organizerHashedQrListFragment, R.id.navigation_organizer_create_event, R.id.navigation_entrant_home, R.id.navigation_qr_code_scan, R.id.navigation_event_details, R.id.navigation_entrant_profile)
+                R.id.navigation_entrant_home, R.id.navigation_orgprofile, R.id.navigation_notifications,
+                R.id.navigation_events, R.id.navigation_home, R.id.navigation_first_time_user, R.id.organizerHashedQrListFragment, R.id.navigation_organizer_create_event, R.id.navigation_entrant_home, R.id.navigation_qr_code_scan, R.id.navigation_event_details, R.id.navigation_entrant_profile)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -49,6 +49,27 @@ public class MainActivity extends AppCompatActivity {
                 navView.setVisibility(View.VISIBLE);
             }
         });
+
+        // Ovewrride the Home button to always take you to the entrant screen. FIX THIS IN PART 4!
+        // THIS IS JUST A QUICK FIX FOR PART 3 TO WORK RIGHT
+        //
+        //
+        //
+        // DO YOU SEE ME? REMOVE ME IN PART 4! RAHHHHHHH
+        //
+        //
+        //
+        navView.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.navigation_home) {
+                // Always navigate to entrant home
+                navController.popBackStack(R.id.navigation_entrant_home, false);
+                navController.navigate(R.id.navigation_entrant_home);
+                return true;
+            } else {
+                // Handle other navigation items as usual
+                return NavigationUI.onNavDestinationSelected(item, navController);
+            }
+        });
         //Log.d("MainActivity", "CHECKPOINT");
 
         // Handle unique ID and navigate to welcome screen if necessary
@@ -60,6 +81,10 @@ public class MainActivity extends AppCompatActivity {
         if (uniqueID == null) {
             // Navigate to the welcome screen if no unique ID is found
             navController.navigate(R.id.navigation_first_time_user);
+        }
+        else {
+            // Added to take the user to the entrant homescreen if an ID is found
+            navController.navigate(R.id.navigation_entrant_home);
         }
         mainActivityViewModel.setUniqueID(uniqueID);
     }

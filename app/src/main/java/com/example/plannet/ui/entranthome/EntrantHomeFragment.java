@@ -43,6 +43,11 @@ public class EntrantHomeFragment extends Fragment {
             navController.navigate(R.id.action_home_to_profile);
         });
 
+        binding.buttonSwitch.setOnClickListener(v -> {
+            NavController navController = Navigation.findNavController(v);
+            navController.navigate(R.id.action_navigation_entrant_home_to_navigation_home);
+        });
+
         return root;
     }
 

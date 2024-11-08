@@ -65,7 +65,7 @@ public class FirstTimeUserFragment extends Fragment {
 
             // Navigate to home fragment
             NavController navController = Navigation.findNavController(view);
-            navController.navigate(R.id.navigation_home);
+            navController.navigate(R.id.navigation_entrant_home);
         });
 
         return view;
