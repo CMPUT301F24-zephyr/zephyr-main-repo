@@ -50,6 +50,7 @@ dependencies {
     implementation(libs.firebase.storage)
     implementation(libs.firebase.auth)
     implementation(libs.fragment.testing)
+<<<<<<< HEAD
     testImplementation ("junit:junit:4.13.2")
     testImplementation(libs.junit)
     testImplementation(libs.ext.junit)
@@ -70,4 +71,22 @@ dependencies {
 
 
     testImplementation("androidx.test.espresso:espresso-core:3.5.1")
+=======
+    implementation(libs.rules)
+    //implementation("androidx.core:core-ktx:1.7.0")
+//    testImplementation(libs.junit)
+
+//    androidTestImplementation(libs.ext.junit)
+//    androidTestImplementation(libs.espresso.core)
+
+    //implementation("com.journeyapps:zxing-android-embedded:4.3.0")
+    //implementation("com.google.zxing:core:3.4.1")
+
+    // testing dependencies
+    implementation("androidx.activity:activity:1.9.3")
+    implementation("androidx.test.espresso:espresso-intents:3.6.1")
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.2.1")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+>>>>>>> 191fdca1a21cde3ad6ab27a808583d688783d0fd
 }

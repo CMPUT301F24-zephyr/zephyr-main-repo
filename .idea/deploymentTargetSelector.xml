@@ -5,10 +5,14 @@
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
+<<<<<<< HEAD
       <SelectionState runConfigName="QRCodeScanTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
       <SelectionState runConfigName="EntrantScanEventFragmentTest">
+=======
+      <SelectionState runConfigName="testCreateFacility()">
+>>>>>>> 191fdca1a21cde3ad6ab27a808583d688783d0fd
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
