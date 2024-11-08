@@ -113,6 +113,15 @@ public class FirebaseConnector {
                 .addOnSuccessListener(aVoid -> Log.d("Firestore", "User added to Firestore"))
                 .addOnFailureListener(e -> Log.e("Firestore", "Error saving user", e));
     }
+    public void addUserInfoToFirestore(String uniqueID, Map<String, Object> userInfo,
+                                       OnSuccessListener<Void> onSuccessListener,
+                                       OnFailureListener onFailureListener) {
+        db.collection("users").document(uniqueID)
+                .collection("userInfo").document("profile")
+                .set(userInfo)
+                .addOnSuccessListener(onSuccessListener)
+                .addOnFailureListener(onFailureListener);
+    }
 
     public void checkIfFacilityDataIsValid(String userID, OnSuccessListener<Map<String, Object>> onSuccess, OnFailureListener onFailure) {
         db.collection("users").document(userID).get()
@@ -127,6 +136,20 @@ public class FirebaseConnector {
                         }
                     } else {
                         onFailure.onFailure(new Exception("No document found for userID: " + userID));
+                    }
+                })
+                .addOnFailureListener(onFailure);
+    }
+
+    public void getUserInfo(String userID, OnSuccessListener<Map<String, Object>> onSuccess, OnFailureListener onFailure) {
+        db.collection("users").document(userID)
+                .collection("userInfo").document("profile")
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        onSuccess.onSuccess(documentSnapshot.getData()); // Pass user data to onSuccess listener
+                    } else {
+                        onFailure.onFailure(new Exception("User document does not exist"));
                     }
                 })
                 .addOnFailureListener(onFailure);

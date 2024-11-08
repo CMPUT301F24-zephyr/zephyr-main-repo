@@ -79,7 +79,7 @@
         app:layout_constraintVertical_bias="0.572" />
 
     <Button
-        android:id="@+id/button_switchrole"
+        android:id="@+id/button_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Switch Role"

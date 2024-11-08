@@ -2,13 +2,14 @@ package com.example.plannet.Event;
 
 import android.media.Image;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Stores event attributes such as name, image, price, maximum entrants,
  * waitlist limit, dates, description, geolocation status, and facility information.
  */
-public class Event {
+public class Event implements Serializable {
     private String eventName;
     private Image image;
     private String price;
@@ -26,7 +27,7 @@ public class Event {
     private String eventID;
     private EventWaitlistPending eventPending;
 
-
+    public Event() {}
 
     /**
      * Constructor. Creates an event and fills all the attributes.

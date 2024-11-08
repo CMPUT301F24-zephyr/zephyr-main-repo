@@ -12,4 +12,5 @@
     <string name="underlined_text"><u>SKIP</u></string>
     <string name="scan_qr_code">Scan QR code</string>
     <string name="view_events">View events</string>
+    <string name="view_my_profile">View My Profile</string>
 </resources>

@@ -16,6 +16,10 @@
             <action
                 android:id="@+id/action_navigation_home_to_organizerEventListFragment"
                 app:destination="@id/organizerHashedQrListFragment" />
+        <action
+            android:id="@+id/action_home_to_entrant"
+            app:destination="@id/navigation_entrant_home" />
+
     </fragment>
 
 
@@ -63,4 +67,41 @@
             android:id="@+id/action_organizerEventListFragment_to_navigation_home"
             app:destination="@id/navigation_home" />
     </fragment>
-</navigation>
+
+    <!--putting entrant nav here for now-->
+    <fragment
+        android:id="@+id/navigation_entrant_home"
+        android:name="com.example.plannet.ui.entranthome.EntrantHomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/homescreen_entrant_fragment">
+        <action
+            android:id="@+id/action_home_to_qrCodeScan"
+            app:destination="@id/navigation_qr_code_scan" />
+        <action
+            android:id="@+id/action_home_to_profile"
+            app:destination="@id/navigation_entrant_profile" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_entrant_profile"
+        android:name="com.example.plannet.Entrant.EntrantProfileFragment"/>
+
+    <fragment
+        android:id="@+id/navigation_qr_code_scan"
+        android:name="com.example.plannet.EntrantScanEventFragment"
+        android:label="QR Code Scan"
+        tools:layout="@layout/fragment_qr_code_scanner">
+        <action
+            android:id="@+id/action_qrCodeScan_to_eventDetailsFragment"
+            app:destination="@id/navigation_event_details" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_event_details"
+        android:name="com.example.plannet.EventDetailsFragment"
+        android:label="Event Details"
+        tools:layout="@layout/entrant_view_event">
+
+    </fragment>
+
+
+    </navigation>

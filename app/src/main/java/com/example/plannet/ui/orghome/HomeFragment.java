@@ -2,6 +2,7 @@ package com.example.plannet.ui.orghome;
 
 import android.os.Bundle;
 import android.provider.Settings;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,9 @@ import androidx.navigation.Navigation;
 
 import com.example.plannet.R;
 import com.example.plannet.databinding.FragmentHomeBinding;
+import com.example.plannet.ui.orghome.HomeViewModel;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -80,6 +84,11 @@ public class HomeFragment extends Fragment {
             }
         }).addOnFailureListener(e -> {
             // Make a toast of error?
+        });
+
+        binding.buttonSwitch.setOnClickListener(v -> {
+            NavController navController = Navigation.findNavController(v);
+            navController.navigate(R.id.action_home_to_entrant);
         });
 
         return root;
