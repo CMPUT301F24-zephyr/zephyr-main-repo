@@ -50,6 +50,7 @@ dependencies {
     implementation(libs.firebase.storage)
     implementation(libs.firebase.auth)
     implementation(libs.fragment.testing)
+    implementation(libs.legacy.support.v4)
     testImplementation ("junit:junit:4.13.2")
     testImplementation(libs.junit)
     testImplementation(libs.ext.junit)

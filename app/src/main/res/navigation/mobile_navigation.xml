@@ -87,7 +87,8 @@
 
     <fragment
         android:id="@+id/navigation_entrantprofile"
-        android:name="com.example.plannet.ui.entrantprofile.EntrantProfileFragment"/>
+        android:name="com.example.plannet.ui.entrantprofile.EntrantProfileFragment"
+        android:label="Entrant Profile"/>
 
     <fragment
         android:id="@+id/navigation_qr_code_scan"
@@ -103,7 +104,12 @@
         android:name="com.example.plannet.EventDetailsFragment"
         android:label="Event Details"
         tools:layout="@layout/entrant_view_event">
-
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_entrantnotifications"
+        android:name="com.example.plannet.ui.entrantnotifications.EntrantNotificationsFragment"
+        android:label="Entrant Notifications"
+        tools:layout="@layout/fragment_entrant_notifications">
     </fragment>
 
 
