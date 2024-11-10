@@ -24,10 +24,28 @@ public class OrganizerHomeFragment extends Fragment {
 
     private FragmentHomeOrganizerBinding binding;
     private OrganizerHomeViewModel organizerHomeViewModel;
+    private DocumentReference userQrRef;
 
     /**
-     * OnCreateView method for the binding. Code that happens when the view is created.
-     *
+     * configurations upon creating fragment such as viewmodels and initializations
+     * @param savedInstanceState If the fragment is being re-created from
+     * a previous saved state, this is the state.
+     */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Initialize ViewModel
+        organizerHomeViewModel = new ViewModelProvider(this).get(OrganizerHomeViewModel.class);
+
+        // Initialize Firebase DocumentReference to retrieve DB info
+        String userID1 = Settings.Secure.getString(requireContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        userQrRef = db.collection("users").document(userID1);
+    }
+
+    /**
+     * set up views and inflator
      * @param inflater The LayoutInflater object that can be used to inflate
      * any views in the fragment,
      * @param container If non-null, this is the parent view that the fragment's
@@ -37,22 +55,25 @@ public class OrganizerHomeFragment extends Fragment {
      * from a previous saved state as given here.
      *
      * @return
-     *      root.
      */
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        OrganizerHomeViewModel organizerHomeViewModel =
-                new ViewModelProvider(this).get(OrganizerHomeViewModel.class);
-
-        // Using DocumentReference collection to retrieve DB info - lab5
-        String userID1 = Settings.Secure.getString(requireContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference userQrRef = db.collection("users").document(userID1);
-
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate the layout using View Binding
         binding = FragmentHomeOrganizerBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        return binding.getRoot();
+    }
 
-        // Set up buttons with View Binding
+    /**
+     * configure buttonlisteners & db operations
+     * @param view The View returned by {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     */
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // Set up button click listeners
         binding.buttonNewEvent.setOnClickListener(v -> {
             NavController navController = Navigation.findNavController(v);
             navController.navigate(R.id.action_home_to_createEvent);
@@ -64,22 +85,8 @@ public class OrganizerHomeFragment extends Fragment {
         });
 
         binding.buttonDraw.setOnClickListener(v -> {
-            // for future reference
+            // Future navigation reference
             // navController.navigate(R.id.action_homeFragment_to_drawFragment);
-        });
-        // Setting Facility title if available
-        userQrRef.get().addOnSuccessListener(documentSnapshot -> {
-            if (documentSnapshot.exists()) {
-                String facilityName = documentSnapshot.getString("facility.name");
-                if (facilityName != null) {
-                    binding.title.setText("Facility: " + facilityName);
-                }
-                else {
-                    binding.title.setText("Facility: null");
-                }
-            }
-        }).addOnFailureListener(e -> {
-            // Make a toast of error?
         });
 
         binding.buttonSwitch.setOnClickListener(v -> {
@@ -87,7 +94,15 @@ public class OrganizerHomeFragment extends Fragment {
             navController.navigate(R.id.action_home_to_entrant);
         });
 
-        return root;
+        // Fetch and display facility title if available
+        userQrRef.get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                String facilityName = documentSnapshot.getString("facility.name");
+                binding.title.setText("Facility: " + (facilityName != null ? facilityName : "null"));
+            }
+        }).addOnFailureListener(e -> {
+            // Handle failure, maybe show a toast or log the error
+        });
     }
 
     /**
@@ -96,6 +111,6 @@ public class OrganizerHomeFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null;
+        binding = null; // Clear the binding reference
     }
 }
