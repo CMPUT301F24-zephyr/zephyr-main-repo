@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_orghome">
+    app:startDestination="@+id/navigation_entranthome">
 
     <fragment
         android:id="@+id/navigation_orghome"
@@ -47,7 +47,7 @@
         tools:layout="@layout/fragment_first_time_user">
         <action
             android:id="@+id/action_firstTimeUser_to_home"
-            app:destination="@id/navigation_orghome" />
+            app:destination="@id/navigation_entranthome" />
     </fragment>
     <fragment
         android:id="@+id/navigation_organizer_create_event"

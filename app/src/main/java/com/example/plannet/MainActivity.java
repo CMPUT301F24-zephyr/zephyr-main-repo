@@ -13,6 +13,8 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import com.example.plannet.databinding.ActivityMainBinding;
+import com.google.android.material.bottomnavigation.LabelVisibilityMode;
+import com.google.android.material.navigation.NavigationBarView;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -83,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNav = binding.navView;
         bottomNav.getMenu().clear(); // Clear current menu
         bottomNav.inflateMenu(R.menu.bottom_nav_menu_entrant);
+        bottomNav.setLabelVisibilityMode(NavigationBarView.LABEL_VISIBILITY_LABELED);
+
     }
 
     /**
@@ -93,6 +97,8 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNav = binding.navView;
         bottomNav.getMenu().clear(); // Clear current menu
         bottomNav.inflateMenu(R.menu.bottom_nav_menu_org);
+        bottomNav.setLabelVisibilityMode(NavigationBarView.LABEL_VISIBILITY_LABELED);
+
     }
 }
 
