@@ -19,6 +19,9 @@ import com.example.plannet.databinding.FragmentEntrantProfileBinding;
 
 import java.util.Map;
 
+/**
+ * Entrant profile fragment for user data collection
+ */
 public class EntrantProfileFragment extends Fragment {
 
     private EditText firstNameEdit, lastNameEdit, phoneEdit, emailEdit;
@@ -26,6 +29,18 @@ public class EntrantProfileFragment extends Fragment {
     private EntrantProfileViewModel entrantProfileViewModel;
     private String userID;
 
+    /**
+     *
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentEntrantProfileBinding.inflate(inflater, container, false);
@@ -78,7 +93,9 @@ public class EntrantProfileFragment extends Fragment {
                 });
     }
 
-
+    /**
+     * Method for setting the binding to null when the view is destroyed to avoid errors.
+     */
     @Override
     public void onDestroyView() {
         super.onDestroyView();

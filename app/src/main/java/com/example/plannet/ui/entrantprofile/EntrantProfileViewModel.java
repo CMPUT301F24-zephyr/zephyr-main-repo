@@ -11,15 +11,28 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.Map;
 
+/**
+ * View model class for managing entrant details
+ */
 public class EntrantProfileViewModel extends ViewModel {
 
     private final MutableLiveData<Map<String, Object>> entrantDetails = new MutableLiveData<>();
     private final EntrantDBConnector entrantDBConnector = new EntrantDBConnector();
 
+    /**
+     * Constructor for the view model.
+     * @param userID
+     * unique user identifier passed to constructor
+     */
     public EntrantProfileViewModel(String userID) {
         loadEntrantDetails(userID);
     }
 
+    /**
+     *
+     *
+     * @param userID
+     */
     private void loadEntrantDetails(String userID) {
         entrantDBConnector.getUserInfo(userID,
                 new OnSuccessListener<Map<String, Object>>() {

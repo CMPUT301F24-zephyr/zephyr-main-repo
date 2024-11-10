@@ -34,7 +34,7 @@ public class EventDetailsFragment extends Fragment {
         View root = inflater.inflate(R.layout.entrant_view_event, container, false);
         dbConnector = new EntrantDBConnector();
 
-        // Initialize Views
+
         title = root.findViewById(R.id.title);
         facilityName = root.findViewById(R.id.facility_name);
         facilityAddress = root.findViewById(R.id.facility_address);
@@ -47,7 +47,7 @@ public class EventDetailsFragment extends Fragment {
         backArrow = root.findViewById(R.id.back_arrow);
         poster = root.findViewById(R.id.poster);
 
-        // Get from QRCodeScannerFragment
+
         Bundle eventBundle = getArguments();
         if (eventBundle != null) {
             title.setText("Event: " + eventBundle.getString("eventName"));
@@ -85,18 +85,18 @@ public class EventDetailsFragment extends Fragment {
                         String profilePictureUrl = (String) userInfo.get("profilePictureUrl");
                         boolean notifsActivated = userInfo.get("notifsActivated") != null && (Boolean) userInfo.get("notifsActivated");
 
-                        // Combine first and last name as needed
+
                         String name = firstName + " " + lastName;
 
-                        // Create the EntrantProfile object using the context for device ID
+
                         EntrantProfile entrantProfile = new EntrantProfile(
-                                requireContext(), // Pass context for deviceID generation
+                                requireContext(),
                                 userID,
                                 name,
                                 email,
                                 phone,
                                 profilePictureUrl,
-                                userID, // For deviceID (or generate if different)
+                                userID,
                                 notifsActivated
                         );
 

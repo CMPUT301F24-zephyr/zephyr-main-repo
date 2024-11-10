@@ -2,6 +2,9 @@ package com.example.plannet.Entrant;
 import android.content.Context;
 import android.provider.Settings;
 
+/**
+ *  Class for storing entrant details
+ */
 public class EntrantProfile {
     private String userId;
     private String name;
@@ -11,10 +14,29 @@ public class EntrantProfile {
     private String deviceID;
     private boolean notifsActivated;
 
-    // Empty constructor for Firebase
+    //Empty constructor for Firebase
     public EntrantProfile() {}
 
-
+    /**
+     *
+     * Constructor for creating a new EntrantProfile object.
+     *
+     * @param context
+     *      Context passed for toast
+     * @param userId
+     *      userId of user
+     * @param name
+     *      entrant name
+     * @param email
+     *      entrant email
+     * @param phoneNumber
+     *      entrant phone number
+     * @param profilePictureUrl
+     *      entrant profile pricture url
+     * @param deviceID
+     *      attribute to store device ID of entrant
+     * @param notifsActivated
+     */
     public EntrantProfile(Context context, String userId, String name, String email, String phoneNumber, String profilePictureUrl, String deviceID, boolean notifsActivated) {
         this.userId = userId;
         this.name = name;
