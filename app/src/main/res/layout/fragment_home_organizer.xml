@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.orghome.HomeFragment"
+    tools:context=".ui.orghome.OrganizerHomeFragment"
     android:background="@color/backgroundColor">
 
     <TextView
@@ -88,5 +88,5 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonDraw"
-        app:layout_constraintVertical_bias="0.493" />
+        app:layout_constraintVertical_bias="0.49" />
 </androidx.constraintlayout.widget.ConstraintLayout>

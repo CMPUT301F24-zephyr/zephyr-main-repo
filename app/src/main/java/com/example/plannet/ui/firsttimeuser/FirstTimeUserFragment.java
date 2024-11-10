@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +16,6 @@ import androidx.navigation.Navigation;
 
 import com.example.plannet.FirebaseConnector;
 import com.example.plannet.R;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 /**
  * Fragment that is displayed when a user first opens the app (their android ID is not recognized).
@@ -65,7 +59,7 @@ public class FirstTimeUserFragment extends Fragment {
 
             // Navigate to home fragment
             NavController navController = Navigation.findNavController(view);
-            navController.navigate(R.id.navigation_home);
+            navController.navigate(R.id.navigation_orghome);
         });
 
         return view;

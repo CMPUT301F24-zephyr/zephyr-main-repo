@@ -34,8 +34,10 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView navView = binding.navView;
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_orgprofile, R.id.navigation_notifications,
-                R.id.navigation_events, R.id.navigation_first_time_user, R.id.organizerHashedQrListFragment, R.id.navigation_organizer_create_event, R.id.navigation_entrant_home, R.id.navigation_qr_code_scan, R.id.navigation_event_details, R.id.navigation_entrant_profile)
+                R.id.navigation_orghome, R.id.navigation_orgprofile, R.id.navigation_orgnotifications,
+                R.id.navigation_orgevents, R.id.navigation_first_time_user, R.id.organizerHashedQrListFragment,
+                R.id.navigation_organizer_create_event, R.id.navigation_entranthome, R.id.navigation_qr_code_scan,
+                R.id.navigation_event_details, R.id.navigation_entrantprofile)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -47,6 +49,15 @@ public class MainActivity extends AppCompatActivity {
                 navView.setVisibility(View.GONE);
             } else {
                 navView.setVisibility(View.VISIBLE);
+            }
+
+            // Nav tabs configuration depending on which role (later add admin as well)
+            if (destination.getId() == R.id.navigation_entranthome || destination.getId() == R.id.navigation_entrantprofile || destination.getId() == R.id.navigation_entrantnotifications) {
+                // Customize tabs for EntrantHomeFragment
+                showEntrantTabs();
+            } else {
+                // Show Org navTabs
+                showOrgTabs();
             }
         });
         //Log.d("MainActivity", "CHECKPOINT");
@@ -62,6 +73,26 @@ public class MainActivity extends AppCompatActivity {
             navController.navigate(R.id.navigation_first_time_user);
         }
         mainActivityViewModel.setUniqueID(uniqueID);
+    }
+
+    /**
+     * method to enable entrant XML menu
+     */
+    private void showEntrantTabs() {
+        // Show Entrant menu xml
+        BottomNavigationView bottomNav = binding.navView;
+        bottomNav.getMenu().clear(); // Clear current menu
+        bottomNav.inflateMenu(R.menu.bottom_nav_menu_entrant);
+    }
+
+    /**
+     * method to enable org XML menu
+     */
+    private void showOrgTabs() {
+        // Show Org menu xml
+        BottomNavigationView bottomNav = binding.navView;
+        bottomNav.getMenu().clear(); // Clear current menu
+        bottomNav.inflateMenu(R.menu.bottom_nav_menu_org);
     }
 }
 

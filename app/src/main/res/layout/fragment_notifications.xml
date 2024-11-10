@@ -162,7 +162,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/buttonPurple"
-        app:menu="@menu/bottom_nav_menu"
+        app:menu="@menu/bottom_nav_menu_org"
         app:itemIconTint="@color/white"
         app:itemTextColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"

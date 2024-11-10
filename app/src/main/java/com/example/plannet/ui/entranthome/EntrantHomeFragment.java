@@ -12,30 +12,40 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.plannet.R;
-import com.example.plannet.databinding.HomescreenEntrantFragmentBinding;
-import com.example.plannet.ui.orghome.HomeViewModel;
+import com.example.plannet.databinding.FragmentHomeEntrantBinding;
+import com.example.plannet.ui.entranthome.EntrantHomeViewModel;
 
 public class EntrantHomeFragment extends Fragment {
 
-    private HomescreenEntrantFragmentBinding binding;
-    private HomeViewModel homeViewModel;
+    private FragmentHomeEntrantBinding binding;
+    private EntrantHomeViewModel entrantHomeViewModel;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Initialize ViewModel
+        entrantHomeViewModel = new ViewModelProvider(this).get(EntrantHomeViewModel.class);
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
+        // Inflate the layout for this fragment and set up View Binding
+        binding = FragmentHomeEntrantBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
 
-        binding = HomescreenEntrantFragmentBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        // Set up buttons with View Binding
         binding.scanQrButton.setOnClickListener(v -> {
             NavController navController = Navigation.findNavController(v);
             navController.navigate(R.id.action_home_to_qrCodeScan);
         });
 
         binding.viewEventsButton.setOnClickListener(v -> {
-            //
+            // Add any action for this button here
         });
 
         binding.viewProfileButton.setOnClickListener(v -> {
@@ -43,12 +53,17 @@ public class EntrantHomeFragment extends Fragment {
             navController.navigate(R.id.action_home_to_profile);
         });
 
-        return root;
+        // switch role button
+        binding.buttonSwitch2.setOnClickListener(v -> {
+            NavController navController = Navigation.findNavController(v);
+            navController.navigate(R.id.action_entranthome_to_orghome);
+        });
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        // This method is for clear the binding reference when view is destroyed
         binding = null;
     }
 }

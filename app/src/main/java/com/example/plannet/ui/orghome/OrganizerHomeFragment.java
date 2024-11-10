@@ -2,11 +2,9 @@ package com.example.plannet.ui.orghome;
 
 import android.os.Bundle;
 import android.provider.Settings;
-import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -15,22 +13,17 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.plannet.R;
-import com.example.plannet.databinding.FragmentHomeBinding;
-import com.example.plannet.ui.orghome.HomeViewModel;
+import com.example.plannet.databinding.FragmentHomeOrganizerBinding;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.List;
 
 /**
  * Organizer Homescreen fragment. Provides the general navigation options for an organizer.
  */
-public class HomeFragment extends Fragment {
+public class OrganizerHomeFragment extends Fragment {
 
-    private FragmentHomeBinding binding;
-    private HomeViewModel homeViewModel;
+    private FragmentHomeOrganizerBinding binding;
+    private OrganizerHomeViewModel organizerHomeViewModel;
 
     /**
      * OnCreateView method for the binding. Code that happens when the view is created.
@@ -48,15 +41,15 @@ public class HomeFragment extends Fragment {
      */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
+        OrganizerHomeViewModel organizerHomeViewModel =
+                new ViewModelProvider(this).get(OrganizerHomeViewModel.class);
 
         // Using DocumentReference collection to retrieve DB info - lab5
         String userID1 = Settings.Secure.getString(requireContext().getContentResolver(), Settings.Secure.ANDROID_ID);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference userQrRef = db.collection("users").document(userID1);
 
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
+        binding = FragmentHomeOrganizerBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         // Set up buttons with View Binding

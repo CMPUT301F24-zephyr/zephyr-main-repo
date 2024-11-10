@@ -1,4 +1,4 @@
-package com.example.plannet.Entrant;
+package com.example.plannet.ui.entrantprofile;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
