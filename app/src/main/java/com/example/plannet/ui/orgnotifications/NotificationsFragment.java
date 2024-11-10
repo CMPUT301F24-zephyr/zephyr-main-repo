@@ -13,6 +13,10 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.plannet.databinding.FragmentNotificationsBinding;
 import com.example.plannet.databinding.FragmentOrganizerSendNotificationBinding;
 
+/**
+ * class for org notification manager
+ * has to do with sending all types of notifications to entrants
+ */
 public class NotificationsFragment extends Fragment {
 
     private FragmentOrganizerSendNotificationBinding binding;

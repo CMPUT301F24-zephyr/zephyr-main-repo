@@ -77,7 +77,7 @@ public class ProjectInstrumentedTest {
         checkFirstTimeUserFragment();
         Espresso.onIdle();
 
-        // Click on organizer profile tab from nav bar
+        // Click on entrant profile tab from nav bar
         onView(withId(R.id.navigation_entrantprofile)).perform(click());
         Espresso.onIdle();
 
