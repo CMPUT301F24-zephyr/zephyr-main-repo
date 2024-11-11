@@ -46,8 +46,8 @@
         android:label="Welcome"
         tools:layout="@layout/fragment_first_time_user">
         <action
-            android:id="@+id/action_firstTimeUser_to_home"
-            app:destination="@id/navigation_entranthome" />
+            android:id="@+id/action_firstTimeUser_to_entrantProfile"
+            app:destination="@id/navigation_entrantprofile" />
     </fragment>
     <fragment
         android:id="@+id/navigation_organizer_create_event"
@@ -88,7 +88,12 @@
     <fragment
         android:id="@+id/navigation_entrantprofile"
         android:name="com.example.plannet.ui.entrantprofile.EntrantProfileFragment"
-        android:label="Entrant Profile"/>
+        android:label="Entrant Profile">
+        <action
+            android:id="@+id/action_entrantProfile_to_home"
+            app:destination="@id/navigation_entranthome" />
+    </fragment>
+
 
     <fragment
         android:id="@+id/navigation_qr_code_scan"
@@ -112,5 +117,12 @@
         tools:layout="@layout/fragment_entrant_notifications">
     </fragment>
 
+<!--    <fragment-->
+<!--        android:id="@+id/navigation_entrant_profile_display"-->
+<!--        android:name="com.example.plannet.ui.entrantprofiledisplay.EntrantProfileDisplayFragment"-->
+<!--        android:label="Entrant Profile Display"-->
+<!--        tools:layout="@layout/fragment_entrant_profile_display" />-->
 
-    </navigation>
+
+
+</navigation>
