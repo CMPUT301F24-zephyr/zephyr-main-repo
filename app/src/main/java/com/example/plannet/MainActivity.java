@@ -23,8 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
 //    private FirebaseConnector db;
-    private boolean check = false;
-    private int numberCheck;
+    private boolean check = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +55,17 @@ public class MainActivity extends AppCompatActivity {
 
             // Nav tabs configuration depending on which role (later add admin as well)
             if (destination.getId() == R.id.navigation_entranthome || destination.getId() == R.id.navigation_entrantprofile || destination.getId() == R.id.navigation_entrantnotifications) {
-                // Customize tabs for EntrantHomeFragment
-                showEntrantTabs();
+                if (check != true) {
+                    // Customize tabs for EntrantHomeFragment
+                    showEntrantTabs();
+                    check = true;
+                }
             } else {
-                // Show Org navTabs
-                showOrgTabs();
+                if (check != false) {
+                    // Show Org navTabs
+                    showOrgTabs();
+                    check = false;
+                }
             }
         });
         //Log.d("MainActivity", "CHECKPOINT");
