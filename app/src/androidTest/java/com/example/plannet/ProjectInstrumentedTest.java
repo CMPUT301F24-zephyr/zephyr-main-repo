@@ -55,6 +55,10 @@ public class ProjectInstrumentedTest {
     public void testOrganizerCreateNewEventFragmentUIComponents() {
         checkFirstTimeUserFragment();
         Espresso.onIdle();
+
+        onView(withId(R.id.button_switch2)).perform(click());
+        Espresso.onIdle();
+
         onView(withId(R.id.buttonNewEvent)).check(matches(isDisplayed()));
         Espresso.onIdle();
         // Check OrganizerCreateEventFragment UI elements
@@ -73,12 +77,12 @@ public class ProjectInstrumentedTest {
         checkFirstTimeUserFragment();
         Espresso.onIdle();
 
-        // Click on organizer profile tab from nav bar
-        onView(withId(R.id.navigation_orgprofile)).perform(click());
+        // Click on entrant profile tab from nav bar
+        onView(withId(R.id.navigation_entrantprofile)).perform(click());
         Espresso.onIdle();
 
-        // Verify that content specific to Orgpprofile is displayed
-        onView(withId(R.id.facility_prompt)).check(matches(isDisplayed()));
+        // Verify that content specific to entrantpprofile is displayed
+        onView(withId(R.id.first_name_edittext)).check(matches(isDisplayed()));
         Espresso.onIdle();
     }
 
@@ -90,6 +94,10 @@ public class ProjectInstrumentedTest {
         // Get past first time user
         checkFirstTimeUserFragment();
         Espresso.onIdle();
+        // navigate to org view
+        onView(withId(R.id.button_switch2)).perform(click());
+        Espresso.onIdle();
+
         // click create new event
         onView(withId(R.id.buttonNewEvent)).perform(click());
         Espresso.onIdle();

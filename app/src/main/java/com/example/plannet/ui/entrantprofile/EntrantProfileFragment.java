@@ -1,4 +1,4 @@
-package com.example.plannet.Entrant;
+package com.example.plannet.ui.entrantprofile;
 
 import android.os.Bundle;
 import android.provider.Settings;
@@ -10,13 +10,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.plannet.databinding.FirstTimeGeneralSignupBinding;
-import com.example.plannet.Entrant.EntrantProfileViewModel;
+import com.example.plannet.Entrant.EntrantDBConnector;
+import com.example.plannet.databinding.FragmentEntrantProfileBinding;
 
 import java.util.Map;
 
@@ -26,7 +25,7 @@ import java.util.Map;
 public class EntrantProfileFragment extends Fragment {
 
     private EditText firstNameEdit, lastNameEdit, phoneEdit, emailEdit;
-    private FirstTimeGeneralSignupBinding binding;
+    private FragmentEntrantProfileBinding binding;
     private EntrantProfileViewModel entrantProfileViewModel;
     private String userID;
 
@@ -44,7 +43,7 @@ public class EntrantProfileFragment extends Fragment {
      */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FirstTimeGeneralSignupBinding.inflate(inflater, container, false);
+        binding = FragmentEntrantProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         userID = Settings.Secure.getString(requireContext().getContentResolver(), Settings.Secure.ANDROID_ID);
@@ -65,7 +64,7 @@ public class EntrantProfileFragment extends Fragment {
 
         entrantProfileViewModel.getEntrantDetails().observe(getViewLifecycleOwner(), this::updateUI);
 
-        binding.buttonContinue.setOnClickListener(v -> saveUserProfile());
+        binding.buttonSave.setOnClickListener(v -> saveUserProfile());
 
         return root;
     }

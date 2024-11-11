@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+android:id="@+id/bottom_navigation_bar_org">
+<!--    ORGANIZER TABS-->
+    <item
+        android:id="@+id/navigation_orghome"
+        android:icon="@drawable/ic_home_black_24dp"
+        android:title="@string/title_home" />
+
+    <item
+        android:id="@+id/navigation_orgprofile"
+        android:icon="@drawable/baseline_account_box_24"
+        android:title="@string/title_orgprofile" />
+
+    <item
+        android:id="@+id/navigation_orgnotifications"
+        android:icon="@drawable/ic_notifications_black_24dp"
+        android:title="@string/title_notifications" />
+
+    <item
+        android:id="@+id/navigation_orgevents"
+        android:icon="@drawable/baseline_event_24"
+        android:title="@string/title_events" />
+
+
+</menu>

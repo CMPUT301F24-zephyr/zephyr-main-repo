@@ -11,17 +11,22 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.plannet.databinding.FragmentNotificationsBinding;
+import com.example.plannet.databinding.FragmentOrganizerSendNotificationBinding;
 
+/**
+ * class for org notification manager
+ * has to do with sending all types of notifications to entrants
+ */
 public class NotificationsFragment extends Fragment {
 
-    private FragmentNotificationsBinding binding;
+    private FragmentOrganizerSendNotificationBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         NotificationsViewModel notificationsViewModel =
                 new ViewModelProvider(this).get(NotificationsViewModel.class);
 
-        binding = FragmentNotificationsBinding.inflate(inflater, container, false);
+        binding = FragmentOrganizerSendNotificationBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         return root;

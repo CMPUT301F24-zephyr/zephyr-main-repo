@@ -13,6 +13,8 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import com.example.plannet.databinding.ActivityMainBinding;
+import com.google.android.material.bottomnavigation.LabelVisibilityMode;
+import com.google.android.material.navigation.NavigationBarView;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -21,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
 //    private FirebaseConnector db;
+    private boolean check = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,11 +34,12 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         BottomNavigationView navView = binding.navView;
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_entrant_home, R.id.navigation_orgprofile, R.id.navigation_notifications,
-                R.id.navigation_events, R.id.navigation_home, R.id.navigation_first_time_user, R.id.organizerHashedQrListFragment, R.id.navigation_organizer_create_event, R.id.navigation_entrant_home, R.id.navigation_qr_code_scan, R.id.navigation_event_details, R.id.navigation_entrant_profile)
+                R.id.navigation_orghome, R.id.navigation_orgprofile, R.id.navigation_orgnotifications,
+                R.id.navigation_orgevents, R.id.navigation_first_time_user, R.id.organizerHashedQrListFragment,
+                R.id.navigation_organizer_create_event, R.id.navigation_entranthome, R.id.navigation_qr_code_scan,
+                R.id.navigation_event_details, R.id.navigation_entrantprofile, R.id.navigation_entrantnotifications)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -48,26 +52,20 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 navView.setVisibility(View.VISIBLE);
             }
-        });
 
-        // Ovewrride the Home button to always take you to the entrant screen. FIX THIS IN PART 4!
-        // THIS IS JUST A QUICK FIX FOR PART 3 TO WORK RIGHT
-        //
-        //
-        //
-        // DO YOU SEE ME? REMOVE ME IN PART 4! RAHHHHHHH
-        //
-        //
-        //
-        navView.setOnItemSelectedListener(item -> {
-            if (item.getItemId() == R.id.navigation_home) {
-                // Always navigate to entrant home
-                navController.popBackStack(R.id.navigation_entrant_home, false);
-                navController.navigate(R.id.navigation_entrant_home);
-                return true;
+            // Nav tabs configuration depending on which role (later add admin as well)
+            if (destination.getId() == R.id.navigation_entranthome || destination.getId() == R.id.navigation_entrantprofile || destination.getId() == R.id.navigation_entrantnotifications) {
+                if (check != true) {
+                    // Customize tabs for EntrantHomeFragment
+                    showEntrantTabs();
+                    check = true;
+                }
             } else {
-                // Handle other navigation items as usual
-                return NavigationUI.onNavDestinationSelected(item, navController);
+                if (check != false) {
+                    // Show Org navTabs
+                    showOrgTabs();
+                    check = false;
+                }
             }
         });
         //Log.d("MainActivity", "CHECKPOINT");
@@ -82,11 +80,31 @@ public class MainActivity extends AppCompatActivity {
             // Navigate to the welcome screen if no unique ID is found
             navController.navigate(R.id.navigation_first_time_user);
         }
-        else {
-            // Added to take the user to the entrant homescreen if an ID is found
-            navController.navigate(R.id.navigation_entrant_home);
-        }
         mainActivityViewModel.setUniqueID(uniqueID);
+    }
+
+    /**
+     * method to enable entrant XML menu
+     */
+    private void showEntrantTabs() {
+        // Show Entrant menu xml
+        BottomNavigationView bottomNav = binding.navView;
+        bottomNav.getMenu().clear(); // Clear current menu
+        bottomNav.inflateMenu(R.menu.bottom_nav_menu_entrant);
+        bottomNav.setLabelVisibilityMode(NavigationBarView.LABEL_VISIBILITY_LABELED);
+
+    }
+
+    /**
+     * method to enable org XML menu
+     */
+    private void showOrgTabs() {
+        // Show Org menu xml
+        BottomNavigationView bottomNav = binding.navView;
+        bottomNav.getMenu().clear(); // Clear current menu
+        bottomNav.inflateMenu(R.menu.bottom_nav_menu_org);
+        bottomNav.setLabelVisibilityMode(NavigationBarView.LABEL_VISIBILITY_LABELED);
+
     }
 }
 

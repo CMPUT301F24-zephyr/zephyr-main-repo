@@ -55,7 +55,7 @@ public class OrganizerProfileFragment extends Fragment {
             // Make a toast of error?
         });
         // Set up listener for Save button and call addFacilityToDB()
-        binding.buttonContinue.setOnClickListener(v -> {
+        binding.buttonSave.setOnClickListener(v -> {
             db.addFacilityToDB(userID, facilityEdit.getText().toString(), locationEdit.getText().toString());
             //Toast saying successful
             Toast.makeText(getContext(), "Facility saved!", Toast.LENGTH_SHORT).show();

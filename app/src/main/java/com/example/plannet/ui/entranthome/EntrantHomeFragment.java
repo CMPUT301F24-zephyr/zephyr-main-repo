@@ -12,30 +12,69 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.plannet.R;
-import com.example.plannet.databinding.HomescreenEntrantFragmentBinding;
-import com.example.plannet.ui.orghome.HomeViewModel;
+import com.example.plannet.databinding.FragmentHomeEntrantBinding;
+import com.example.plannet.ui.entranthome.EntrantHomeViewModel;
+
+/**
+ * this is the home fragment for entrants, which is also set to default
+ */
 
 public class EntrantHomeFragment extends Fragment {
 
-    private HomescreenEntrantFragmentBinding binding;
-    private HomeViewModel homeViewModel;
+    private FragmentHomeEntrantBinding binding;
+    private EntrantHomeViewModel entrantHomeViewModel;
 
+
+    /**
+     * view hierarchy - onCreate contains viewmodel configurations
+     * @param savedInstanceState If the fragment is being re-created from
+     * a previous saved state, this is the state.
+     */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Initialize ViewModel
+        entrantHomeViewModel = new ViewModelProvider(this).get(EntrantHomeViewModel.class);
+    }
+
+    /**
+     * onCreateView is 2nd up in view hierarchy which contains everything
+     * for inflators/binding
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return
+     */
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        HomeViewModel homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
+        // Inflate the layout for this fragment and set up View Binding
+        binding = FragmentHomeEntrantBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
 
-        binding = HomescreenEntrantFragmentBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+    /**
+     * last in the sequence. this contains all misc items such as buttonlisteneres, etc..
+     * @param view The View returned by {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     */
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-        // Set up buttons with View Binding
         binding.scanQrButton.setOnClickListener(v -> {
             NavController navController = Navigation.findNavController(v);
             navController.navigate(R.id.action_home_to_qrCodeScan);
         });
 
         binding.viewEventsButton.setOnClickListener(v -> {
-            //
+            // Add any action for this button here
         });
 
         binding.viewProfileButton.setOnClickListener(v -> {
@@ -43,17 +82,20 @@ public class EntrantHomeFragment extends Fragment {
             navController.navigate(R.id.action_home_to_profile);
         });
 
-        binding.buttonSwitch.setOnClickListener(v -> {
+        // switch role button
+        binding.buttonSwitch2.setOnClickListener(v -> {
             NavController navController = Navigation.findNavController(v);
-            navController.navigate(R.id.action_navigation_entrant_home_to_navigation_home);
+            navController.navigate(R.id.action_entranthome_to_orghome);
         });
-
-        return root;
     }
 
+    /**
+     * This method is for clear the binding reference when view is destroyed
+     */
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        // This method is for clear the binding reference when view is destroyed
         binding = null;
     }
 }

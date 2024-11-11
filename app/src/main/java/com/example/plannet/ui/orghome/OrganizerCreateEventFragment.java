@@ -41,7 +41,6 @@ import java.util.Map;
 public class OrganizerCreateEventFragment extends Fragment {
     // import data from mainActivityViewModel
     private MainActivityViewModel mainActivityViewModel;
-    private EventList eventList;
     private String userID1;
 
 //    private String facility;
@@ -61,18 +60,52 @@ public class OrganizerCreateEventFragment extends Fragment {
     //private OrganizerData orgData;
     private FirebaseConnector dbConnector = new FirebaseConnector();
 
+    /**
+     * this method is called as soon as the fragment is called
+     * @param savedInstanceState If the fragment is being re-created from
+     * a previous saved state, this is the state.
+     */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        userID1 = Settings.Secure.getString(requireContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+
+    }
+
+    /**
+     * this method sets up binding configurations
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Initialize ViewBinding for this fragment
         binding = FragmentOrganizerCreateEventBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        userID1 = Settings.Secure.getString(requireContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        return root;
+    }
+
+    /**
+     * this is where buttonlisteners and other fragment interactions go
+     * @param view The View returned by {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     */
+    @Override
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         // checks and creates facility if needed
         checkIfFacilityDataIsValid(userID1);
 
         initializeViews();
-        eventList = new EventList();
         // cancel button
         cancelButton.setOnClickListener(v -> {
             NavController navController = Navigation.findNavController(v);
@@ -81,12 +114,13 @@ public class OrganizerCreateEventFragment extends Fragment {
 
         // generate QR button (create event)
         generateQrButton.setOnClickListener(v -> createEvent());
-
-        return root;
     }
 
-    // Method for initializing views used for cleaner code
+    /**
+     * method for initializing views to keep cleaner code structure
+     */
     private void initializeViews() {
+
         nameEdit = binding.nameEdit;
         priceEdit = binding.priceEdit;
         maxEntrantsEdit = binding.maxEntrantsEdit;
@@ -106,6 +140,10 @@ public class OrganizerCreateEventFragment extends Fragment {
         runtimeEndEdit.setOnClickListener(view -> showDatePicker(runtimeEndEdit));
     }
 
+    /**
+     * method for checking if facility is already set up prior to creating event
+     * @param userID
+     */
     private void checkIfFacilityDataIsValid(String userID) {
         dbConnector.checkIfFacilityDataIsValid(userID,
                 facilityMap -> {
@@ -129,6 +167,9 @@ public class OrganizerCreateEventFragment extends Fragment {
                 });
     }
 
+    /**
+     * method for creating an event if initial tests pass such as valid facility, etc..
+     */
     private void createEvent() {
         if (facilityDetails.getFacilityName() == null) {
             Toast.makeText(getContext(), "Facility data is missing. Please create or select a facility.", Toast.LENGTH_SHORT).show();
@@ -190,6 +231,10 @@ public class OrganizerCreateEventFragment extends Fragment {
         }
     }
 
+    /**
+     * interactive datepicker UI for a better user experience
+     * @param editText
+     */
     private void showDatePicker(EditText editText) {
         // Get the current date as default
         Calendar calendar = Calendar.getInstance();
@@ -207,6 +252,12 @@ public class OrganizerCreateEventFragment extends Fragment {
         datePickerDialog.show();
     }
 
+    /**
+     * parses date in a proper format to display
+     * @param dateString
+     * @param dateFormat
+     * @return
+     */
     private Date parseDate(String dateString, SimpleDateFormat dateFormat) {
         try {
             return dateString.isEmpty() ? null : dateFormat.parse(dateString);
@@ -216,7 +267,10 @@ public class OrganizerCreateEventFragment extends Fragment {
         }
     }
 
-    // method to show toast notification with QR code
+    /**
+     * method to show toast notification with QR code
+     * @param qrBitmap
+     */
     private void showCustomToast(Bitmap qrBitmap) {
         // Inflate custom toast layout
         LayoutInflater inflater = getLayoutInflater();
@@ -282,12 +336,15 @@ public class OrganizerCreateEventFragment extends Fragment {
                 .setNegativeButton("Cancel", (dialog, which) -> {
                     Toast.makeText(getContext(), "Cannot create event without facility info", Toast.LENGTH_SHORT).show();
                     NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
-                    navController.navigate(R.id.navigation_home);
+                    navController.navigate(R.id.navigation_orghome);
                 })
                 .show();
     }
 
 
+    /**
+     * destroys view to avoid any errors when exiting fragment
+     */
     @Override
     public void onDestroyView() {
         super.onDestroyView();

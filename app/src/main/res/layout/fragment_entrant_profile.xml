@@ -12,26 +12,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/facilityHeader"
+        app:layout_constraintTop_toBottomOf="@+id/entrantProfileHeader"
+        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/rectangle_long" />
 
     <TextView
-        android:id="@+id/facilityHeader"
+        android:id="@+id/entrantProfileHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
         android:fontFamily="@font/poppins"
-        android:text="Sign Up"
+        android:text="Entrant Profile"
         android:textColor="@color/white"
         android:textSize="50sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <EditText
         android:id="@+id/first_name_edittext"
@@ -207,27 +208,17 @@
         app:layout_constraintTop_toTopOf="@+id/line1" />
 
     <Button
-        android:id="@+id/button_back"
+        android:id="@+id/button_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginBottom="12dp"
-        android:background="@android:color/transparent"
-        android:backgroundTint="@android:color/transparent"
-        android:text="@string/underlined_text"
-        app:layout_constraintBottom_toBottomOf="@+id/line1"
-        app:layout_constraintStart_toStartOf="@+id/line1" />
-
-    <Button
-        android:id="@+id/button_continue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
+        android:layout_marginTop="11dp"
         android:layout_marginBottom="12dp"
         android:fontFamily="@font/poppins"
-        android:text="Continue"
+        android:text="Save"
         app:layout_constraintBottom_toBottomOf="@+id/line1"
-        app:layout_constraintEnd_toEndOf="@+id/line1" />
+        app:layout_constraintEnd_toEndOf="@+id/line1"
+        app:layout_constraintStart_toStartOf="@+id/line1"
+        app:layout_constraintTop_toBottomOf="@+id/imageView5" />
 
     <ImageView
         android:id="@+id/imageView5"
