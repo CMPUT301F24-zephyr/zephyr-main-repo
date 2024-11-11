@@ -86,7 +86,7 @@
         android:id="@+id/filter_pending"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="@color/NavigationBar"
         android:text="ACCEPTED"
         android:textColor="@color/black"
         app:layout_constraintBottom_toTopOf="@+id/event_item"
