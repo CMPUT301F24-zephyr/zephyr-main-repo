@@ -79,7 +79,7 @@ public class EntrantHomeFragment extends Fragment {
 
         binding.viewProfileButton.setOnClickListener(v -> {
             NavController navController = Navigation.findNavController(v);
-            navController.navigate(R.id.action_home_to_profile);
+            navController.navigate(R.id.navigation_entrant_profile_display);
         });
 
         // switch role button

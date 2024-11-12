@@ -117,12 +117,10 @@
         tools:layout="@layout/fragment_entrant_notifications">
     </fragment>
 
-<!--    <fragment-->
-<!--        android:id="@+id/navigation_entrant_profile_display"-->
-<!--        android:name="com.example.plannet.ui.entrantprofiledisplay.EntrantProfileDisplayFragment"-->
-<!--        android:label="Entrant Profile Display"-->
-<!--        tools:layout="@layout/fragment_entrant_profile_display" />-->
-
-
+    <fragment
+        android:id="@+id/navigation_entrant_profile_display"
+        android:name="com.example.plannet.ui.entrantprofile.EntrantProfileDisplayFragment"
+        android:label="Entrant Profile Display"
+        tools:layout="@layout/entrant_profile_display" />
 
 </navigation>
