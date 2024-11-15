@@ -88,6 +88,10 @@ public class EntrantScanEventFragment extends Fragment {
                                 eventBundle.putString("facility", event.getFacility());
 
                                 //eventBundle.putString("registrationDates", regDate + " - " + startDate + " to " + endDate);
+
+                                //for now I'm passing the codesensei test event, but we gotta change this
+                                //field to the actual event ID later
+                                eventBundle.putString("eventID", qrData);
                                 eventBundle.putString("registrationStartDate", startDate);
                                 eventBundle.putString("registrationDateDeadline", regDate);
                                 eventBundle.putString("eventDate", endDate);

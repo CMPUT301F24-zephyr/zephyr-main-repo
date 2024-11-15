@@ -23,28 +23,20 @@ public class EntrantDBConnector {
     }
 
     /**
-     * Add an entrant to a specified waitlist in the Firestore database.
      *
-     * @param collectionPath
-     *      The path of the collection in Firestore where waitlist is stored.
      * @param eventID
-     *      The string ID of an event for joining the waitlist.
-     * @param entrant
-     *      The profile of the entrant to be added to a waitlist.
+     * @param entrantID
+     * @param entrantData
      * @param onSuccess
-     *      Triggered if the operation is successful.
      * @param onFailure
-     *      Triggered if the operation is unsuccessful.
      */
-    public void addEntrantToWaitlist(String collectionPath, String eventID, EntrantProfile entrant,
-                                     OnSuccessListener<Void> onSuccess, OnFailureListener onFailure) {
-        HashMap<String, Object> data = new HashMap<>();
-        data.put("deviceID", entrant.getDeviceID());
-        data.put("entrant", entrant);
-        // add onsuccess and onfailure for addign data to firebase??
-        fireCon.addData(collectionPath, eventID, data, onSuccess, onFailure);
-
+    public void addEntrantToWaitlist(String eventID, String entrantID, HashMap<String, Object> entrantData,
+                                     String waitlistType, OnSuccessListener<Void> onSuccess, OnFailureListener onFailure) {
+        String collectionPath = "events/" + eventID + "/waitlist_" + waitlistType; // Dynamically choose sub-collection
+        fireCon.addData(collectionPath, entrantID, entrantData, onSuccess, onFailure);
     }
+
+
 
     /**
      * Remove an entrant from a specified waitlist in the Firestore database.
