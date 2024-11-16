@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Hide the navigation bar on the welcome screen
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            if (destination.getId() == R.id.navigation_first_time_user) {
+            if (destination.getId() == R.id.navigation_first_time_user|| destination.getId() == R.id.navigation_entrantprofile) {
                 navView.setVisibility(View.GONE);
             } else {
                 navView.setVisibility(View.VISIBLE);

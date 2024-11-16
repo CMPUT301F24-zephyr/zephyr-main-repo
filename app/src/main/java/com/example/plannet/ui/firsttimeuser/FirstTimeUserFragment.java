@@ -57,9 +57,9 @@ public class FirstTimeUserFragment extends Fragment {
             // Add user to Firestore
             db.addUserToFirestore(uniqueID);
 
-            // Navigate to home fragment
-            NavController navController = Navigation.findNavController(view);
-            navController.navigate(R.id.navigation_entranthome);
+            // Navigate to entrant profile fragment
+            NavController navController = Navigation.findNavController(v);
+            navController.navigate(R.id.action_firstTimeUser_to_entrantProfile);
         });
 
         return view;

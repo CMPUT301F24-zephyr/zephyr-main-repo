@@ -21,6 +21,9 @@ import com.example.plannet.R;
 import com.example.plannet.Event.Event;
 import com.example.plannet.ui.orgevents.EventsViewModel;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class EventDetailsFragment extends Fragment {
 
     private TextView title, facilityName, facilityAddress, eventDates, capacity, cost, end_date, descriptionWriting;
@@ -66,7 +69,7 @@ public class EventDetailsFragment extends Fragment {
 
         userID = Settings.Secure.getString(requireContext().getContentResolver(), Settings.Secure.ANDROID_ID);
 
-        // Setup listeners:
+
         backArrow.setOnClickListener(v -> requireActivity().onBackPressed());
         registerButton.setOnClickListener(v -> registerForEvent());
 
@@ -74,45 +77,38 @@ public class EventDetailsFragment extends Fragment {
     }
 
     private void registerForEvent() {
-        if (eventID != null) {
-            dbConnector.getUserInfo(userID,
-                    userInfo -> {
-                        // Create EntrantProfile object with necessary fields
-                        String firstName = (String) userInfo.get("firstName");
-                        String lastName = (String) userInfo.get("lastName");
-                        String email = (String) userInfo.get("email");
-                        String phone = (String) userInfo.get("phone");
-                        String profilePictureUrl = (String) userInfo.get("profilePictureUrl");
-                        boolean notifsActivated = userInfo.get("notifsActivated") != null && (Boolean) userInfo.get("notifsActivated");
-
-
-                        String name = firstName + " " + lastName;
-
-
-                        EntrantProfile entrantProfile = new EntrantProfile(
-                                requireContext(),
-                                userID,
-                                name,
-                                email,
-                                phone,
-                                profilePictureUrl,
-                                userID,
-                                notifsActivated
-                        );
-
-                        dbConnector.addEntrantToWaitlist("events", eventID, entrantProfile,
-                                aVoid -> Toast.makeText(getContext(), "Successfully registered for the waitlist", Toast.LENGTH_SHORT).show(),
-                                e -> {
-                                    Toast.makeText(getContext(), "Failed to register for the waitlist", Toast.LENGTH_SHORT).show();
-                                    Log.e("EventDetailsFragment", "Error registering for waitlist", e);
-                                });
-                    },
-                    e -> {
-                        Toast.makeText(getContext(), "Error fetching user profile", Toast.LENGTH_SHORT).show();
-                        Log.e("EventDetailsFragment", "Failed to fetch user profile", e);
-                    });
-        } else {
+        if (eventID == null) {
             Toast.makeText(getContext(), "Event ID not found", Toast.LENGTH_SHORT).show();
+            return;
         }
+
+        dbConnector.getUserInfo(userID,
+                userInfo -> {
+                    // I've constructed a hash map of the user's info here instead of passing the object for the usere
+                    //coz we don't really need to store the object on Firebase
+
+                    //this portion of the code only runs after Firestore returns the data
+                    HashMap<String, Object> entrantData = new HashMap<>();
+                    entrantData.put("name", userInfo.get("firstName") + " " + userInfo.get("lastName"));
+                    entrantData.put("email", userInfo.get("email"));
+                    entrantData.put("phone", userInfo.get("phone"));
+                    entrantData.put("profilePictureUrl", userInfo.get("profilePictureUrl"));
+                    entrantData.put("notificationsEnabled", userInfo.get("notifsActivated") != null && (Boolean) userInfo.get("notifsActivated"));
+
+                    // after firestore returns the data, we call addEntrantToWaitlist to add the entrant to the waitlist
+                    //the register button only works for pending waitlist
+                    dbConnector.addEntrantToWaitlist(eventID, userID, entrantData, "pending",
+                            aVoid -> Toast.makeText(getContext(), "Successfully registered for the pending waitlist", Toast.LENGTH_SHORT).show(),
+                            e -> {
+                                Toast.makeText(getContext(), "Failed to register for the waitlist", Toast.LENGTH_SHORT).show();
+                                Log.e("EventDetailsFragment", "Error registering for waitlist", e);
+                            });
+                },
+                e -> {
+                    Toast.makeText(getContext(), "Error fetching user profile", Toast.LENGTH_SHORT).show();
+                    Log.e("EventDetailsFragment", "Failed to fetch user profile", e);
+                });
     }
+
+
 }

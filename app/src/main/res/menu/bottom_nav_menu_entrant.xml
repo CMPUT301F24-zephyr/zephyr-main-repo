@@ -7,7 +7,7 @@
         android:icon="@drawable/ic_home_black_24dp"
         android:title="@string/title_home" />
     <item
-        android:id="@+id/navigation_entrantprofile"
+        android:id="@+id/navigation_entrant_profile_display"
         android:icon="@drawable/baseline_account_box_24"
         android:title="@string/title_entrantprofile" />
     <item

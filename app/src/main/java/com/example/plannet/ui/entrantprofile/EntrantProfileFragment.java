@@ -1,5 +1,7 @@
 package com.example.plannet.ui.entrantprofile;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -13,8 +15,11 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.example.plannet.Entrant.EntrantDBConnector;
+import com.example.plannet.R;
 import com.example.plannet.databinding.FragmentEntrantProfileBinding;
 
 import java.util.Map;
@@ -86,7 +91,18 @@ public class EntrantProfileFragment extends Fragment {
 
         EntrantDBConnector entrantDBConnector = new EntrantDBConnector();
         entrantDBConnector.saveUserInfo(userID, firstName, lastName, phone, email,
-                aVoid -> Toast.makeText(getContext(), "Profile saved successfully", Toast.LENGTH_SHORT).show(),
+                aVoid -> {
+                    // Display a success message
+                    Toast.makeText(getContext(), "Profile saved successfully", Toast.LENGTH_SHORT).show();
+
+                    // Save unique ID to SharedPreferences to mark the user as registered
+                    SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("app_preferences", Context.MODE_PRIVATE);
+                    sharedPreferences.edit().putString("unique_id", userID).apply();
+
+                    // Navigate to Entrant Home
+                    NavController navController = Navigation.findNavController(requireView());
+                    navController.navigate(R.id.action_entrantProfile_to_home);
+                },
                 e -> {
                     Toast.makeText(getContext(), "Failed to save profile", Toast.LENGTH_SHORT).show();
                     Log.e("EntrantProfileFragment", "Error saving profile");
