@@ -2,7 +2,9 @@ package com.example.plannet;
 
 import android.util.Log;
 
+import com.example.plannet.Event.Event;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -10,9 +12,12 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.SetOptions;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Date;
 
 public class FirebaseConnector {
 
@@ -154,4 +159,95 @@ public class FirebaseConnector {
                 })
                 .addOnFailureListener(onFailure);
     }
+
+    // See OrganizerHashedQrListFragment.java for how to use
+    // Resource for callback: https://www.baeldung.com/java-callback-functions
+    public void getOrganizerEventsList(String userID, GetOrganizerEventsCallback callback) {
+        ArrayList<Event> events = new ArrayList<>();
+
+        db.collection("users").document(userID).get()
+                .addOnCompleteListener(organizerTask -> {
+                    if (organizerTask.isSuccessful()) {
+                        DocumentSnapshot document = organizerTask.getResult();
+                        if (document.exists()) {
+                            List<String> eventNames = (List<String>) document.get("createdEvents");
+                            if (eventNames != null) {
+                                final int totalEvents = eventNames.size();
+                                final int[] completedEvents = {0};
+
+                                for (String eventName : eventNames) {
+                                    Log.d("Firestore", "Got event for organizer: " + userID + " with name: " + eventName);
+                                    db.collection("events").document(eventName).get()
+                                            .addOnCompleteListener(eventTask -> {
+                                                if (eventTask.isSuccessful()) {
+                                                    DocumentSnapshot eventDocument = eventTask.getResult();
+                                                    if (eventDocument.exists()) {
+                                                        try {
+                                                            // Get all the attributes from firebase
+                                                            String name = (String) eventDocument.get("eventName");
+                                                            String price = (String) eventDocument.get("eventPrice");
+                                                            int maxEntrants = ((Long) eventDocument.get("eventMaxEntrants")).intValue();
+                                                            int waitlistLimit = ((Long) eventDocument.get("eventLimitWaitlist")).intValue();
+                                                            Timestamp lastRegDateTimestamp = (Timestamp) eventDocument.get("LastRegDate");
+                                                            Timestamp runTimeStartTimestamp = (Timestamp) eventDocument.get("RunTimeStartDate");
+                                                            Timestamp runTimeEndTimestamp = (Timestamp) eventDocument.get("RunTimeEndDate");
+                                                            Date lastRegDate = lastRegDateTimestamp.toDate();
+                                                            Date runTimeStartDate = runTimeStartTimestamp.toDate();
+                                                            Date runTimeEndDate = runTimeEndTimestamp.toDate();
+                                                            String description = (String) eventDocument.get("description");
+                                                            boolean geolocation = (Boolean) eventDocument.get("geolocation");
+                                                            String facility = (String) eventDocument.get("facility");
+
+                                                            // Create an Event object using those attributes
+                                                            Event currentEvent = new Event(
+                                                                    name,
+                                                                    "IMAGE PLACEHOLDER",
+                                                                    price,
+                                                                    maxEntrants,
+                                                                    waitlistLimit,
+                                                                    lastRegDate,
+                                                                    runTimeEndDate,
+                                                                    runTimeStartDate,
+                                                                    description,
+                                                                    geolocation,
+                                                                    facility
+                                                            );
+
+                                                            // Then add it to the list
+                                                            events.add(currentEvent);
+                                                            Log.d("Firestore", "added event with info, id: " + currentEvent.getEventID() + " name: " + currentEvent.getEventName());
+                                                        } catch (Exception e){
+                                                            Log.e("Firestore", "Error processing event: " + eventName, e);
+                                                        }
+                                                    }
+                                                } else {
+                                                    Log.e("Firestore", "Failed to retrieve event details for: " + eventName, eventTask.getException());
+                                                }
+
+                                                // Track completion for callback
+                                                // https://www.geeksforgeeks.org/synchronization-in-java/
+                                                synchronized (completedEvents) {
+                                                    completedEvents[0]++;
+                                                    if (completedEvents[0] == totalEvents){
+                                                        // Then we now have completed all tasks! We can callback
+                                                        callback.getEvents(events);
+                                                    }
+                                                }
+                                            });
+                                }
+                            } else {
+                                Log.d("Firestore", "No events found for organizer: " + userID);
+                                callback.getEvents(events);  // Returns nothing
+                            }
+                        } else {
+                            Log.d("Firestore", "No document found for user: " + userID);
+                            callback.getEvents(events);  // Returns nothing
+                        }
+                    } else {
+                        Log.e("Firestore", "Failed to retrieve organizer's document", organizerTask.getException());
+                        callback.getEvents(events);  // Returns nothing
+                    }
+                });
+    }
+
 }

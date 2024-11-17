@@ -182,7 +182,7 @@
         android:hint="(optional)"
         android:textSize="20sp"
         android:backgroundTint="@color/white"
-        android:inputType="text"
+        android:inputType="numberDecimal"
         android:textColorHint="@color/buttonGrey"
         android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/line2"

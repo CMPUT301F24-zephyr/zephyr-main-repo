@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.plannet.Event.Event;
 import com.example.plannet.R;
 
 import java.util.ArrayList;
@@ -23,18 +24,18 @@ import java.util.ArrayList;
  * at the top and the event name at the bottom.
  * Help creating this class was from labs and https://github.com/codepath/android_guides/wiki/using-an-arrayadapter-with-listview
  */
-public class OrganizerEventListArrayAdapter extends ArrayAdapter<String> {
+public class OrganizerEventListArrayAdapter extends ArrayAdapter<Event> {
 
     /**
      * Constructor.
      *
      * @param context
      *      The context of the fragment (The QR code list fragment)
-     * @param qrCodeHashes
-     *      ArrayList of the hashed qr codes as strings. NOTE FOR PART 4: This will be an ArrayList of events with all event info!
+     * @param events
+     *      ArrayList of the Event objects for each event.
      */
-    public OrganizerEventListArrayAdapter(@NonNull Context context, ArrayList<String> qrCodeHashes) {
-        super(context, 0, qrCodeHashes);
+    public OrganizerEventListArrayAdapter(@NonNull Context context, ArrayList<Event> events) {
+        super(context, 0, events);
     }
 
     /**
@@ -58,17 +59,15 @@ public class OrganizerEventListArrayAdapter extends ArrayAdapter<String> {
         }
 
         // Get the current QR code hash (The event ID)
-        String qrCodeHash = getItem(position);
+        Event event = getItem(position);
 
         // Set the data to show in the TextView
         TextView qrData = convertView.findViewById(R.id.hashed_qr_data);
-        if (qrCodeHash != null) {
-            qrData.setText(qrCodeHash);
-        }
-
-        // NOT YET IMPLEMENTED: Set the event name under the hashed qr code data
         TextView eventDetailsTextView = convertView.findViewById(R.id.event_details);
-        eventDetailsTextView.setText("EVENT NAME GOES HERE (WIP)");
+        if (event != null) {
+            qrData.setText(event.getEventID());
+            eventDetailsTextView.setText(event.getEventName());
+        }
 
         return convertView;
     }

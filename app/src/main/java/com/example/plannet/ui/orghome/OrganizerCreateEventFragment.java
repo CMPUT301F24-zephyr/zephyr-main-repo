@@ -22,7 +22,6 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.plannet.Event.Event;
-import com.example.plannet.Event.EventList;
 import com.example.plannet.FirebaseConnector;
 import com.example.plannet.MainActivityViewModel;
 import com.example.plannet.Organizer.Facility;

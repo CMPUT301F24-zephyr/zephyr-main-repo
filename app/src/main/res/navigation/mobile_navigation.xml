@@ -37,9 +37,9 @@
 
     <fragment
         android:id="@+id/navigation_orgevents"
-        android:name="com.example.plannet.ui.orgevents.EventsFragment"
+        android:name="com.example.plannet.ui.orghome.OrganizerHashedQrListFragment"
         android:label="@string/title_events"
-        tools:layout="@layout/fragment_events" />
+        tools:layout="@layout/fragment_organizer_qrcodes_list" />
     <fragment
         android:id="@+id/navigation_first_time_user"
         android:name="com.example.plannet.ui.firsttimeuser.FirstTimeUserFragment"
@@ -66,6 +66,9 @@
         <action
             android:id="@+id/action_organizerEventListFragment_to_navigation_home"
             app:destination="@id/navigation_orghome" />
+        <action
+            android:id="@+id/action_organizerHashedQrListFragment_to_organizerViewEventFragment"
+            app:destination="@id/organizerViewEventFragment" />
     </fragment>
 
     <!--putting entrant nav here for now-->
@@ -122,5 +125,14 @@
         android:name="com.example.plannet.ui.entrantprofile.EntrantProfileDisplayFragment"
         android:label="Entrant Profile Display"
         tools:layout="@layout/entrant_profile_display" />
+    <fragment
+        android:id="@+id/organizerViewEventFragment"
+        android:name="com.example.plannet.ui.orgevents.OrganizerViewEventFragment"
+        android:label="fragment_organizer_view_event"
+        tools:layout="@layout/fragment_organizer_view_event" >
+        <action
+            android:id="@+id/action_organizerViewEventFragment_to_organizerHashedQrListFragment"
+            app:destination="@id/organizerHashedQrListFragment" />
+    </fragment>
 
 </navigation>

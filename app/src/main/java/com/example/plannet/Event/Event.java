@@ -11,7 +11,7 @@ import java.util.Date;
  */
 public class Event implements Serializable {
     private String eventName;
-    private Image image;
+    private String image;  // SET TO STRING FOR TESTING PURPOSES! PLEASE FIX WHEN WE GET IMAGES WORKING
     private String price;
     private int maxEntrants;
     // we can add a condition in MainActivity or another class where if
@@ -36,6 +36,7 @@ public class Event implements Serializable {
      * @param eventName
      *      The name of the event.
      * @param image
+     *      NOTE FROM JON: I SET THIS TO BE A STRING FOR TESTING UNTIL WE FIGURE OUT IMAGES
      *      The event poster.
      * @param price
      *      The price for the event as a String (optional).
@@ -56,7 +57,7 @@ public class Event implements Serializable {
      * @param facility
      *      The facility where the event is.
      */
-    public Event(String eventName, Image image, String price, int maxEntrants,
+    public Event(String eventName, String image, String price, int maxEntrants,
                  int limitWaitlist, Date eventDate, Date registrationDateDeadline,
                  Date registrationStartDate, String description, boolean geolocation,
                  String facility) {
@@ -102,11 +103,13 @@ public class Event implements Serializable {
         this.eventName = eventName;
     }
 
-    public Image getImage() {
+    // Set to string for now as we do not have images working yet
+    public String getImage() {
         return image;
     }
 
-    public void setImage(Image image) {
+    // Read comment above
+    public void setImage(String image) {
         this.image = image;
     }
 

@@ -6,7 +6,7 @@
     <!-- Border color and thickness -->
     <stroke
         android:width="2dp"
-        android:color="@color/black" />
+        android:color="@color/white" />
 
     <!-- Optional: corner radius for rounded borders -->
     <corners android:radius="4dp" />
