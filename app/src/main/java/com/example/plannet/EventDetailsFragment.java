@@ -19,7 +19,6 @@ import com.example.plannet.Entrant.EntrantDBConnector;
 import com.example.plannet.Entrant.EntrantProfile;
 import com.example.plannet.R;
 import com.example.plannet.Event.Event;
-import com.example.plannet.ui.orgevents.EventsViewModel;
 
 import java.util.HashMap;
 import java.util.Map;
