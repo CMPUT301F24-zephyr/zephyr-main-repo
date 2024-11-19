@@ -4,45 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/backgroundColor"
+    android:background="@color/adminbg"
     android:padding="15dp">
+    <!-- NOTE: This XML can be used for multiple different admin lists -->
 
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins"
-        android:text="JOHN SMITH"
+        android:text="FULL NAME"
         android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/event_details"
+        app:layout_constraintBottom_toTopOf="@id/role"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/event_details"
+        android:id="@+id/role"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="EVENT NAME @ FACILITY_NAME"
         android:fontFamily="@font/poppins"
+        android:text="ROLE"
         android:textColor="@color/white"
         android:textSize="14sp"
-        app:layout_constraintTop_toBottomOf="@+id/name"
-        app:layout_constraintBottom_toTopOf="@id/status"
-        app:layout_constraintStart_toStartOf="parent"/>
-
-    <TextView
-        android:id="@+id/status"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="i.e. PENDING"
-        android:fontFamily="@font/poppins"
-        android:textColor="@color/chosen"
-        android:textSize="14sp"
-        app:layout_constraintTop_toBottomOf="@+id/event_details"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/name" />
 
     <ImageView
         android:id="@+id/imageView8"

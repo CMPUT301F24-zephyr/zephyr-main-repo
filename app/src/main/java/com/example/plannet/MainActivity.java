@@ -36,8 +36,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         BottomNavigationView navView = binding.navView;
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_orghome, R.id.navigation_orgprofile, R.id.navigation_orgnotifications,
-                R.id.navigation_orgevents, R.id.navigation_first_time_user, R.id.organizerHashedQrListFragment,
+                R.id.navigation_orghome, R.id.navigation_orgprofile, R.id.navigation_orgnotifications, R.id.navigation_first_time_user, R.id.organizerHashedQrListFragment,
                 R.id.navigation_organizer_create_event, R.id.navigation_entranthome, R.id.navigation_qr_code_scan,
                 R.id.navigation_event_details, R.id.navigation_entrantprofile, R.id.navigation_entrantnotifications)
                 .build();
