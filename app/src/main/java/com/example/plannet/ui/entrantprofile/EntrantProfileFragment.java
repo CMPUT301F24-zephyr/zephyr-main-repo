@@ -19,6 +19,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.plannet.Entrant.EntrantDBConnector;
+import com.example.plannet.Entrant.EntrantProfile;
 import com.example.plannet.R;
 import com.example.plannet.databinding.FragmentEntrantProfileBinding;
 
@@ -92,6 +93,18 @@ public class EntrantProfileFragment extends Fragment {
         EntrantDBConnector entrantDBConnector = new EntrantDBConnector();
         entrantDBConnector.saveUserInfo(userID, firstName, lastName, phone, email,
                 aVoid -> {
+
+                    EntrantProfile entrantProfile = EntrantProfile.getInstance(
+                            requireContext(),
+                            userID,
+                            firstName + " " + lastName,
+                            email,
+                            phone,
+                            null, // Add profilePictureUrl later if applicable
+                            true // Assuming notifications are enabled by default
+                    );
+
+                    Log.d("EntrantProfileFragment", "EntrantProfile initialized: " + entrantProfile.getName());
                     // Display a success message
                     Toast.makeText(getContext(), "Profile saved successfully", Toast.LENGTH_SHORT).show();
 

@@ -1,44 +1,48 @@
 package com.example.plannet.Entrant;
 
-import com.example.plannet.Event.EventWaitlistPending;
-
 import java.util.ArrayList;
 
 /**
- * Class for storing the events the entrant is waiting for
+ * Class for storing the event IDs the entrant is waiting for.
  */
 public class EntrantWaitlistPending {
-    private ArrayList<EventWaitlistPending> joinedWaitLists;
+    private ArrayList<String> joinedWaitLists;
 
     /**
-     * Constructor for class that makes new array list object
+     * Constructor for class that makes a new ArrayList object
      */
     public EntrantWaitlistPending() {
         this.joinedWaitLists = new ArrayList<>();
     }
 
     /**
-     * Adds waitlist to list of all events the entrant is waiting for
+     * Adds an event ID to the list of all events the entrant is waiting for.
      *
-     * @param waitlist
-     * waitlist to be added to the list
+     * @param eventID The event ID to be added to the list.
      */
-    public void addWaitlist(EventWaitlistPending waitlist){
-        if (waitlist != null && !joinedWaitLists.contains(waitlist)) {
-            joinedWaitLists.add(waitlist);
+    public void addWaitlist(String eventID) {
+        if (eventID != null && !joinedWaitLists.contains(eventID)) {
+            joinedWaitLists.add(eventID);
         }
     }
 
     /**
-     * removes waitlist from list of all events the entrant is waiting for
+     * Removes an event ID from the list of all events the entrant is waiting for.
      *
-     * @param waitlist
-     * waitlist to be removed from the list
+     * @param eventID The event ID to be removed from the list.
      */
-    public void removeWaitlist(EventWaitlistPending waitlist){
-        if (waitlist != null && joinedWaitLists.contains(waitlist)) {
-            joinedWaitLists.remove(waitlist);
+    public void removeWaitlist(String eventID) {
+        if (eventID != null && joinedWaitLists.contains(eventID)) {
+            joinedWaitLists.remove(eventID);
         }
+    }
+
+    public ArrayList<String> getWaitlist() {
+        return joinedWaitLists;
+    }
+
+    public void clearWaitlist() {
+        this.joinedWaitLists.clear();
     }
 
 }

@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.plannet.Entrant.EntrantDBConnector;
 import com.example.plannet.Entrant.EntrantProfile;
+import com.example.plannet.Event.EventWaitlistPending;
 import com.example.plannet.R;
 import com.example.plannet.Event.Event;
 import com.example.plannet.ui.orgevents.EventsViewModel;
@@ -98,7 +99,17 @@ public class EventDetailsFragment extends Fragment {
                     // after firestore returns the data, we call addEntrantToWaitlist to add the entrant to the waitlist
                     //the register button only works for pending waitlist
                     dbConnector.addEntrantToWaitlist(eventID, userID, entrantData, "pending",
-                            aVoid -> Toast.makeText(getContext(), "Successfully registered for the pending waitlist", Toast.LENGTH_SHORT).show(),
+                            aVoid -> {
+                                EntrantProfile profile = EntrantProfile.getInstance();
+                                if (profile != null) {
+                                    profile.getWaitlistPending().addWaitlist(eventID); // Add eventID
+                                    Toast.makeText(getContext(), "Successfully registered for the pending waitlist", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Log.e("EventDetailsFragment", "EntrantProfile is null. Cannot update local waitlist.");
+                                }
+
+                                Toast.makeText(getContext(), "Successfully registered for the pending waitlist", Toast.LENGTH_SHORT).show();
+                            },
                             e -> {
                                 Toast.makeText(getContext(), "Failed to register for the waitlist", Toast.LENGTH_SHORT).show();
                                 Log.e("EventDetailsFragment", "Error registering for waitlist", e);

@@ -86,6 +86,9 @@
         <action
             android:id="@+id/action_entranthome_to_orghome"
             app:destination="@id/navigation_orghome"/>
+        <action
+            android:id="@+id/action_home_to_event_list"
+            app:destination="@id/navigation_event_list" />
     </fragment>
 
     <fragment
@@ -134,5 +137,16 @@
             android:id="@+id/action_organizerViewEventFragment_to_organizerHashedQrListFragment"
             app:destination="@id/organizerHashedQrListFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/navigation_event_list"
+        android:name="com.example.plannet.ui.entrantprofile.EntrantEventListFragment"
+        android:label="Event List"
+        tools:layout="@layout/entrant_event_list">
+        <action
+            android:id="@+id/action_event_list_to_event_details"
+            app:destination="@id/navigation_event_details" />
+    </fragment>
+
 
 </navigation>
