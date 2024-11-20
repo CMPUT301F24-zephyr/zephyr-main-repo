@@ -252,15 +252,4 @@
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/back_arrow" />
 
-    <ImageView
-        android:id="@+id/edit_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        app:layout_constraintBottom_toBottomOf="@+id/title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.8"
-        app:layout_constraintStart_toEndOf="@id/title"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/edit_symbol" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,9 +13,6 @@
             <action
                 android:id="@+id/action_home_to_createEvent"
                 app:destination="@id/navigation_organizer_create_event" />
-            <action
-                android:id="@+id/action_navigation_home_to_organizerEventListFragment"
-                app:destination="@id/organizerHashedQrListFragment" />
         <action
             android:id="@+id/action_home_to_entrant"
             app:destination="@id/navigation_entranthome" />
@@ -35,11 +32,6 @@
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
 
-    <fragment
-        android:id="@+id/navigation_orgevents"
-        android:name="com.example.plannet.ui.orghome.OrganizerHashedQrListFragment"
-        android:label="@string/title_events"
-        tools:layout="@layout/fragment_organizer_qrcodes_list" />
     <fragment
         android:id="@+id/navigation_first_time_user"
         android:name="com.example.plannet.ui.firsttimeuser.FirstTimeUserFragment"
@@ -61,7 +53,7 @@
     <fragment
         android:id="@+id/organizerHashedQrListFragment"
         android:name="com.example.plannet.ui.orghome.OrganizerHashedQrListFragment"
-        android:label="@string/title_orgqrcodes"
+        android:label="@string/title_events"
         tools:layout="@layout/fragment_organizer_qrcodes_list" >
         <action
             android:id="@+id/action_organizerEventListFragment_to_navigation_home"

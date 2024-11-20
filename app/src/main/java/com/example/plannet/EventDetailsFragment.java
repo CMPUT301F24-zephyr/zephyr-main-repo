@@ -20,7 +20,6 @@ import com.example.plannet.Entrant.EntrantProfile;
 import com.example.plannet.Event.EventWaitlistPending;
 import com.example.plannet.R;
 import com.example.plannet.Event.Event;
-import com.example.plannet.ui.orgevents.EventsViewModel;
 
 import java.util.HashMap;
 import java.util.Map;
