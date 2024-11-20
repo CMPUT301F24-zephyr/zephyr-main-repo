@@ -79,10 +79,6 @@ public class OrganizerHomeFragment extends Fragment {
             navController.navigate(R.id.action_home_to_createEvent);
         });
 
-        binding.buttonQrCodes.setOnClickListener(v -> {
-            NavController navController = Navigation.findNavController(v);
-            navController.navigate(R.id.action_navigation_home_to_organizerEventListFragment);
-        });
 
         binding.buttonDraw.setOnClickListener(v -> {
             // Future navigation reference
