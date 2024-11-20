@@ -18,7 +18,7 @@ android:id="@+id/bottom_navigation_bar_org">
         android:title="@string/title_notifications" />
 
     <item
-        android:id="@+id/navigation_orgevents"
+        android:id="@+id/organizerHashedQrListFragment"
         android:icon="@drawable/baseline_event_24"
         android:title="@string/title_events" />
 
