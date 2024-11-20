@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Request user for internet access -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <!-- Request user for approximate location -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <!-- Request user for precise location -->
@@ -23,6 +26,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PlanNet"
         tools:targetApi="31">
+
+        <!-- FCM configuration service -->
+        <service
+            android:name="com.google.firebase.messaging.FirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
         <activity
             android:name=".MainActivity"
             android:exported="true"

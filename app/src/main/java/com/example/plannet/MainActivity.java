@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             // Nav tabs configuration depending on which role (later add admin as well)
-            if (destination.getId() == R.id.navigation_entranthome || destination.getId() == R.id.navigation_entrantprofile || destination.getId() == R.id.navigation_entrantnotifications) {
+            if (destination.getId() == R.id.navigation_entranthome || destination.getId() == R.id.navigation_entrantprofile || destination.getId() == R.id.navigation_entrantnotifications || destination.getId() == R.id.navigation_entrant_profile_display) {
                 if (check != true) {
                     // Customize tabs for EntrantHomeFragment
                     showEntrantTabs();
