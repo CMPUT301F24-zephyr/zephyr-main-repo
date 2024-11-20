@@ -67,12 +67,6 @@ public class OrganizerHashedQrListFragment extends Fragment {
             // Make a toast of error?
         });
 
-        // button listener for back button
-        binding.backArrow.setOnClickListener(v -> {
-            // Functionality for the back arrow
-            NavController navController = Navigation.findNavController(v);
-            navController.navigate(R.id.action_organizerEventListFragment_to_navigation_home);
-        });
 
         // Listener for clicking an element of the list
         binding.eventList.setOnItemClickListener((adapterView, view, i, l) -> {

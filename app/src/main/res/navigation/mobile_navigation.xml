@@ -13,9 +13,6 @@
             <action
                 android:id="@+id/action_home_to_createEvent"
                 app:destination="@id/navigation_organizer_create_event" />
-            <action
-                android:id="@+id/action_navigation_home_to_organizerEventListFragment"
-                app:destination="@id/organizerHashedQrListFragment" />
         <action
             android:id="@+id/action_home_to_entrant"
             app:destination="@id/navigation_entranthome" />
