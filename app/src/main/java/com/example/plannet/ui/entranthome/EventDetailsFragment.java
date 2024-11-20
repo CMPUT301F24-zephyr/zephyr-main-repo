@@ -1,4 +1,4 @@
-package com.example.plannet;
+package com.example.plannet.ui.entranthome;
 
 import android.os.Bundle;
 import android.provider.Settings;
@@ -13,16 +13,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.plannet.Entrant.EntrantDBConnector;
 import com.example.plannet.Entrant.EntrantProfile;
-import com.example.plannet.Event.EventWaitlistPending;
 import com.example.plannet.R;
-import com.example.plannet.Event.Event;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class EventDetailsFragment extends Fragment {
 
