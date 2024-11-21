@@ -68,7 +68,7 @@ public class EntrantScanEventFragment extends Fragment {
         barcodeView = view.findViewById(R.id.barcode_scanner);
         Log.d("QRScan", "BarcodeView initialized.");
 
-        barcodeView.decodeContinuous(new BarcodeCallback() {
+        barcodeView.decodeSingle(new BarcodeCallback() {
             @Override
             public void barcodeResult(BarcodeResult result) {
                 if (result != null && result.getText() != null) {
