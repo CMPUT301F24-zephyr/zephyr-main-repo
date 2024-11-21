@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -27,7 +28,7 @@ public class EntrantEventListFragment extends Fragment {
     private ListView eventListView;
     private EventListAdapter eventListAdapter;
     private List<EventData> eventDataList;
-
+    private ImageView backArrow;
     private String currentFilter = "Pending"; // Default filter
 
     @Nullable
@@ -39,6 +40,9 @@ public class EntrantEventListFragment extends Fragment {
         eventDataList = new ArrayList<>();
         eventListAdapter = new EventListAdapter(requireContext(), eventDataList);
         eventListView.setAdapter(eventListAdapter);
+        backArrow = root.findViewById(R.id.back_arrow);
+        backArrow.setOnClickListener(v -> requireActivity().onBackPressed());
+
 
         fetchEvents();
 

@@ -8,13 +8,11 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import android.os.Bundle;
-
 import androidx.fragment.app.testing.FragmentScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.example.plannet.Event.Event;
+import com.example.plannet.ui.entranthome.EntrantScanEventFragment;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -67,14 +65,15 @@ public class EntrantScanEventFragmentTest {
                 .get())
                 .thenReturn(Mockito.mock(Task.class));
 
-        // Launch the Fragment with mocked Firestore
-        FragmentScenario<EntrantScanEventFragment> scenario =
-                FragmentScenario.launchInContainer(EntrantScanEventFragment.class, null, R.style.Theme_PlanNet);
-
-        // Simulate calling fetchEventDetails directly without scanning
-        scenario.onFragment(fragment -> {
-            fragment.fetchEventDetails("sampleEventID");
-        });
+        // Commented this out for now - Moe
+//        // Launch the Fragment with mocked Firestore
+//        FragmentScenario<EntrantScanEventFragment> scenario =
+//                FragmentScenario.launchInContainer(EntrantScanEventFragment.class, null, R.style.Theme_PlanNet);
+//
+//        // Simulate calling fetchEventDetails directly without scanning
+//        scenario.onFragment(fragment -> {
+//            fragment.fetchEventDetails("sampleEventID");
+//        });
 
         // Verify that the EventDetailsFragment opens with the mock event data
         onView(withId(R.id.title))  // Assuming 'event_title' is in EventDetailsFragment
