@@ -276,7 +276,7 @@ public class FirebaseConnector {
                               OnSuccessListener<List<Map<String, Object>>> onSuccess,
                               OnFailureListener onFailure) {
         // The path to the collection where events are stored
-        String collectionPath = "events/" + userID + "/waitlist_" + filterStatus.toLowerCase();
+        String collectionPath = "users/" + userID + "/waitlists/" + filterStatus + "/events";
 
         db.collection(collectionPath)
                 .get()
@@ -305,6 +305,20 @@ public class FirebaseConnector {
                 })
                 .addOnFailureListener(onFailure);
     }
+
+    public void getSubCollection(String path, OnSuccessListener<List<Map<String, Object>>> onSuccess, OnFailureListener onFailure) {
+        db.collection(path)
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    List<Map<String, Object>> result = new ArrayList<>();
+                    for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
+                        result.add(doc.getData());
+                    }
+                    onSuccess.onSuccess(result);
+                })
+                .addOnFailureListener(onFailure);
+    }
+
 
 
 }
