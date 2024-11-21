@@ -125,6 +125,18 @@
         <action
             android:id="@+id/action_organizerViewEventFragment_to_organizerHashedQrListFragment"
             app:destination="@id/organizerHashedQrListFragment" />
+        <action
+            android:id="@+id/action_organizerViewEventFragment_to_organizerViewEntrantsFragment"
+            app:destination="@id/organizerViewEntrantsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/organizerViewEntrantsFragment"
+        android:name="com.example.plannet.ui.orgevents.OrganizerViewEntrantsFragment"
+        android:label="fragment_organizer_entrant_list"
+        tools:layout="@layout/fragment_organizer_entrant_list" >
+        <action
+            android:id="@+id/action_organizerViewEntrantsFragment_to_organizerViewEventFragment"
+            app:destination="@id/organizerViewEventFragment" />
     </fragment>
 
 </navigation>

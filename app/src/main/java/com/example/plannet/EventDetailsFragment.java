@@ -88,7 +88,8 @@ public class EventDetailsFragment extends Fragment {
 
                     //this portion of the code only runs after Firestore returns the data
                     HashMap<String, Object> entrantData = new HashMap<>();
-                    entrantData.put("name", userInfo.get("firstName") + " " + userInfo.get("lastName"));
+                    entrantData.put("firstName", userInfo.get("firstName"));
+                    entrantData.put("lastName",userInfo.get("lastName"));
                     entrantData.put("email", userInfo.get("email"));
                     entrantData.put("phone", userInfo.get("phone"));
                     entrantData.put("profilePictureUrl", userInfo.get("profilePictureUrl"));

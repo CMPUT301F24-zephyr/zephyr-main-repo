@@ -230,7 +230,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:fontFamily="@font/poppins"
-        android:text="The description should go here. I am writing a lot to try to see how much space I can take up. Maybe we should add a click listener to view the full description if the description is longer than what fits in this box?"
+        android:text="description"
         android:textColor="@color/buttonGrey"
         android:textSize="14dp"
         app:layout_constraintBottom_toBottomOf="@id/purple_box"

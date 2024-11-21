@@ -10,6 +10,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
@@ -250,4 +251,42 @@ public class FirebaseConnector {
                 });
     }
 
+    /**
+     * Creates a list of entrant IDs on the waitlist for an event, accessed from firebase.
+     *
+     * @param eventID
+     *      The String ID of the event to check
+     * @param status
+     *      The string title of the "status" collection to check (i.e. waitlist_pending" to get all the pending entrants)
+     * @param callback
+     *      Used for waiting for the asynchronous firebase calls, rather than a return statement.
+     */
+    public void getEventWaitlistEntrants(String eventID, String status, GetEventWaitlistCallback callback) {
+        List<String> entrantIDs = new ArrayList<>();
+
+        // pending entrants
+        db.collection("events")
+                .document(eventID)
+                .collection(status)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot doc : task.getResult()) {
+                            // For each document in this collection...
+                            Log.d("Firestore.getEventWaitlistEntrants", "waitlist_pending - ID recieved: " + doc.getId());
+                            entrantIDs.add(doc.getId());
+                            // Rather than just a list of IDs, I want to create an object of type EntrantProfile here
+                        }
+                        // Pass the result to the callback
+                        // This will be changed to return the list of objects of EntrantProfile here
+                        callback.getWaitlist(entrantIDs);
+                    } else {
+                        Log.e("Firestore.getEventWaitlistEntrants", "waitlist_pending: ERROR GETTING NAMES");
+                    }
+                });
+        // Repeat for waitlist_accepted, waitlist_declined, etc. ADD THIS CODE WHEN THOSE EXIST!!!
+        // HEY
+        // HEY
+        // DON'T FORGET
+    }
 }
