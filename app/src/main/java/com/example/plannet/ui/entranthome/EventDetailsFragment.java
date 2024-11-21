@@ -1,4 +1,4 @@
-package com.example.plannet;
+package com.example.plannet.ui.entranthome;
 
 import android.os.Bundle;
 import android.provider.Settings;
@@ -13,15 +13,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.plannet.Entrant.EntrantDBConnector;
 import com.example.plannet.Entrant.EntrantProfile;
 import com.example.plannet.R;
-import com.example.plannet.Event.Event;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class EventDetailsFragment extends Fragment {
 
@@ -83,10 +80,7 @@ public class EventDetailsFragment extends Fragment {
 
         dbConnector.getUserInfo(userID,
                 userInfo -> {
-                    // I've constructed a hash map of the user's info here instead of passing the object for the usere
-                    //coz we don't really need to store the object on Firebase
-
-                    //this portion of the code only runs after Firestore returns the data
+                    // Prepare entrant data for both event and user waitlists
                     HashMap<String, Object> entrantData = new HashMap<>();
                     entrantData.put("firstName", userInfo.get("firstName"));
                     entrantData.put("lastName",userInfo.get("lastName"));
@@ -95,20 +89,35 @@ public class EventDetailsFragment extends Fragment {
                     entrantData.put("profilePictureUrl", userInfo.get("profilePictureUrl"));
                     entrantData.put("notificationsEnabled", userInfo.get("notifsActivated") != null && (Boolean) userInfo.get("notifsActivated"));
 
-                    // after firestore returns the data, we call addEntrantToWaitlist to add the entrant to the waitlist
-                    //the register button only works for pending waitlist
                     dbConnector.addEntrantToWaitlist(eventID, userID, entrantData, "pending",
-                            aVoid -> Toast.makeText(getContext(), "Successfully registered for the pending waitlist", Toast.LENGTH_SHORT).show(),
-                            e -> {
-                                Toast.makeText(getContext(), "Failed to register for the waitlist", Toast.LENGTH_SHORT).show();
-                                Log.e("EventDetailsFragment", "Error registering for waitlist", e);
+                            aVoid -> {
+                                // Add event details to the user's pending waitlist
+                                HashMap<String, Object> eventData = new HashMap<>();
+                                eventData.put("eventID", eventID);
+                                eventData.put("eventName", title.getText().toString());
+                                eventData.put("facilityName", facilityName.getText().toString());
+                                eventData.put("eventDates", eventDates.getText().toString());
+                                eventData.put("cost", cost.getText().toString());
+                                eventData.put("registrationDate", System.currentTimeMillis());
+
+                                dbConnector.updateWaitlist(userID, "pending", eventID, eventData,
+                                        waitlistSuccess -> {
+                                            Toast.makeText(getContext(), "Successfully added to pending waitlist (both user and event).", Toast.LENGTH_SHORT).show();
+                                        },
+                                        waitlistFailure -> {
+                                            Toast.makeText(getContext(), "Failed to update user's pending waitlist.", Toast.LENGTH_SHORT).show();
+                                            Log.e("EventDetailsFragment", "Error updating user's pending waitlist", waitlistFailure);
+                                        });
+                            },
+                            eventWaitlistFailure -> {
+                                Toast.makeText(getContext(), "Failed to register for event's pending waitlist.", Toast.LENGTH_SHORT).show();
+                                Log.e("EventDetailsFragment", "Error registering for event's pending waitlist", eventWaitlistFailure);
                             });
                 },
-                e -> {
+                userInfoFailure -> {
                     Toast.makeText(getContext(), "Error fetching user profile", Toast.LENGTH_SHORT).show();
-                    Log.e("EventDetailsFragment", "Failed to fetch user profile", e);
+                    Log.e("EventDetailsFragment", "Failed to fetch user profile", userInfoFailure);
                 });
     }
-
 
 }

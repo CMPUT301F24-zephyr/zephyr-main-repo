@@ -1,23 +1,23 @@
-package com.example.plannet;
+package com.example.plannet.ui.entranthome;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.plannet.Event.Event;
+import com.example.plannet.R;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.BarcodeView;
 
-import java.io.Serializable;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
@@ -26,29 +26,34 @@ import java.util.Locale;
 public class EntrantScanEventFragment extends Fragment {
 
     FirebaseFirestore firebaseDB;
-
+    ImageView backArrow;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_qr_code_scanner, container, false);
-        BarcodeView barcodeView = view.findViewById(R.id.barcode_scanner);
+
+        // Commented this out for now -- Moe
+        //BarcodeView barcodeView = view.findViewById(R.id.barcode_scanner);
         firebaseDB = FirebaseFirestore.getInstance();
 
         //bypass the scanning for now
         view.findViewById(R.id.bypass_scan_button).setOnClickListener(v -> {
-            String testHashedData = "codesensei1731040010535";  // Replace with your actual hashed data in Firebase
+            String testHashedData = "codesensei1732082703215";  // Replace with your actual hashed data in Firebase
             fetchEventDetails(testHashedData);
         });
+        backArrow = view.findViewById(R.id.back_arrow);
+        backArrow.setOnClickListener(v -> requireActivity().onBackPressed());
 
-        // Start scanning
-        barcodeView.decodeSingle(new BarcodeCallback() {
-            @Override
-            public void barcodeResult(BarcodeResult result) {
-                String qrData = result.getText();
-                if (qrData != null) {
-                    fetchEventDetails(qrData);
-                }
-            }
-        });
+        // Commented this out for now - Moe
+//        // Start scanning
+//        barcodeView.decodeSingle(new BarcodeCallback() {
+//            @Override
+//            public void barcodeResult(BarcodeResult result) {
+//                String qrData = result.getText();
+//                if (qrData != null) {
+//                    fetchEventDetails(qrData);
+//                }
+//            }
+//        });
         return view;
     }
 

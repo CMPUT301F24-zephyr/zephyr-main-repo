@@ -1,65 +1,11 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#1A1B26"
+    android:background="@color/backgroundColor"
     android:padding="16dp">
-
-    <TextView
-        android:id="@+id/my_events_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="MY EVENTS"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
-
-    <LinearLayout
-        android:id="@+id/event_item"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="#2C2D3E"
-        android:orientation="vertical"
-        android:padding="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/filter_accepted">
-
-        <TextView
-            android:id="@+id/event_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Event Name"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/event_location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Rec Centre"
-            android:textColor="#CCCCCC"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/event_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:padding="4dp"
-            android:text="Accepted"
-            android:textColor="#FFFFFF" />
-    </LinearLayout>
-
-
-
 
     <ImageView
         android:id="@+id/imageView2"
@@ -70,44 +16,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/profile" />
-
-    <Button
-        android:id="@+id/filter_accepted"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/NavigationBar"
-        android:text="PENDING"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/event_item"
-        app:layout_constraintEnd_toStartOf="@+id/filter_pending"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/filter_pending"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/NavigationBar"
-        android:text="ACCEPTED"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/event_item"
-        app:layout_constraintEnd_toStartOf="@+id/filter_declined"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/filter_accepted"
-        app:layout_constraintTop_toBottomOf="@+id/my_events_label"
-        app:layout_constraintVertical_bias="0.238" />
-
-    <Button
-        android:id="@+id/filter_declined"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/NavigationBar"
-        android:text="DECLINED"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toTopOf="@+id/event_item"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/filter_pending"
-        app:layout_constraintTop_toBottomOf="@+id/my_events_label"
-        app:layout_constraintVertical_bias="0.238" />
 
     <ImageView
         android:id="@+id/imageView9"
@@ -121,17 +29,93 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView2"
         app:srcCompat="@drawable/line_separator" />
 
+    <TextView
+        android:id="@+id/my_events_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="MY EVENTS"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView9" />
+
+    <Button
+        android:id="@+id/filter_pending"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:backgroundTint="@color/NavigationBar"
+        android:text="PENDING"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/event_item_container"
+        app:layout_constraintEnd_toStartOf="@+id/filter_accepted"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/my_events_label"
+        app:layout_constraintVertical_bias="0.51" />
+
+    <Button
+        android:id="@+id/filter_accepted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/NavigationBar"
+        android:text="ACCEPTED"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/event_item_container"
+        app:layout_constraintEnd_toStartOf="@+id/filter_declined"
+        app:layout_constraintStart_toEndOf="@+id/filter_pending"
+        app:layout_constraintTop_toBottomOf="@+id/my_events_label" />
+
+    <Button
+        android:id="@+id/filter_declined"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:backgroundTint="@color/NavigationBar"
+        android:text="DECLINED"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/event_item_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/filter_accepted"
+        app:layout_constraintTop_toBottomOf="@+id/my_events_label" />
+
+    <ListView
+        android:id="@+id/event_item_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+
+        app:layout_constraintBottom_toTopOf="@+id/button3"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:divider="@color/white"
+        android:dividerHeight="1dp"
+        app:layout_constraintHorizontal_bias="0.515"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/filter_pending" />
+
     <Button
         android:id="@+id/button3"
         android:layout_width="80dp"
         android:layout_height="62dp"
+        android:layout_marginBottom="52dp"
         android:backgroundTint="@color/NavigationBar"
         android:drawableRight="@drawable/scan_qr_code"
         android:text=""
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.511"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/back_arrow"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageView2"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/event_item"
-        app:layout_constraintVertical_bias="0.7" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/back_arrow" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

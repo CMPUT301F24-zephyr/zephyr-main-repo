@@ -1,8 +1,11 @@
 package com.example.plannet.ui.entrantprofile;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,8 +22,11 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.plannet.Entrant.EntrantDBConnector;
+import com.example.plannet.Entrant.EntrantProfile;
 import com.example.plannet.R;
 import com.example.plannet.databinding.FragmentEntrantProfileBinding;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.Map;
 
@@ -33,6 +39,7 @@ public class EntrantProfileFragment extends Fragment {
     private FragmentEntrantProfileBinding binding;
     private EntrantProfileViewModel entrantProfileViewModel;
     private String userID;
+    private Uri selectedImageUri; //to store pfp URI
 
     /**
      *
@@ -67,21 +74,45 @@ public class EntrantProfileFragment extends Fragment {
             }
         }).get(EntrantProfileViewModel.class);
 
-        entrantProfileViewModel.getEntrantDetails().observe(getViewLifecycleOwner(), this::updateUI);
+        //entrantProfileViewModel.getEntrantDetails().observe(getViewLifecycleOwner(), this::updateUI);
 
         binding.buttonSave.setOnClickListener(v -> saveUserProfile());
+
+        binding.imageView5.setOnClickListener(v -> openImagePicker());
+
 
         return root;
     }
 
-    private void updateUI(Map<String, Object> entrantInfo) {
-        if (entrantInfo != null) {
-            firstNameEdit.setText((String) entrantInfo.get("firstName"));
-            lastNameEdit.setText((String) entrantInfo.get("lastName"));
-            phoneEdit.setText((String) entrantInfo.get("phone"));
-            emailEdit.setText((String) entrantInfo.get("email"));
-        }
+    private static final int PICK_IMAGE_REQUEST = 1001;
+
+    private void openImagePicker() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == getActivity().RESULT_OK && data != null && data.getData() != null) {
+            selectedImageUri = data.getData();
+            binding.imageView5.setImageURI(selectedImageUri);
+            Log.d("ProfilePictureUpload", "Selected URI: " + selectedImageUri);
+        }
+
+
+    }
+
+
+//    private void updateUI(Map<String, Object> entrantInfo) {
+//        if (entrantInfo != null) {
+//            firstNameEdit.setText((String) entrantInfo.get("firstName"));
+//            lastNameEdit.setText((String) entrantInfo.get("lastName"));
+//            phoneEdit.setText((String) entrantInfo.get("phone"));
+//            emailEdit.setText((String) entrantInfo.get("email"));
+//        }
+//    }
 
     private void saveUserProfile() {
         String firstName = firstNameEdit.getText().toString();
@@ -89,9 +120,58 @@ public class EntrantProfileFragment extends Fragment {
         String phone = phoneEdit.getText().toString();
         String email = emailEdit.getText().toString();
 
+        // Check if a profile picture has been selected
+        if (selectedImageUri != null) {
+
+            try {
+                getContext().getContentResolver().openInputStream(selectedImageUri).close();
+                Log.d("ProfilePictureUpload", "URI is accessible: " + selectedImageUri);
+            } catch (Exception e) {
+                Log.e("ProfilePictureUpload", "URI is not accessible", e);
+                Toast.makeText(getContext(), "Unable to access the selected image.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Upload the image to Firebase Storage
+            String fileName = "profile_pictures/" + userID + ".jpg";
+            Log.d("ProfilePictureUpload", "File name for upload: " + fileName);
+            StorageReference storageRef = FirebaseStorage.getInstance().getReference(fileName);
+
+
+            storageRef.putFile(selectedImageUri)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        // Get the download URL of the uploaded image
+                        storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                            String profilePictureUrl = uri.toString();
+                            // Proceed to save user info with the profile picture URL
+                            saveUserInfoToDatabase(firstName, lastName, phone, email, profilePictureUrl);
+                        });
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(getContext(), "Failed to upload profile picture.", Toast.LENGTH_SHORT).show();
+                        Log.e("EntrantProfileFragment", "Error uploading profile picture", e);
+                    });
+        } else {
+            // No profile picture selected; save user info with null profile picture URL
+            saveUserInfoToDatabase(firstName, lastName, phone, email, null);
+        }
+    }
+
+    private void saveUserInfoToDatabase(String firstName, String lastName, String phone, String email, String profilePictureUrl) {
         EntrantDBConnector entrantDBConnector = new EntrantDBConnector();
-        entrantDBConnector.saveUserInfo(userID, firstName, lastName, phone, email,
+        entrantDBConnector.saveUserInfo(userID, firstName, lastName, phone, email, profilePictureUrl,
                 aVoid -> {
+                    EntrantProfile entrantProfile = EntrantProfile.getInstance(
+                            requireContext(),
+                            userID,
+                            firstName + " " + lastName,
+                            email,
+                            phone,
+                            profilePictureUrl, // Now includes the profile picture URL
+                            true // Assuming notifications are enabled by default
+                    );
+
+                    Log.d("EntrantProfileFragment", "EntrantProfile initialized: " + entrantProfile.getName());
                     // Display a success message
                     Toast.makeText(getContext(), "Profile saved successfully", Toast.LENGTH_SHORT).show();
 
@@ -108,6 +188,7 @@ public class EntrantProfileFragment extends Fragment {
                     Log.e("EntrantProfileFragment", "Error saving profile");
                 });
     }
+
 
     /**
      * Method for setting the binding to null when the view is destroyed to avoid errors.

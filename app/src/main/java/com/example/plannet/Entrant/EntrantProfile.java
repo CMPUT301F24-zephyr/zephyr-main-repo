@@ -6,13 +6,18 @@ import android.provider.Settings;
  *  Class for storing entrant details
  */
 public class EntrantProfile {
+
+    private static EntrantProfile instance; //Singleton instance for later use
     private String userId;
     private String name;
     private String email;
     private String phoneNumber;
-    private String profilePictureUrl; // URL to store the profile picture
+    private String profilePictureUrl;
     private String deviceID;
     private boolean notifsActivated;
+    private EntrantWaitlistPending waitlistPending;
+    private EntrantWaitlistAccepted waitlistAccepted;
+    private EntrantWaitlistRejected waitlistRejected;
 
     //Empty constructor for Firebase
     public EntrantProfile() {}
@@ -37,7 +42,7 @@ public class EntrantProfile {
      *      attribute to store device ID of entrant
      * @param notifsActivated
      */
-    public EntrantProfile(Context context, String userId, String name, String email, String phoneNumber, String profilePictureUrl, String deviceID, boolean notifsActivated) {
+    private EntrantProfile(Context context, String userId, String name, String email, String phoneNumber, String profilePictureUrl, boolean notifsActivated) {
         this.userId = userId;
         this.name = name;
         this.email = email;
@@ -45,6 +50,51 @@ public class EntrantProfile {
         this.profilePictureUrl = profilePictureUrl;
         this.deviceID = getAndroidID(context);
         this.notifsActivated = notifsActivated;
+        this.waitlistPending = new EntrantWaitlistPending();
+        this.waitlistAccepted = new EntrantWaitlistAccepted();
+        this.waitlistRejected = new EntrantWaitlistRejected();
+    }
+
+    public static EntrantProfile getInstance(Context context, String userId, String name, String email, String phoneNumber, String profilePictureUrl, boolean notifsActivated) {
+        if (context == null) {
+            throw new IllegalArgumentException("Context cannot be null");
+        }
+        if (instance == null) {
+            instance = new EntrantProfile(context, userId, name, email, phoneNumber, profilePictureUrl, notifsActivated);
+        }
+        return instance;
+    }
+
+    /**
+     * Gets the singleton instance if it has already been initialized.
+     *
+     * @return The singleton instance of EntrantProfile.
+     */
+    public static EntrantProfile getInstance() {
+        if (instance == null) {
+            throw new IllegalStateException("EntrantProfile is not initialized. Call getInstance with parameters first.");
+        }
+        return instance;
+    }
+    /**
+     * Clears the instance for cases like user logout.
+     */
+    public static void clearInstance() {
+        instance = null;
+    }
+
+
+
+    public EntrantWaitlistPending getWaitlistPending() {
+        return waitlistPending;
+    }
+
+    public EntrantWaitlistAccepted getWaitlistAccepted() {
+        return waitlistAccepted;
+    }
+
+    public EntrantWaitlistRejected getWaitlistRejected() {
+        return waitlistRejected;
     }
 
     private String getAndroidID(Context context) {

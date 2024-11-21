@@ -28,6 +28,7 @@ public class FirebaseConnector {
         db = FirebaseFirestore.getInstance(); // lab5
     }
 
+
     public void addData(String collectionPath, String documentID, HashMap<String, Object> data,
                         OnSuccessListener<Void> onSuccess, OnFailureListener onFailure) {
         db.collection(collectionPath)
@@ -161,6 +162,27 @@ public class FirebaseConnector {
                 .addOnFailureListener(onFailure);
     }
 
+    public void getUserEventsByID(String eventID, OnSuccessListener<Map<String, Object>> onSuccess, OnFailureListener onFailure) {
+        db.collection("events").document(eventID)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        Log.d("FirebaseConnector", "Fetched event: " + eventID);
+                        onSuccess.onSuccess(documentSnapshot.getData());
+                    } else {
+                        Log.e("FirebaseConnector", "Event not found: " + eventID);
+                        onFailure.onFailure(new Exception("Event not found"));
+                    }
+                })
+                .addOnFailureListener(error -> {
+                    Log.e("FirebaseConnector", "Error fetching event: " + eventID, error);
+                    onFailure.onFailure(error);
+                });
+    }
+
+
+
+
     // See OrganizerHashedQrListFragment.java for how to use
     // Resource for callback: https://www.baeldung.com/java-callback-functions
     public void getOrganizerEventsList(String userID, GetOrganizerEventsCallback callback) {
@@ -250,6 +272,55 @@ public class FirebaseConnector {
                     }
                 });
     }
+
+    public void getUserEvents(String userID, String filterStatus,
+                              OnSuccessListener<List<Map<String, Object>>> onSuccess,
+                              OnFailureListener onFailure) {
+        // The path to the collection where events are stored
+        String collectionPath = "users/" + userID + "/waitlists/" + filterStatus + "/events";
+
+        db.collection(collectionPath)
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    List<Map<String, Object>> events = new ArrayList<>();
+                    for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                        events.add(document.getData()); // Add event data to the list
+                    }
+                    onSuccess.onSuccess(events); // Pass the events back via the callback
+                })
+                .addOnFailureListener(onFailure); // Handle failures
+    }
+
+    public void getJoinedEvents(String userID, OnSuccessListener<List<String>> onSuccess, OnFailureListener onFailure) {
+        db.collection("users").document(userID)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        // Fetch events from user's document
+                        List<String> joinedEvents = (List<String>) documentSnapshot.get("joinedEvents");
+                        if (joinedEvents == null) joinedEvents = new ArrayList<>();
+                        onSuccess.onSuccess(joinedEvents);
+                    } else {
+                        onFailure.onFailure(new Exception("User document not found"));
+                    }
+                })
+                .addOnFailureListener(onFailure);
+    }
+
+    public void getSubCollection(String path, OnSuccessListener<List<Map<String, Object>>> onSuccess, OnFailureListener onFailure) {
+        db.collection(path)
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    List<Map<String, Object>> result = new ArrayList<>();
+                    for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
+                        result.add(doc.getData());
+                    }
+                    onSuccess.onSuccess(result);
+                })
+                .addOnFailureListener(onFailure);
+    }
+
+
 
     /**
      * Creates a list of entrant IDs on the waitlist for an event, accessed from firebase.
