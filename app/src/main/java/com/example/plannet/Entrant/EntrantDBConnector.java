@@ -75,13 +75,15 @@ public class EntrantDBConnector {
      *      Triggered if the operation is unsuccessful.
      */
     public void saveUserInfo(String userID, String firstName, String lastName, String phone, String email,
-                             OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
+                             String profilePictureUrl, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
 
         Map<String, Object> userInfo = new HashMap<>();
         userInfo.put("firstName", firstName);
         userInfo.put("lastName", lastName);
         userInfo.put("phone", phone);
         userInfo.put("email", email);
+        userInfo.put("profilePictureUrl", profilePictureUrl);
+
         fireCon.addUserInfoToFirestore(userID, userInfo, onSuccessListener, onFailureListener);
     }
 
