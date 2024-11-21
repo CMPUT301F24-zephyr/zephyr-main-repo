@@ -15,7 +15,7 @@
     <color name="NavigationBar">#70648E</color>
     <color name="chosen">#b58213</color>
     <color name="enrolled">#138b1f</color>
-    <color name="rejected">#8b1513</color>
-    <color name="waitlist">#79747e</color>
+    <color name="cancelled">#8b1513</color>
+    <color name="pending">#79747e</color>
 
 </resources>
