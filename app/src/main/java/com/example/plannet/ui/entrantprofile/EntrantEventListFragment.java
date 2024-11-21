@@ -19,7 +19,9 @@ import com.example.plannet.FirebaseConnector;
 import com.example.plannet.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EntrantEventListFragment extends Fragment {
     private ListView eventListView;
@@ -45,37 +47,34 @@ public class EntrantEventListFragment extends Fragment {
 
     private void fetchEvents() {
         FirebaseConnector firebaseConnector = new FirebaseConnector();
-        EntrantProfile profile = EntrantProfile.getInstance();
+        String userID = Settings.Secure.getString(requireContext().getContentResolver(), Settings.Secure.ANDROID_ID);
 
-        if (profile == null) {
-            Log.e("EntrantEventListFragment", "EntrantProfile is null.");
-            return;
-        }
+        String collectionPath = "users/" + userID + "/waitlists/pending/events";
 
-        // Fetch event IDs from the waitlist
-        List<String> eventIDs = profile.getWaitlistPending().getWaitlist(); // Example: Pending waitlist
-        if (eventIDs.isEmpty()) {
-            Toast.makeText(getContext(), "No events found.", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        firebaseConnector.getSubCollection(collectionPath,
+                pendingEvents -> {
+                    if (pendingEvents.isEmpty()) {
+                        Toast.makeText(getContext(), "No events found in the pending waitlist.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
-        // Clear the current event data list
-        eventDataList.clear();
+                    eventDataList.clear();
 
-        // Fetch each event by its ID
-        for (String eventID : eventIDs) {
-            firebaseConnector.getUserEventsByID(eventID, event -> {
-                String eventName = (String) event.get("eventName");
-                String eventLocation = (String) event.get("facility");
-                String eventStatus = currentFilter;
+                    for (Map<String, Object> event : pendingEvents) {
+                        String eventName = (String) event.get("eventName");
+                        String eventLocation = (String) event.get("facilityName");
+                        String eventStatus = currentFilter;
 
-                // Add event data to the list
-                eventDataList.add(new EventData(eventName, eventStatus, eventLocation));
-                eventListAdapter.notifyDataSetChanged(); // Refresh the ListView
-            }, error -> {
-                Log.e("EntrantEventListFragment", "Error fetching event details for ID: " + eventID, error);
-            });
-        }
+                        eventDataList.add(new EventData(eventName, eventStatus, eventLocation));
+                    }
+
+                    eventListAdapter.notifyDataSetChanged();
+                },
+                error -> {
+                    Toast.makeText(getContext(), "Failed to fetch pending events.", Toast.LENGTH_SHORT).show();
+                    Log.e("EntrantEventListFragment", "Error fetching pending waitlist", error);
+                });
     }
+
 
 }
