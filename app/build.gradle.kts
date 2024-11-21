@@ -57,6 +57,12 @@ dependencies {
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
 
     implementation(libs.legacy.support.v4)
+    implementation("com.github.bumptech.glide:glide:4.11.0")
+
+
+    annotationProcessor("com.github.bumptech.glide:compiler:4.11.0")
+
+
 
     // For testing
     testImplementation("junit:junit:4.13.2")
