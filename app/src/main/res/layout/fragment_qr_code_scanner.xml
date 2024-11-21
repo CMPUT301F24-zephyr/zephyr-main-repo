@@ -6,12 +6,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!-- Barcode scanner view -->
-    <com.journeyapps.barcodescanner.BarcodeView
+    <com.journeyapps.barcodescanner.DecoratedBarcodeView
         android:id="@+id/barcode_scanner"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </com.journeyapps.barcodescanner.BarcodeView>
+    </com.journeyapps.barcodescanner.DecoratedBarcodeView>
 
     <FrameLayout
         android:id="@+id/fragment_container"
