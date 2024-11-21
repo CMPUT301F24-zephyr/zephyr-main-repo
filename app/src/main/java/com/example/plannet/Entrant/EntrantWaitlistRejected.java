@@ -1,40 +1,55 @@
 package com.example.plannet.Entrant;
 
-import com.example.plannet.Event.EventWaitlistRejected;
-
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class for storing the events the entrant has rejected
  */
 public class EntrantWaitlistRejected {
-    private ArrayList<EventWaitlistRejected> rejectedWaitLists;
+    private List<String> rejectedWaitLists;
 
+    /**
+     * Constructor for class that initializes a new list
+     */
     public EntrantWaitlistRejected() {
         this.rejectedWaitLists = new ArrayList<>();
     }
 
     /**
-     * adds waitlist to list of all events the entrant has rejected
+     * Adds eventID to the list of rejected events
      *
-     * @param waitlist
-     * waitlist to be added to the list
+     * @param eventID
+     * The ID of the event to be added
      */
-    public void addWaitlist(EventWaitlistRejected waitlist){
-        if (waitlist != null) {
-            rejectedWaitLists.add(waitlist);
+    public void addWaitlist(String eventID) {
+        if (eventID != null && !rejectedWaitLists.contains(eventID)) {
+            rejectedWaitLists.add(eventID);
         }
     }
 
     /**
-     * removes waitlist from list of all events the entrant has rejected
+     * Removes eventID from the list of rejected events
      *
-     * @param waitlist
-     * waitlist to be removed from the list
+     * @param eventID
+     * The ID of the event to be removed
      */
-    public void removeWaitlist(EventWaitlistRejected waitlist){
-        if (waitlist != null) {
-            rejectedWaitLists.remove(waitlist);
+    public void removeWaitlist(String eventID) {
+        if (eventID != null) {
+            rejectedWaitLists.remove(eventID);
         }
+    }
+
+    /**
+     * Retrieves the list of rejected events
+     *
+     * @return List of rejected event IDs
+     */
+    public List<String> getWaitlist() {
+        return rejectedWaitLists;
+    }
+
+    public void clearWaitlist() {
+        this.rejectedWaitLists.clear();
     }
 }

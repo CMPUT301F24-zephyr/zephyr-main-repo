@@ -1,43 +1,55 @@
 package com.example.plannet.Entrant;
 
-import com.example.plannet.Event.EventWaitlistAccepted;
-
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class for storing the events the entrant has accepted
  */
 public class EntrantWaitlistAccepted {
-    private ArrayList<EventWaitlistAccepted> acceptedWaitLists;
+    private List<String> acceptedWaitLists;
 
     /**
-     * Construcor for class that makes new array list object
+     * Constructor for class that initializes a new list
      */
     public EntrantWaitlistAccepted() {
         this.acceptedWaitLists = new ArrayList<>();
     }
 
     /**
-     * Adds watlist to list of all events the entrant has accepted
+     * Adds eventID to the list of accepted events
      *
-     * @param waitlist
-     * waitlist to be added
+     * @param eventID
+     * The ID of the event to be added
      */
-    public void addWaitlist(EventWaitlistAccepted waitlist){
-        if (waitlist != null) {
-            acceptedWaitLists.add(waitlist);
+    public void addWaitlist(String eventID) {
+        if (eventID != null && !acceptedWaitLists.contains(eventID)) {
+            acceptedWaitLists.add(eventID);
         }
     }
 
     /**
-     * Removed waitlist from list of all events the entrant has accepted
+     * Removes eventID from the list of accepted events
      *
-     * @param waitlist
-     * waitlist to be removed
+     * @param eventID
+     * The ID of the event to be removed
      */
-    public void removeWaitlist(EventWaitlistAccepted waitlist){
-        if (waitlist != null) {
-            acceptedWaitLists.remove(waitlist);
+    public void removeWaitlist(String eventID) {
+        if (eventID != null) {
+            acceptedWaitLists.remove(eventID);
         }
+    }
+
+    /**
+     * Retrieves the list of accepted events
+     *
+     * @return List of accepted event IDs
+     */
+    public List<String> getWaitlist() {
+        return acceptedWaitLists;
+    }
+
+    public void clearWaitlist() {
+        this.acceptedWaitLists.clear();
     }
 }
