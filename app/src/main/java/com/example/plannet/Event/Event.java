@@ -77,6 +77,25 @@ public class Event implements Serializable {
         this.eventPending = new EventWaitlistPending(this.eventID);
     }
 
+    // 2nd constructor for creating local object with an ID that is already on firebase.
+    public Event(String eventID, String eventName, String image, String price, int maxEntrants,
+                 int limitWaitlist, Date eventDate, Date registrationDateDeadline,
+                 Date registrationStartDate, String description, boolean geolocation,
+                 String facility) {
+        this.eventName = eventName;
+        this.image = image;
+        this.price = price;
+        this.maxEntrants = maxEntrants;
+        this.limitWaitlist = limitWaitlist;
+        this.eventDate = eventDate;
+        this.registrationDateDeadline = registrationDateDeadline;
+        this.registrationStartDate = registrationStartDate;
+        this.description = description;
+        this.geolocation = geolocation;
+        this.facility = facility;
+        this.eventID = eventID;
+    }
+
     /**
      * Called whenever an event is created. Generates a unique event ID by combining the event
      * name and the current time.

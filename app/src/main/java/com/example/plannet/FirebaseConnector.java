@@ -3,6 +3,7 @@ package com.example.plannet;
 import android.util.Log;
 
 import com.example.plannet.Event.Event;
+import com.example.plannet.Entrant.EntrantProfile;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -10,6 +11,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
@@ -222,6 +224,7 @@ public class FirebaseConnector {
 
                                                             // Create an Event object using those attributes
                                                             Event currentEvent = new Event(
+                                                                    eventName,
                                                                     name,
                                                                     "IMAGE PLACEHOLDER",
                                                                     price,
@@ -319,6 +322,50 @@ public class FirebaseConnector {
                 .addOnFailureListener(onFailure);
     }
 
+    /**
+     * Creates a list of entrant IDs on the waitlist for an event, accessed from firebase.
+     *
+     * @param eventID
+     *      The String ID of the event to check
+     * @param status
+     *      The string title of the "status" collection to check (i.e. waitlist_pending" to get all the pending entrants)
+     * @param callback
+     *      Used for waiting for the asynchronous firebase calls, rather than a return statement.
+     */
+    public void getEventWaitlistEntrants(String eventID, String status, GetEventWaitlistCallback callback) {
+        List<EntrantProfile> entrants = new ArrayList<>();
+        Log.d("Firestore WaitlistEntrants", "Getting users from waitlist: waitlist_" + status + " For event with ID: " + eventID);
 
+        // pending entrants
+        db.collection("events")
+                .document(eventID)
+                .collection("waitlist_" + status)  // i.e. "pending"
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d("Firestore WaitlistEntrants", "Successfully found collection. Number of documents in collection: " + task.getResult().size());
+                        for (QueryDocumentSnapshot doc : task.getResult()) {
+                            // For each document in this collection...
+                            String userID = doc.getId();
+                            String email = doc.getString("email");
+                            String phone = doc.getString("phone");
+                            boolean notifs = doc.getBoolean("notificationsEnabled");
+                            String firstName = doc.getString("firstName");
+                            String lastName = doc.getString("lastName");
+                            String profilePic = doc.getString("profilePictureUrl");
+                            Log.d("Firestore WaitlistEntrants", "waitlist_" + status + " - user received with ID: " + userID);
 
+                            // Now we create the object:
+                            EntrantProfile entrant = new EntrantProfile(userID, firstName, lastName, email, phone, profilePic, notifs, status);
+                            entrants.add(entrant);
+                        }
+
+                        // Pass the result to the callback
+                        // This will be changed to return the list of objects of EntrantProfile here
+                        callback.getWaitlist(entrants);
+                    } else {
+                        Log.e("Firestore WaitlistEntrants", "waitlist_pending: ERROR GETTING NAMES");
+                    }
+                });
+    }
 }

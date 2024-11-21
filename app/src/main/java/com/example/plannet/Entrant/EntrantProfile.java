@@ -2,10 +2,12 @@ package com.example.plannet.Entrant;
 import android.content.Context;
 import android.provider.Settings;
 
+import java.io.Serializable;
+
 /**
  *  Class for storing entrant details
  */
-public class EntrantProfile {
+public class EntrantProfile implements Serializable {
 
     private static EntrantProfile instance; //Singleton instance for later use
     private String userId;
@@ -18,6 +20,13 @@ public class EntrantProfile {
     private EntrantWaitlistPending waitlistPending;
     private EntrantWaitlistAccepted waitlistAccepted;
     private EntrantWaitlistRejected waitlistRejected;
+
+    // For keeping separate first and last name if needed
+    private String firstName;
+    private String lastName;
+
+    // For organizer's... organization (simple fix!)
+    private String waitlistStatus;
 
     //Empty constructor for Firebase
     public EntrantProfile() {}
@@ -38,8 +47,6 @@ public class EntrantProfile {
      *      entrant phone number
      * @param profilePictureUrl
      *      entrant profile pricture url
-     * @param deviceID
-     *      attribute to store device ID of entrant
      * @param notifsActivated
      */
     private EntrantProfile(Context context, String userId, String name, String email, String phoneNumber, String profilePictureUrl, boolean notifsActivated) {
@@ -53,6 +60,20 @@ public class EntrantProfile {
         this.waitlistPending = new EntrantWaitlistPending();
         this.waitlistAccepted = new EntrantWaitlistAccepted();
         this.waitlistRejected = new EntrantWaitlistRejected();
+    }
+
+    public EntrantProfile(String userId, String firstName, String lastName, String email, String phoneNumber, String profilePictureUrl, boolean notifsActivated, String waitlistStatus) {
+        // This constructor has firstName and lastName rather than just Name, and ignores deviceID. Used by organizers.
+        // Additionally does not care about waitlist status, as it is just used to store info about an entrant for organizer viewing
+        this.userId = userId;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.profilePictureUrl = profilePictureUrl;
+        this.notifsActivated = notifsActivated;
+        this.name = firstName + " " + lastName;
+        this.waitlistStatus = waitlistStatus;  // i.e. "Pending"
     }
 
     public static EntrantProfile getInstance(Context context, String userId, String name, String email, String phoneNumber, String profilePictureUrl, boolean notifsActivated) {
@@ -157,5 +178,17 @@ public class EntrantProfile {
 
     public void setNotifsActivated(boolean notifsActivated) {
         this.notifsActivated = notifsActivated;
+    }
+
+    public String getWaitlistStatus() {
+        return waitlistStatus;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getFirstName() {
+        return firstName;
     }
 }

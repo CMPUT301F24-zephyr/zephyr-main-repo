@@ -128,6 +128,21 @@
         <action
             android:id="@+id/action_organizerViewEventFragment_to_organizerHashedQrListFragment"
             app:destination="@id/organizerHashedQrListFragment" />
+        <action
+            android:id="@+id/action_organizerViewEventFragment_to_organizerViewEntrantsFragment"
+            app:destination="@id/organizerViewEntrantsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/organizerViewEntrantsFragment"
+        android:name="com.example.plannet.ui.orgevents.OrganizerViewEntrantsFragment"
+        android:label="fragment_organizer_entrant_list"
+        tools:layout="@layout/fragment_organizer_entrant_list" >
+        <action
+            android:id="@+id/action_organizerViewEntrantsFragment_to_organizerViewEventFragment"
+            app:destination="@id/organizerViewEventFragment" />
+        <action
+            android:id="@+id/action_organizerViewEntrantsFragment_to_organizerViewEntrantInfoFragment"
+            app:destination="@id/organizerViewEntrantInfoFragment" />
     </fragment>
 
     <fragment
@@ -138,6 +153,15 @@
         <action
             android:id="@+id/action_event_list_to_event_details"
             app:destination="@id/navigation_event_details" />
+    </fragment>
+    <fragment
+        android:id="@+id/organizerViewEntrantInfoFragment"
+        android:name="com.example.plannet.ui.orgevents.OrganizerViewEntrantInfoFragment"
+        android:label="fragment_organizer_view_entrant"
+        tools:layout="@layout/fragment_organizer_view_entrant" >
+        <action
+            android:id="@+id/action_organizerViewEntrantInfoFragment_to_organizerViewEntrantsFragment"
+            app:destination="@id/organizerViewEntrantsFragment" />
     </fragment>
 
 
