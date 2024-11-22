@@ -68,8 +68,10 @@ public class EntrantEventListFragment extends Fragment {
                         String eventName = (String) event.get("eventName");
                         String eventLocation = (String) event.get("facilityName");
                         String eventStatus = currentFilter;
+                        String eventDescription = (String) event.get("eventDescription");
+                        String posterPath = (String) event.get("posterPath");
 
-                        eventDataList.add(new EventData(eventName, eventStatus, eventLocation));
+                        eventDataList.add(new EventData(eventName, eventDescription, posterPath, eventStatus, eventLocation));
                     }
 
                     eventListAdapter.notifyDataSetChanged();
@@ -79,6 +81,5 @@ public class EntrantEventListFragment extends Fragment {
                     Log.e("EntrantEventListFragment", "Error fetching pending waitlist", error);
                 });
     }
-
 
 }

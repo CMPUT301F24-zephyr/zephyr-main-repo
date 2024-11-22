@@ -49,7 +49,7 @@ public class EventDetailsFragment extends Fragment {
 
         Bundle eventBundle = getArguments();
         if (eventBundle != null) {
-            title.setText("Event: " + eventBundle.getString("eventName"));
+            title.setText(eventBundle.getString("eventName"));
             facilityName.setText(eventBundle.getString("facility"));
             facilityAddress.setText(eventBundle.getString("address"));
             end_date.setText(eventBundle.getString("registrationDateDeadline"));
