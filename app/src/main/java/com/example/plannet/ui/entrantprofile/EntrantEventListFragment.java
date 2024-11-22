@@ -44,6 +44,7 @@ public class EntrantEventListFragment extends Fragment {
         eventListAdapter = new EventListAdapter(requireContext(), eventDataList);
         eventListView.setAdapter(eventListAdapter);
         activeFilters = new HashSet<>(); // Start with no active filters
+        activeFilters.add("pending");
 
         backArrow = root.findViewById(R.id.back_arrow);
         backArrow.setOnClickListener(v -> requireActivity().onBackPressed());
@@ -56,6 +57,7 @@ public class EntrantEventListFragment extends Fragment {
         Button acceptedButton = root.findViewById(R.id.filter_accepted);
         Button chosenButton = root.findViewById(R.id.filter_chosen);
         Button declinedButton = root.findViewById(R.id.filter_declined);
+
 
         // Set click listeners for the buttons with specific colors
         pendingButton.setOnClickListener(v -> toggleFilter("pending"));
