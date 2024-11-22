@@ -32,25 +32,25 @@
 
     <Button
         android:id="@+id/buttonNewEvent"
-        android:layout_width="wrap_content"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="220dp"
         android:backgroundTint="@color/buttonPurple"
         android:fontFamily="@font/poppins"
-        android:text="Create a new event"
+        android:text="Create New Event"
         android:textAllCaps="false"
-        android:textSize="20sp"
+        android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/buttonDraw"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.519"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintVertical_bias="0.76" />
 
     <Button
         android:id="@+id/buttonDraw"
-        android:layout_width="279dp"
-        android:layout_height="59dp"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
         android:backgroundTint="@color/buttonPurple"
         android:fontFamily="@font/poppins"
         android:text="Draw Attendees for Events"
@@ -58,9 +58,10 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.519"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.479" />
+        app:layout_constraintVertical_bias="0.472" />
 
     <Button
         android:id="@+id/button_switch"
@@ -73,4 +74,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.806" />
+
+    <Button
+        android:id="@+id/button_sample"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:text="Generate Attendees"
+        android:textSize="16sp"
+        android:visibility="invisible"
+        android:textAllCaps="false"
+        tools:layout_editor_absoluteX="65dp"
+        tools:layout_editor_absoluteY="381dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
