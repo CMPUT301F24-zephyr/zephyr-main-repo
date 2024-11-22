@@ -87,13 +87,13 @@ public class EntrantScanEventFragment extends Fragment {
 
     }
 
-    // Method to fetch event details from Firebase and navigate
+    // fetch event details from Firebase and navigate
     private void fetchEventDetails(String qrData) {
         firebaseDB.collection("events").document(qrData).get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
                 Event event = new Event();
 
-                // Map fields from Firestore document to Event object
+                // Firestore document to Event object
                 event.setEventName(documentSnapshot.getString("eventName"));
                 event.setFacility(documentSnapshot.getString("facility"));
                 event.setPrice(documentSnapshot.getString("eventPrice"));
@@ -102,7 +102,7 @@ public class EntrantScanEventFragment extends Fragment {
                 event.setDescription(documentSnapshot.getString("description"));
                 event.setGeolocation(documentSnapshot.getBoolean("geolocation"));
 
-                // Convert Timestamps for date fields and set them
+                // Convert Timestamps for date fields and set them and check for null
                 Timestamp startTimestamp = documentSnapshot.getTimestamp("RunTimeStartDate");
                 if (startTimestamp != null) event.setRegistrationStartDate(startTimestamp.toDate());
 
