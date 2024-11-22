@@ -11,16 +11,19 @@ import androidx.annotation.NonNull;
 import com.example.plannet.Event.EventData;
 import com.example.plannet.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EventListAdapter extends android.widget.BaseAdapter {
 
     private final Context context;
     private final List<EventData> eventList;
+    private List<EventData> filteredEventList;
 
     public EventListAdapter(Context context, List<EventData> eventList) {
         this.context = context;
         this.eventList = eventList;
+        this.filteredEventList = new ArrayList<>(eventList);
     }
 
     @Override
