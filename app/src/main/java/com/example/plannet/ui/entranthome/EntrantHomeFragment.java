@@ -188,10 +188,10 @@ public class EntrantHomeFragment extends Fragment {
                     .navigate(R.id.navigation_event_list);
         });
 
-        binding.viewProfileButton.setOnClickListener(v -> {
-            NavController navController = Navigation.findNavController(v);
-            navController.navigate(R.id.navigation_entrant_profile_display);
-        });
+//        binding.viewProfileButton.setOnClickListener(v -> {
+//            NavController navController = Navigation.findNavController(v);
+//            navController.navigate(R.id.navigation_entrant_profile_display);
+//        });
 
         // switch role button
         binding.buttonSwitch2.setOnClickListener(v -> {
