@@ -4,22 +4,18 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
-import com.example.plannet.databinding.FragmentNotificationsBinding;
 import com.example.plannet.databinding.FragmentOrganizerSendNotificationBinding;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 /**
  * class for org notification manager
  * has to do with sending all types of notifications to entrants
  */
-public class NotificationsFragment extends Fragment {
+public class SendNotificationFragment extends Fragment {
 
     private FragmentOrganizerSendNotificationBinding binding;
     String title = "PlanNet";
@@ -47,17 +43,8 @@ public class NotificationsFragment extends Fragment {
         return root;
     }
 
-    private void sendNotification(String title, String body, String recipient) {
-        // This method sends notifications using Firebase
-        // You can implement sending logic based on topics or individual tokens
-        FirebaseMessaging.getInstance().subscribeToTopic(recipient)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Toast.makeText(getContext(), "Notification sent!", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getContext(), "Failed to send notification.", Toast.LENGTH_SHORT).show();
-                    }
-                });
+    private void sendNotification(String title, String body, String waitlist) {
+        // Send notifications to entrants in specific waitlists
     }
     @Override
     public void onDestroyView() {

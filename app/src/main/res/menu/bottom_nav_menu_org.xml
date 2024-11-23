@@ -13,7 +13,7 @@ android:id="@+id/bottom_navigation_bar_org">
         android:title="@string/title_orgprofile" />
 
     <item
-        android:id="@+id/navigation_orgnotifications"
+        android:id="@+id/navigation_notificationmanager"
         android:icon="@drawable/ic_notifications_black_24dp"
         android:title="@string/title_notifications" />
 

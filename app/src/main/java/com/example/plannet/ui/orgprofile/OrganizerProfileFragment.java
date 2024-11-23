@@ -39,16 +39,14 @@ public class OrganizerProfileFragment extends Fragment {
         FirebaseFirestore db1 = FirebaseFirestore.getInstance();
         DocumentReference userQrRef = db1.collection("users").document(userID);
         userQrRef.get().addOnSuccessListener(documentSnapshot -> {
-            if (binding != null) {
-                if (documentSnapshot.exists()) {
-                    String facilityName = documentSnapshot.getString("facility.name");
-                    String facilityLocation = documentSnapshot.getString("facility.location");
-                    if (facilityName != null) {
-                        facilityEdit.setText(facilityName);
+            if (binding != null && documentSnapshot.exists()) {
+                String facilityName = documentSnapshot.getString("facility.name");
+                String facilityLocation = documentSnapshot.getString("facility.location");
+                if (facilityName != null) {
+                    facilityEdit.setText(facilityName);
 
-                    } if (facilityLocation != null) {
-                        locationEdit.setText(facilityLocation);
-                    }
+                } if (facilityLocation != null) {
+                    locationEdit.setText(facilityLocation);
                 }
             }
         }).addOnFailureListener(e -> {

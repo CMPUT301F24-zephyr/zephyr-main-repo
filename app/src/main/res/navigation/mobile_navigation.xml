@@ -26,11 +26,11 @@
         android:label="@string/title_orgprofile"
         tools:layout="@layout/fragment_organizer_profile" />
 
-    <fragment
-        android:id="@+id/navigation_orgnotifications"
-        android:name="com.example.plannet.ui.orgnotifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+<!--    <fragment-->
+<!--        android:id="@+id/navigation_orgnotifications"-->
+<!--        android:name="com.example.plannet.ui.orgnotifications.SendNotificationFragment"-->
+<!--        android:label="@string/title_notifications"-->
+<!--        tools:layout="@layout/fragment_notifications" />-->
 
     <fragment
         android:id="@+id/navigation_first_time_user"
@@ -163,6 +163,17 @@
             android:id="@+id/action_organizerViewEntrantInfoFragment_to_organizerViewEntrantsFragment"
             app:destination="@id/organizerViewEntrantsFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/navigation_notificationmanager"
+        android:name="com.example.plannet.ui.orgnotifications.NotificationManagerFragment"
+        android:label="Notification Manager"
+        tools:layout="@layout/fragment_organizer_notification_manager" />
+    <fragment
+        android:id="@+id/navigation_sendnotification"
+        android:name="com.example.plannet.ui.orgnotifications.SendNotificationFragment"
+        android:label="Send Notification"
+        tools:layout="@layout/fragment_organizer_send_notification" />
 
 
 </navigation>
