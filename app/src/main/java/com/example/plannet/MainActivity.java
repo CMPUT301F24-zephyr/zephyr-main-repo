@@ -2,6 +2,7 @@ package com.example.plannet;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 
@@ -39,7 +40,8 @@ public class MainActivity extends AppCompatActivity {
                 R.id.navigation_orghome, R.id.navigation_orgprofile, R.id.navigation_sendnotification, R.id.navigation_first_time_user, R.id.organizerHashedQrListFragment,
                 R.id.navigation_organizer_create_event, R.id.navigation_entranthome, R.id.navigation_qr_code_scan,
                 R.id.navigation_event_details, R.id.navigation_entrantprofile, R.id.navigation_entrantnotifications, R.id.navigation_notificationmanager,
-                R.id.navigation_entrantprofile, R.id.navigation_event_details, R.id.navigation_entrant_profile_display, R.id.navigation_event_list)
+                R.id.navigation_entrantprofile, R.id.navigation_event_details, R.id.navigation_entrant_profile_display, R.id.navigation_event_list,
+                R.id.organizerViewEventFragment, R.id.organizerViewEntrantsFragment, R.id.organizerViewEntrantInfoFragment)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -76,6 +78,9 @@ public class MainActivity extends AppCompatActivity {
 
         // this deletes your locally cached UUID -- for testing...... (must also delete UUID from DB if wanting to start over)
         //sharedPreferences.edit().remove("unique_id").apply();
+        // check your local device ID (just for testing)
+        //Log.e("MainActivity", "Device ID = " + uniqueID);
+
         if (uniqueID == null) {
             // Navigate to the welcome screen if no unique ID is found
             navController.navigate(R.id.navigation_first_time_user);

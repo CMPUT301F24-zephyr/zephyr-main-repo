@@ -79,6 +79,7 @@ public class SendNotificationFragment extends Fragment {
                 }
                 if (isCancelledEntrantsChecked) {
                     // send notif to cancelled/rejected entrants
+                    // this is simply waitlist_pending - waitlist_selected
                     sendNotification(eventID, "waitlist_cancelled", body);
                 }
                 if (!isWaitingListChecked && !isSelectedEntrantsChecked && !isCancelledEntrantsChecked){
