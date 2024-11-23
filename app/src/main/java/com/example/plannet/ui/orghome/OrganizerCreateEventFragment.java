@@ -271,21 +271,23 @@ public class OrganizerCreateEventFragment extends Fragment {
      * @param qrBitmap
      */
     private void showCustomToast(Bitmap qrBitmap) {
-        // Inflate custom toast layout
+        // Inflate custom dialog layout
         LayoutInflater inflater = getLayoutInflater();
-        View layout = inflater.inflate(R.layout.custom_toast_layout,
-                (ViewGroup) binding.getRoot().findViewById(R.id.custom_toast_xml));
+        View layout = inflater.inflate(R.layout.custom_toast_layout, null);
 
-        // Set the QR code image in the toast layout
+        // Set the QR code image in the dialog layout
         ImageView toastQrImage = layout.findViewById(R.id.toast_qr_image);
+
         toastQrImage.setImageBitmap(qrBitmap);
 
-        // Create and show the custom toast
-        Toast toast = new Toast(requireContext());
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.setDuration(Toast.LENGTH_LONG);
-        toast.setView(layout);
-        toast.show();
+        // Build and show the dialog
+        new AlertDialog.Builder(requireContext())
+                .setView(layout)
+                .setCancelable(false) // This prevents dismissal on outside touch or back button
+                .setPositiveButton("OK!", (dialog, which) -> {
+                    dialog.dismiss();
+                })
+                .show();
     }
 
     /**
