@@ -73,15 +73,15 @@ public class SendNotificationFragment extends Fragment {
                     // send notif to pending users (ones who just signed up)
                     sendNotification(eventID, "waitlist_pending", body);
                 }
-                else if (isSelectedEntrantsChecked) {
+                if (isSelectedEntrantsChecked) {
                     // send notif to selected/lottery winners entrants
                     sendNotification(eventID, "waitlist_selected", body);
                 }
-                else if (isCancelledEntrantsChecked) {
+                if (isCancelledEntrantsChecked) {
                     // send notif to cancelled/rejected entrants
                     sendNotification(eventID, "waitlist_cancelled", body);
                 }
-                else {
+                if (!isWaitingListChecked && !isSelectedEntrantsChecked && !isCancelledEntrantsChecked){
                     Toast.makeText(getContext(), "Must make a selection first!", Toast.LENGTH_SHORT).show();
                 }
             }
