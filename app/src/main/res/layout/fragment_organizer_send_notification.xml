@@ -44,20 +44,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintVertical_bias="0.01"/>
 
-    <CheckBox
-        android:id="@+id/checkbox_chosen_entrants"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:buttonTint="@color/buttonPurple"
-        android:fontFamily="@font/poppins"
-        android:text="Chosen entrants to sign-up for event"
-        android:textColor="@color/white"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/checkbox_waiting_list"
-        app:layout_constraintTop_toBottomOf="@id/send_notification_title" />
 
     <CheckBox
         android:id="@+id/checkbox_waiting_list"
@@ -72,7 +58,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/checkbox_selected_entrants"
-        app:layout_constraintTop_toBottomOf="@id/checkbox_chosen_entrants" />
+        app:layout_constraintTop_toBottomOf="@id/send_notification_title" />
 
     <CheckBox
         android:id="@+id/checkbox_selected_entrants"

@@ -49,8 +49,8 @@ public class SendNotificationFragment extends Fragment {
             Log.e("Organizer Send Notification", "No arguments recieved. Event/bundle did not pass correctly from previous fragment.");
             Toast.makeText(getContext(), "Error passing event.", Toast.LENGTH_SHORT).show();
         }
+
         String eventID = event.getEventID();
-        CheckBox chosenEntrantsCheckBox = binding.checkboxChosenEntrants;
         CheckBox waitingListCheckBox = binding.checkboxWaitingList;
         CheckBox selectedEntrantsCheckBox = binding.checkboxSelectedEntrants;
         CheckBox cancelledEntrantsCheckBox = binding.checkboxCancelledEntrants;
@@ -62,43 +62,24 @@ public class SendNotificationFragment extends Fragment {
             String body = binding.messageInput.getText().toString();
 
             // make a switch case/if statements depending on waitlist checks.
-            boolean isChosenEntrantsChecked = chosenEntrantsCheckBox.isChecked();
             boolean isWaitingListChecked = waitingListCheckBox.isChecked();
             boolean isSelectedEntrantsChecked = selectedEntrantsCheckBox.isChecked();
             boolean isCancelledEntrantsChecked = cancelledEntrantsCheckBox.isChecked();
             if (body.isEmpty()) {
                 Toast.makeText(getContext(), "Must write a body message!", Toast.LENGTH_SHORT).show();
             } else {
-                if (isChosenEntrantsChecked) {
-                    // send notif to chosen/pending
-                    fireCon.RetrieveAndStoreUserIDs(eventID, "waitlist_pending", body, new FirestoreCallback() {
-                        @Override
-                        public void onSuccess(String[] userIDs) {
-                            // Handle success case
-                            for (String userID : userIDs) {
-                                Log.d("SendNotification", "User ID: " + userID);
-                            }
-                            Toast.makeText(getContext(), "Notification success!", Toast.LENGTH_SHORT).show();
 
-                        }
-
-                        @Override
-                        public void onFailure(Exception e) {
-                            // Handle failure case
-                            Log.e("SendNotification", "Error fetching user IDs: " + e.getMessage());
-                            Toast.makeText(getContext(), "Notification delivery failed", Toast.LENGTH_SHORT).show();
-
-                        }
-                    });
-                }
-                else if (isWaitingListChecked) {
+                if (isWaitingListChecked) {
                     // send notif to pending users (ones who just signed up)
+                    sendNotification(eventID, "waitlist_pending", body);
                 }
                 else if (isSelectedEntrantsChecked) {
                     // send notif to selected/lottery winners entrants
+                    sendNotification(eventID, "waitlist_selected", body);
                 }
                 else if (isCancelledEntrantsChecked) {
                     // send notif to cancelled/rejected entrants
+                    sendNotification(eventID, "waitlist_cancelled", body);
                 }
                 else {
                     Toast.makeText(getContext(), "Must make a selection first!", Toast.LENGTH_SHORT).show();
@@ -109,8 +90,26 @@ public class SendNotificationFragment extends Fragment {
             return root;
     }
 
-    private void sendNotification(String title, String body, String waitlist) {
+    private void sendNotification(String eventID, String waitlist, String body) {
         // Send notifications to entrants in specific waitlists
+        fireCon.RetrieveAndStoreUserIDs(eventID, waitlist, body, new FirestoreCallback() {
+            @Override
+            public void onSuccess(String[] userIDs) {
+                // Handle success case
+                for (String userID : userIDs) {
+                    Log.d("SendNotification", "User ID: " + userID);
+                }
+                Toast.makeText(getContext(), "Notification success!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                // Handle failure case
+                Log.e("SendNotification", "Error fetching user IDs: " + e.getMessage());
+                Toast.makeText(getContext(), "Notification delivery failed", Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
 
     @Override
