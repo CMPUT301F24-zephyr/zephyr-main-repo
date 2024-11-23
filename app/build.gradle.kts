@@ -58,6 +58,7 @@ dependencies {
 
     implementation(libs.legacy.support.v4)
     implementation("com.github.bumptech.glide:glide:4.11.0")
+    implementation(libs.fragment.testing)
 
 
     annotationProcessor("com.github.bumptech.glide:compiler:4.11.0")

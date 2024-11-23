@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/navigation_orghome"
         android:name="com.example.plannet.ui.orghome.OrganizerHomeFragment"
-        android:label="@string/title_home"
+        android:label="@string/title_orghome"
         tools:layout="@layout/fragment_home_organizer">
             <action
                 android:id="@+id/action_home_to_createEvent"
@@ -67,7 +67,7 @@
     <fragment
         android:id="@+id/navigation_entranthome"
         android:name="com.example.plannet.ui.entranthome.EntrantHomeFragment"
-        android:label="@string/title_home"
+        android:label="@string/title_entranthome"
         tools:layout="@layout/fragment_home_entrant">
         <action
             android:id="@+id/action_home_to_qrCodeScan"
@@ -168,12 +168,22 @@
         android:id="@+id/navigation_notificationmanager"
         android:name="com.example.plannet.ui.orgnotifications.NotificationManagerFragment"
         android:label="Notification Manager"
-        tools:layout="@layout/fragment_organizer_notification_manager" />
+        tools:layout="@layout/fragment_organizer_notification_manager" >
+        <action
+            android:id="@+id/action_navigation_notificationmanager_to_navigation_sendnotification"
+            app:destination="@id/navigation_sendnotification" />
+    </fragment>
+
+
     <fragment
         android:id="@+id/navigation_sendnotification"
         android:name="com.example.plannet.ui.orgnotifications.SendNotificationFragment"
         android:label="Send Notification"
-        tools:layout="@layout/fragment_organizer_send_notification" />
+        tools:layout="@layout/fragment_organizer_send_notification">
+        <action
+            android:id="@+id/action_navigation_sendnotification_to_navigation_notificationmanager"
+            app:destination="@id/navigation_notificationmanager" />
+    </fragment>
 
 
 </navigation>

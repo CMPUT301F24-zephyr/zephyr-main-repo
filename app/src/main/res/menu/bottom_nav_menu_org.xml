@@ -5,7 +5,7 @@ android:id="@+id/bottom_navigation_bar_org">
     <item
         android:id="@+id/navigation_orghome"
         android:icon="@drawable/ic_home_black_24dp"
-        android:title="@string/title_home" />
+        android:title="@string/title_orghome" />
 
     <item
         android:id="@+id/navigation_orgprofile"
