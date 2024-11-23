@@ -77,20 +77,20 @@ public class EntrantProfileDisplayFragment extends Fragment{
             binding.phoneEdit.setText((String) entrantInfo.get("phone"));
             binding.emailEdit.setText((String) entrantInfo.get("email"));
 
-            // Handle latitude and longitude safely
-            Object latitudeObj = entrantInfo.get("latitude");
-            Object longitudeObj = entrantInfo.get("longitude");
-
-            if (latitudeObj instanceof Double && longitudeObj instanceof Double) {
-                double latitude = (Double) latitudeObj;
-                double longitude = (Double) longitudeObj;
-
-                // Set the location field to display the coordinates
-                binding.locationEdit.setText(latitude + ", " + longitude);
-            } else {
-                // Default message if location is unavailable
-                binding.locationEdit.setText("Location not available");
-            }
+//            // Handle latitude and longitude safely
+//            Object latitudeObj = entrantInfo.get("latitude");
+//            Object longitudeObj = entrantInfo.get("longitude");
+//
+//            if (latitudeObj instanceof Double && longitudeObj instanceof Double) {
+//                double latitude = (Double) latitudeObj;
+//                double longitude = (Double) longitudeObj;
+//
+//                // Set the location field to display the coordinates
+//                binding.locationEdit.setText(latitude + ", " + longitude);
+//            } else {
+//                // Default message if location is unavailable
+//                binding.locationEdit.setText("Location not available");
+//            }
 
             String profilePictureUrl = (String) entrantInfo.get("profilePictureUrl");
             if (profilePictureUrl != null) {
