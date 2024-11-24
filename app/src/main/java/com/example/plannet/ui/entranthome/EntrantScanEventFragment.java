@@ -70,6 +70,18 @@ public class EntrantScanEventFragment extends Fragment {
 
         return view;
     }
+
+    /**
+     * reads the result from QR code scanner and sends it to fetchEventDetails if it's != null
+     * @param requestCode The integer request code originally supplied to
+     *                    startActivityForResult(), allowing you to identify who this
+     *                    result came from.
+     * @param resultCode The integer result code returned by the child activity
+     *                   through its setResult().
+     * @param data An Intent, which can return result data to the caller
+     *               (various data can be attached to Intent "extras").
+     *
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -81,7 +93,11 @@ public class EntrantScanEventFragment extends Fragment {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
-    // Method to fetch event details from Firebase and start EventDetailsActivity
+
+    /**
+     * Method to fetch event details from Firebase and start EventDetailsActivity
+     * @param qrData
+     */
     void fetchEventDetails(String qrData) {
         firebaseDB.collection("events").document(qrData).get().addOnSuccessListener(documentSnapshot -> {
                             if (documentSnapshot.exists()) {
