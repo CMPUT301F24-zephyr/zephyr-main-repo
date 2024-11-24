@@ -1,17 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
     android:background="@color/backgroundColor"
     tools:context=".ui.entrantnotifications.EntrantNotificationsFragment">
 
-
     <Switch
-        android:id="@+id/notif_switch"
+        android:id="@+id/notif_switch_all"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:textColor="@color/white"
-        android:text="Receive Notifications?" />
+        android:text="Receive Notifications from Organizer/Admin?" />
 
-</FrameLayout>
+    <Switch
+        android:id="@+id/notif_switch_winner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:textColor="@color/white"
+        android:text="Receive Notifications if chosen from event?" />
+
+    <Switch
+        android:id="@+id/notif_switch_loser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Receive Notifications if not chosen from event?"
+        android:textColor="@color/white" />
+
+</LinearLayout>

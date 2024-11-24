@@ -19,6 +19,9 @@ import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
 
+/**
+ * notification preferences for entrant
+ */
 public class EntrantNotificationsFragment extends Fragment {
     private FirebaseFirestore db;
     private String userID;
@@ -32,39 +35,60 @@ public class EntrantNotificationsFragment extends Fragment {
 
         userID = Settings.Secure.getString(requireContext().getContentResolver(), Settings.Secure.ANDROID_ID);
 
-        // Initialize the Switch
-        Switch notifSwitch = view.findViewById(R.id.notif_switch);
+        // Initialize Switches
+        Switch notifSwitchAll = view.findViewById(R.id.notif_switch_all);
+        Switch notifSwitchWinner = view.findViewById(R.id.notif_switch_winner);
+        Switch notifSwitchLoser = view.findViewById(R.id.notif_switch_loser);
 
+        // Firestore path: users -> userID -> userInfo -> profile
         String profilePath = String.format("users/%s/userInfo/profile", userID);
 
-        // Retrieve and display current state from Firestore
+        // Retrieve and display current state for each switch
         db.document(profilePath)
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists() && documentSnapshot.contains("notifsActivated")) {
-                        boolean isActivated = documentSnapshot.getBoolean("notifsActivated");
-                        notifSwitch.setChecked(isActivated); // Set switch based on value on db
-                    } else {
-                        // If the field does not exist, set it to false by default
-                        notifSwitch.setChecked(false);
-                        db.document(profilePath)
-                                .set(new HashMap<String, Object>() {{
-                                    put("notifsActivated", false);
-                                }}, SetOptions.merge())
-                                .addOnSuccessListener(aVoid -> Log.d("Firestore", "Default notifsActivated set to false"))
-                                .addOnFailureListener(e -> Log.e("Firestore", "Error setting default value", e));
+                    if (documentSnapshot.exists()) {
+                        // retrieve pre-set/default values
+                        boolean allNotifs = documentSnapshot.contains("notifsAll") ? documentSnapshot.getBoolean("notifsAll") : false;
+                        boolean winnerNotifs = documentSnapshot.contains("notifsWinner") ? documentSnapshot.getBoolean("notifsWinner") : false;
+                        boolean loserNotifs = documentSnapshot.contains("notifsLoser") ? documentSnapshot.getBoolean("notifsLoser") : false;
+
+                        notifSwitchAll.setChecked(allNotifs);
+                        notifSwitchWinner.setChecked(winnerNotifs);
+                        notifSwitchLoser.setChecked(loserNotifs);
+
+                        if (!documentSnapshot.contains("notifsAll") || !documentSnapshot.contains("notifsWinner") || !documentSnapshot.contains("notifsLoser")) {
+                            db.document(profilePath)
+                                    .set(new HashMap<String, Object>() {{
+                                        put("notifsAll", allNotifs);
+                                        put("notifsWinner", winnerNotifs);
+                                        put("notifsLoser", loserNotifs);
+                                    }}, SetOptions.merge())
+                                    .addOnSuccessListener(aVoid -> Log.d("Firestore", "Default notification settings initialized."))
+                                    .addOnFailureListener(e -> Log.e("Firestore", "Error initializing default values", e));
+                        }
                     }
                 })
                 .addOnFailureListener(e -> Log.e("Firestore", "Error fetching user data", e));
 
-        // Update Firestore when the Switch is toggled
-        notifSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            db.document(profilePath)
-                    .update("notifsActivated", isChecked)
-                    .addOnSuccessListener(aVoid -> Log.d("Firestore", "Notification preference updated: " + isChecked))
-                    .addOnFailureListener(e -> Log.e("Firestore", "Error updating notification preference", e));
-        });
+        // listeners to update Firestore when switches are toggled
+        notifSwitchAll.setOnCheckedChangeListener((buttonView, isChecked) -> updateNotificationPreference(profilePath, "notifsAll", isChecked));
+        notifSwitchWinner.setOnCheckedChangeListener((buttonView, isChecked) -> updateNotificationPreference(profilePath, "notifsWinner", isChecked));
+        notifSwitchLoser.setOnCheckedChangeListener((buttonView, isChecked) -> updateNotificationPreference(profilePath, "notifsLoser", isChecked));
 
         return view;
+    }
+
+    /**
+     * Method to update Firestore notification preferences
+     * @param profilePath
+     * @param field
+     * @param value
+     */
+    private void updateNotificationPreference(String profilePath, String field, boolean value) {
+        db.document(profilePath)
+                .update(field, value)
+                .addOnSuccessListener(aVoid -> Log.d("Firestore", field + " updated to: " + value))
+                .addOnFailureListener(e -> Log.e("Firestore", "Error updating " + field, e));
     }
 }
