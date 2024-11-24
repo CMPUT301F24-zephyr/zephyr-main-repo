@@ -92,9 +92,9 @@ public class OrganizerHomeFragment extends Fragment {
 
         // Fetch and display facility title if available
         userQrRef.get().addOnSuccessListener(documentSnapshot -> {
-            if (documentSnapshot.exists()) {
+            if (binding != null && documentSnapshot.exists()) {
                 String facilityName = documentSnapshot.getString("facility.name");
-                binding.title.setText("Facility: " + (facilityName != null ? facilityName : "null"));
+                binding.title.setText("Facility: " + (facilityName != null ? facilityName : "Not Set"));
             }
         }).addOnFailureListener(e -> {
             // Handle failure, maybe show a toast or log the error

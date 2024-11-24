@@ -1,27 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/custom_toast_xml"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:background="#CC000000"
-    android:gravity="center">
+    android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/toast_qr_image"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center" />
-
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/custom_toast_xml"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="QR Generated! Take a screenshot or head over to your events to view your QR code."
-        android:fontFamily="@font/poppins"
-        android:textColor="#FFFFFF"
-        android:textAlignment="center"
-        android:paddingTop="8dp"
-        android:gravity="center" />
-</LinearLayout>
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:background="#CC000000"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/toast_qr_image"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="QR Generated! Take a screenshot and press OK! when finished."
+            android:fontFamily="@font/poppins"
+            android:textColor="#FFFFFF"
+            android:textAlignment="center"
+            android:paddingTop="8dp"
+            android:gravity="center"
+            android:layout_marginTop="16dp" />
+    </LinearLayout>
+</ScrollView>

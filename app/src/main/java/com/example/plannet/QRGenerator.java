@@ -37,7 +37,7 @@ public class QRGenerator {
         try {
             BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
             BitMatrix bitMatrix = new QRCodeWriter()
-                    .encode(data, BarcodeFormat.QR_CODE, 400, 400);
+                    .encode(data, BarcodeFormat.QR_CODE, 1000, 1000);
             return barcodeEncoder.createBitmap(bitMatrix);
         } catch (WriterException e) {
             e.printStackTrace();

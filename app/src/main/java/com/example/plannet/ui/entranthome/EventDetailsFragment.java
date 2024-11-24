@@ -22,7 +22,7 @@ import java.util.HashMap;
 
 public class EventDetailsFragment extends Fragment {
 
-    private TextView title, facilityName, facilityAddress, eventDates, capacity, cost, end_date, descriptionWriting;
+    private TextView title, facilityName, facilityAddress, eventDates, capacity, cost, end_date, descriptionWriting, geolocation;
     private Button registerButton;
     private ImageView backArrow, poster;
     private EntrantDBConnector dbConnector;
@@ -45,7 +45,7 @@ public class EventDetailsFragment extends Fragment {
         registerButton = root.findViewById(R.id.entrants_button);
         backArrow = root.findViewById(R.id.back_arrow);
         poster = root.findViewById(R.id.poster);
-
+        geolocation = root.findViewById(R.id.text_geolocaion);
 
         Bundle eventBundle = getArguments();
         if (eventBundle != null) {
@@ -58,6 +58,7 @@ public class EventDetailsFragment extends Fragment {
             cost.setText("Cost: " + eventBundle.getString("price"));
             end_date.setText(eventBundle.getString("registrationDateDeadline"));
             descriptionWriting.setText(eventBundle.getString("description"));
+            geolocation.setText(eventBundle.getString("geolocation"));
         }
         if (getArguments() != null) {
             eventID = getArguments().getString("eventID");
@@ -77,7 +78,7 @@ public class EventDetailsFragment extends Fragment {
             Toast.makeText(getContext(), "Event ID not found", Toast.LENGTH_SHORT).show();
             return;
         }
-
+        boolean isGeolocationRequired = geolocation.getText() != null && !geolocation.getText().toString().isEmpty();
         dbConnector.getUserInfo(userID,
                 userInfo -> {
                     // Prepare entrant data for both event and user waitlists
@@ -88,6 +89,22 @@ public class EventDetailsFragment extends Fragment {
                     entrantData.put("phone", userInfo.get("phone"));
                     entrantData.put("profilePictureUrl", userInfo.get("profilePictureUrl"));
                     entrantData.put("notificationsEnabled", userInfo.get("notifsActivated") != null && (Boolean) userInfo.get("notifsActivated"));
+                    entrantData.put("entrantlatitude", userInfo.get("latitude"));
+                    entrantData.put("entrantlongitude", userInfo.get("longitude"));
+                    // Handle location safely
+                    Object latitudeObj = userInfo.get("latitude");
+                    Object longitudeObj = userInfo.get("longitude");
+
+                    if (latitudeObj instanceof Double && longitudeObj instanceof Double) {
+                        entrantData.put("entrantlatitude", latitudeObj);
+                        entrantData.put("entrantlongitude", longitudeObj);
+                    }
+
+                    // Check if geolocation is required and user location is missing
+                    if (isGeolocationRequired && latitudeObj == null) {
+                        Toast.makeText(getContext(), "Location is required to register for this event.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
                     dbConnector.addEntrantToWaitlist(eventID, userID, entrantData, "pending",
                             aVoid -> {

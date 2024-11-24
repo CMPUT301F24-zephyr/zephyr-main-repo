@@ -59,7 +59,7 @@ public class OrganizerHashedQrListFragment extends Fragment {
                     if (facilityName != null) {
                         binding.title.setText("Facility: " + facilityName);
                     } else {
-                        binding.title.setText("Facility: null");
+                        binding.title.setText("Facility: Not Set");
                     }
                 }
             }

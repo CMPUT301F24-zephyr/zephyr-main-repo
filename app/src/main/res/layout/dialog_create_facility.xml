@@ -10,15 +10,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
-        android:hint="Facility Name"
-        android:inputType="text" />
+        android:hint="Enter Facility Name"
+        android:inputType="text"
+        android:textColorHint="@color/buttonGrey" />
 
     <EditText
         android:id="@+id/facility_location_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
-        android:hint="Location"
-        android:inputType="text" />
+        android:hint="Enter Location"
+        android:inputType="text"
+        android:textColorHint="@color/buttonGrey" />
 
 </LinearLayout>

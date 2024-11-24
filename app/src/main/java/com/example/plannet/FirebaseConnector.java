@@ -6,6 +6,7 @@ import com.example.plannet.Event.Event;
 import com.example.plannet.Entrant.EntrantProfile;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -367,5 +368,55 @@ public class FirebaseConnector {
                         Log.e("Firestore WaitlistEntrants", "waitlist_pending: ERROR GETTING NAMES");
                     }
                 });
+    }
+
+    /**
+     * method to get all the userIDs in a waitlist and add a new document on firebase which contains the message
+     * @param eventID
+     * @param waitlist
+     * @param message
+     * @param callback
+     */
+    public void RetrieveAndStoreUserIDs(String eventID, String waitlist, String message, FirestoreCallback callback) {
+        // Firestore database reference
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Reference to the "events -> eventID -> waitlist" collection
+        CollectionReference waitlistRef = db.collection("events")
+                .document(eventID)
+                .collection(waitlist);
+
+        // Fetch user IDs from the specified waitlist collection
+        waitlistRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                ArrayList<String> userIDs = new ArrayList<>();
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    // Add each document ID (userID) to the list
+                    userIDs.add(document.getId());
+                }
+
+                // Create a map for the "notifications" data
+                Map<String, Object> notificationData = new HashMap<>();
+                notificationData.put("message", message); // organizer message
+                notificationData.put("userIDs", userIDs); // list of user IDs
+
+                // Write the data to the "notifications -> eventID" document
+                db.collection("notifications")
+                        .document(eventID)
+                        .set(notificationData)
+                        .addOnSuccessListener(aVoid -> {
+                            // Success callback
+                            callback.onSuccess(userIDs.toArray(new String[0]));
+                        })
+                        .addOnFailureListener(e -> {
+                            // Failure callback for writing to the database
+                            callback.onFailure(e);
+                        });
+
+            } else {
+                // Failure callback for retrieving user IDs
+                callback.onFailure(task.getException());
+            }
+        });
     }
 }
