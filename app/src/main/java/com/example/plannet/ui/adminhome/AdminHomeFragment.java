@@ -10,6 +10,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class AdminHomeFragment extends Fragment {
@@ -46,25 +49,41 @@ public class AdminHomeFragment extends Fragment {
 
         // Button click listeners
         binding.viewAllEvents.setOnClickListener(v -> {
-            // Call the getAllEvents method
-            getAllEvents().addOnCompleteListener(task -> {
+            getAllEventsWithMapping().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    ArrayList<String> events = task.getResult();
-                    if (!events.isEmpty()) {
-                        // Show the events in a dialog or update UI
-                        showListDialog("Events", "events", events);
+                    Pair<ArrayList<String>, Map<String, String>> result = task.getResult();
+                    ArrayList<String> eventNames = result.first;
+                    Map<String, String> nameToIdMap = result.second;
+
+                    if (!eventNames.isEmpty()) {
+                        // Show the dialog with event names and the mapping
+                        showEventListDialog("Events", eventNames, nameToIdMap);
                     } else {
-                        // Handle empty list case
                         Toast.makeText(requireContext(), "No events found.", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    // Handle error case
                     Toast.makeText(requireContext(), "Failed to fetch events.", Toast.LENGTH_SHORT).show();
                 }
             });
         });
         binding.viewAllFacilities.setOnClickListener(v -> showListDialog("Facilities", "", getAllFacilities()));
-        binding.viewHashedQR.setOnClickListener(v -> showListDialog("QR Hashes", "", getAllHashes()));
+        binding.viewHashedQR.setOnClickListener(v -> {
+            getAllHashes().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    ArrayList<String> qrcodes = task.getResult();
+                    if (!qrcodes.isEmpty()) {
+                        // show the users in a dialog or update UI
+                        showListDialog("QR Hashes", "qr_codes", qrcodes);
+                    } else {
+                        // empty list case
+                        Toast.makeText(requireContext(), "No qr codes found.", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    //error case
+                    Toast.makeText(requireContext(), "Failed to fetch qr codes.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
         binding.viewAllImages.setOnClickListener(v -> showListDialog("Images", "", getAllImages()));
         binding.viewAllProfiles.setOnClickListener(v -> {
             getAllProfiles().addOnCompleteListener(task -> {
@@ -151,33 +170,86 @@ public class AdminHomeFragment extends Fragment {
         void onComplete(boolean success);
     }
 
+    private void deleteEventFromDatabase(String eventName, Map<String, String> nameToIdMap, String collection, OnDeleteCompleteListener listener) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String documentId = nameToIdMap.get(eventName); // Get the document ID using the eventName
+
+        if (documentId == null) {
+            Log.e("DeleteEntry", "Document ID not found for eventName: " + eventName);
+            listener.onComplete(false);
+            return;
+        }
+
+        db.collection(collection)
+                .document(documentId)
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    Log.d("DeleteEntry", "Deleted document: " + documentId);
+                    listener.onComplete(true);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("DeleteEntry", "Failed to delete document: " + documentId, e);
+                    listener.onComplete(false);
+                });
+    }
+
     /**
      * fetches all eventIDs from firebase under events
      * @return string array object
      */
-    public Task<ArrayList<String>> getAllEvents() {
+    public Task<ArrayList<String>> getAllHashes() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference eventsCollection = db.collection("events");
+        CollectionReference eventsCollection = db.collection("qr_codes");
 
-        // Create a TaskCompletionSource to handle asynchronous behavior
         TaskCompletionSource<ArrayList<String>> taskCompletionSource = new TaskCompletionSource<>();
 
-        // Fetch all documents in the "events" collection
         eventsCollection.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 QuerySnapshot querySnapshot = task.getResult();
-                ArrayList<String> events = new ArrayList<>();
+                ArrayList<String> qrCodes = new ArrayList<>();
 
                 if (querySnapshot != null) {
                     for (DocumentSnapshot document : querySnapshot.getDocuments()) {
-                        events.add(document.getId()); // Adds each document ID to the list
+                        qrCodes.add(document.getId()); // adds all hashes to a list for viewing
                     }
                 }
 
-                taskCompletionSource.setResult(events);
+                taskCompletionSource.setResult(qrCodes);
             } else {
                 // empty list if an error arises
                 taskCompletionSource.setResult(new ArrayList<>());
+            }
+        });
+
+        return taskCompletionSource.getTask();
+    }
+
+    public Task<Pair<ArrayList<String>, Map<String, String>>> getAllEventsWithMapping() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference eventsCollection = db.collection("events");
+
+        TaskCompletionSource<Pair<ArrayList<String>, Map<String, String>>> taskCompletionSource = new TaskCompletionSource<>();
+
+        eventsCollection.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                QuerySnapshot querySnapshot = task.getResult();
+                ArrayList<String> eventNames = new ArrayList<>();
+                Map<String, String> nameToIdMap = new HashMap<>();
+
+                if (querySnapshot != null) {
+                    for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                        String eventName = document.getString("eventName");
+                        String documentId = document.getId();
+                        if (eventName != null) {
+                            eventNames.add(eventName);
+                            nameToIdMap.put(eventName, documentId); // Map eventName to document ID
+                        }
+                    }
+                }
+
+                taskCompletionSource.setResult(new Pair<>(eventNames, nameToIdMap));
+            } else {
+                taskCompletionSource.setResult(new Pair<>(new ArrayList<>(), new HashMap<>()));
             }
         });
 
@@ -193,17 +265,6 @@ public class AdminHomeFragment extends Fragment {
         facilities.add("Facility 2");
         facilities.add("Facility 3");
         return facilities;
-    }
-
-    /**
-     * Array data for QR hashes
-     */
-    private ArrayList<String> getAllHashes() {
-        ArrayList<String> hashes = new ArrayList<>();
-        hashes.add("QR Hash 1");
-        hashes.add("QR Hash 2");
-        hashes.add("QR Hash 3");
-        return hashes;
     }
 
     /**
@@ -246,6 +307,44 @@ public class AdminHomeFragment extends Fragment {
         });
 
         return taskCompletionSource.getTask();
+    }
+
+    private void showEventListDialog(String title, ArrayList<String> items, Map<String, String> nameToIdMap) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle(title);
+
+        // Adapter to display the list of items
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, items);
+
+        ListView listView = new ListView(requireContext());
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            String selectedItem = items.get(position);
+
+            // Confirm deletion with a dialog
+            new AlertDialog.Builder(requireContext())
+                    .setTitle("Delete Entry")
+                    .setMessage("Are you sure you want to delete " + selectedItem + "?")
+                    .setPositiveButton("Delete", (dialog, which) -> {
+                        deleteEventFromDatabase(selectedItem, nameToIdMap, "events", success -> {
+                            if (success) {
+                                // call notifydatachanged after successful deletion
+                                items.remove(position);
+                                adapter.notifyDataSetChanged();
+                                Toast.makeText(requireContext(), "Deleted: " + selectedItem, Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(requireContext(), "Failed to delete: " + selectedItem, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    })
+                    .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                    .show();
+        });
+
+        builder.setView(listView);
+        builder.setNegativeButton("Close", (dialog, which) -> dialog.dismiss());
+        builder.show();
     }
 
     @Override
