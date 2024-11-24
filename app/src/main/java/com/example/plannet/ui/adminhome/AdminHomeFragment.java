@@ -109,7 +109,7 @@ public class AdminHomeFragment extends Fragment {
     }
 
     /**
-     * Show a dialog with a list of items and a delete option
+     * Show a dialog with a list of items and a delete option (works for qr+users)
      * @param title
      * @param items
      */
