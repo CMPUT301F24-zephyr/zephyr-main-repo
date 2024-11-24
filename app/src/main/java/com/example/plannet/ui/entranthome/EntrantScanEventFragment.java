@@ -51,7 +51,8 @@ public class EntrantScanEventFragment extends Fragment {
         backArrow = view.findViewById(R.id.back_arrow);
         backArrow.setOnClickListener(v -> requireActivity().onBackPressed());
         // QR code reader button
-        view.findViewById(R.id.scan_qr_button).setOnClickListener(v -> qrCodeReader.startQRCodeScanner(EntrantScanEventFragment.this));
+        qrButton = view.findViewById(R.id.scan_qr_button);
+        qrButton.setOnClickListener(v -> qrCodeReader.startQRCodeScanner(EntrantScanEventFragment.this));
 
         // Commented this out for now - Moe
 //        // Start scanning
