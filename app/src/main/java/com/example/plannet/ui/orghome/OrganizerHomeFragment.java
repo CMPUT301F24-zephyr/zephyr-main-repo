@@ -91,6 +91,7 @@ public class OrganizerHomeFragment extends Fragment {
         binding.buttonDraw.setOnClickListener(v -> {
             // Future navigation reference
             // navController.navigate(R.id.action_homeFragment_to_drawFragment);
+            // UPDATE -- instead of a whole new fragment, we could just show a dialog for this (much easier!)
         });
 
         binding.buttonSwitch.setOnClickListener(v -> {
