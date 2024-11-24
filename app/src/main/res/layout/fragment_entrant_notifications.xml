@@ -9,26 +9,10 @@
     tools:context=".ui.entrantnotifications.EntrantNotificationsFragment">
 
     <Switch
-        android:id="@+id/notif_switch_all"
+        android:id="@+id/notif_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
         android:textColor="@color/white"
-        android:text="Receive Notifications from Organizer/Admin?" />
-
-    <Switch
-        android:id="@+id/notif_switch_winner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:textColor="@color/white"
-        android:text="Receive Notifications if chosen from event?" />
-
-    <Switch
-        android:id="@+id/notif_switch_loser"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Receive Notifications if not chosen from event?"
-        android:textColor="@color/white" />
+        android:text="Receive Notifications?" />
 
 </LinearLayout>
