@@ -25,10 +25,18 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ *  The fragment for event view details when user clicks on an event in their
+ *  list
+ */
+
+
 public class entrantViewEventFragment extends Fragment {
 
     private FirebaseConnector firebaseConnector;
     private String currentStatus = null; // Store the user's current status in the event
+
+    private TextView titleTextView, facilityNameTextView, eventDatesTextView, costTextView;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -50,6 +58,9 @@ public class entrantViewEventFragment extends Fragment {
         ImageView backArrow = root.findViewById(R.id.back_arrow);
         Button actionButton = root.findViewById(R.id.entrants_button);
 
+
+
+
         // Back arrow functionality
         backArrow.setOnClickListener(v -> requireActivity().onBackPressed());
 
@@ -64,7 +75,7 @@ public class entrantViewEventFragment extends Fragment {
                         facilityAddressTextView, eventDatesTextView, capacityTextView,
                         costTextView, registrationEndsTextView, descriptionTextView);
 
-                // Set initial button state and functionality
+
                 updateActionButton(actionButton, eventId, userId);
             } else {
                 Toast.makeText(requireContext(), "Event ID is missing!", Toast.LENGTH_SHORT).show();
@@ -72,6 +83,7 @@ public class entrantViewEventFragment extends Fragment {
         } else {
             Toast.makeText(requireContext(), "No event data received!", Toast.LENGTH_SHORT).show();
         }
+
 
         return root;
     }
@@ -87,10 +99,10 @@ public class entrantViewEventFragment extends Fragment {
 
         firebaseConnector.getUserEventsByID(eventId,
                 eventData -> {
-                    // Format timestamps for display
+
                     SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault());
 
-                    // Update UI with Firebase data
+
                     titleTextView.setText("Event: " + eventData.getOrDefault("eventName", "No Event Name"));
                     facilityNameTextView.setText((String) eventData.getOrDefault("facility", "No Facility Name"));
                     facilityAddressTextView.setText("No Address Available"); // Placeholder if address is missing
@@ -98,7 +110,7 @@ public class entrantViewEventFragment extends Fragment {
                     capacityTextView.setText("Capacity: " + eventData.getOrDefault("eventMaxEntrants", "N/A"));
                     costTextView.setText("Cost: " + eventData.getOrDefault("eventPrice", "Free"));
 
-                    // Handle timestamps
+
                     Timestamp startDate = (Timestamp) eventData.get("RunTimeStartDate");
                     Timestamp endDate = (Timestamp) eventData.get("RunTimeEndDate");
                     eventDatesTextView.setText("Event Dates: " +
@@ -110,7 +122,7 @@ public class entrantViewEventFragment extends Fragment {
                     registrationEndsTextView.setText("Registration Ends: " +
                             (regEndDate != null ? dateFormat.format(regEndDate.toDate()) : "N/A"));
 
-                    // Load poster image using Glide
+
                     String posterPath = (String) eventData.get("eventPoster");
                     if (posterPath != null && !posterPath.isEmpty()) {
                         Glide.with(this)
@@ -122,35 +134,36 @@ public class entrantViewEventFragment extends Fragment {
                     }
                 },
                 error -> {
-                    // Handle errors while fetching data
+
                     Toast.makeText(requireContext(), "Failed to fetch event details!", Toast.LENGTH_SHORT).show();
                 });
     }
 
-    /**
-     * Updates the action button based on the user's current status in the waitlist.
-     */
+
     private void updateActionButton(Button actionButton, String eventId, String userId) {
         if ("pending".equals(currentStatus) || "chosen".equals(currentStatus) || "accepted".equals(currentStatus)) {
             actionButton.setText("Unregister");
             actionButton.setOnClickListener(v -> unregisterForEvent(eventId, userId, actionButton));
         } else {
             actionButton.setText("Register");
-            actionButton.setOnClickListener(v -> registerForEvent(eventId, userId, actionButton));
+            actionButton.setOnClickListener(v -> registerForEvent(eventId, userId, titleTextView, facilityNameTextView, eventDatesTextView, costTextView));
         }
     }
 
-    /**
-     * Handles user registration for the event.
-     */
-    private void registerForEvent(String eventId, String userId, Button actionButton) {
+
+    private void registerForEvent(String eventId, String userId, TextView titleTextView, TextView facilityNameTextView, TextView eventDatesTextView, TextView costTextView) {
+        if (eventId == null) {
+            Toast.makeText(getContext(), "Event ID not found", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         firebaseConnector.getUserInfo(userId, userInfo -> {
             if (userInfo == null) {
                 Toast.makeText(getContext(), "User information not found.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            // Prepare detailed entrant data
+            // Prepare entrant data for both event and user waitlists
             HashMap<String, Object> entrantData = new HashMap<>();
             entrantData.put("firstName", userInfo.get("firstName"));
             entrantData.put("lastName", userInfo.get("lastName"));
@@ -163,89 +176,116 @@ public class entrantViewEventFragment extends Fragment {
 
             firebaseConnector.addDataToWaitlist(eventId, userId, entrantData, "pending",
                     success -> {
-                        currentStatus = "pending";
-                        Toast.makeText(getContext(), "Registered successfully.", Toast.LENGTH_SHORT).show();
-                        updateActionButton(actionButton, eventId, userId);
-                    },
-                    error -> Log.e("FirebaseConnector", "Failed to register for the event.", error));
-        }, error -> Log.e("FirebaseConnector", "Error fetching user profile", error));
-    }
+                        // Add event details to the user's pending waitlist
+                        HashMap<String, Object> eventData = new HashMap<>();
+                        eventData.put("eventID", eventId);
+                        eventData.put("eventName", titleTextView.getText().toString());
+                        eventData.put("facilityName", facilityNameTextView.getText().toString());
+                        eventData.put("eventDates", eventDatesTextView.getText().toString());
+                        eventData.put("cost", costTextView.getText().toString());
+                        eventData.put("registrationDate", System.currentTimeMillis());
 
-    /**
-     * Handles user unregistration from the event.
-     */
-    /**
-     * Handles user unregistration from the event.
-     */
-    /**
-     * Handles user unregistration from the event.
-     */
-    private void unregisterForEvent(String eventId, String userId, Button actionButton) {
-        firebaseConnector.getUserInfo(userId, userInfo -> {
-            if (userInfo == null) {
-                Toast.makeText(getContext(), "User information not found.", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            // Prepare detailed entrant data for "declined" waitlist
-            Map<String, Object> declinedEntrantData = new HashMap<>();
-            declinedEntrantData.put("firstName", userInfo.getOrDefault("firstName", "N/A"));
-            declinedEntrantData.put("lastName", userInfo.getOrDefault("lastName", "N/A"));
-            declinedEntrantData.put("email", userInfo.getOrDefault("email", "N/A"));
-            declinedEntrantData.put("phone", userInfo.getOrDefault("phone", "N/A"));
-            declinedEntrantData.put("profilePictureUrl", userInfo.getOrDefault("profilePictureUrl", null));
-            declinedEntrantData.put("notificationsEnabled", userInfo.getOrDefault("notifsActivated", false));
-            declinedEntrantData.put("entrantlatitude", userInfo.getOrDefault("latitude", "N/A"));
-            declinedEntrantData.put("entrantlongitude", userInfo.getOrDefault("longitude", "N/A"));
-
-            // Fetch additional event details from arguments to populate declined waitlist in user's collection
-            String eventName = getArguments().getString("eventName", "N/A");
-            String facilityName = getArguments().getString("facilityName", "N/A");
-            String eventDates = getArguments().getString("eventDates", "N/A");
-            String cost = getArguments().getString("cost", "N/A");
-
-            // Step 1: Remove entrant from the "pending" waitlist in events
-            firebaseConnector.removeDataFromWaitlist(eventId, userId, "pending",
-                    success -> {
-                        Log.d("unregisterForEvent", "Successfully removed user from event's pending waitlist.");
-
-                        // Step 2: Remove the pending waitlist entry from the user's collection
-                        firebaseConnector.removeUserWaitlistEvent(userId, "pending", eventId,
-                                removed -> {
-                                    Log.d("unregisterForEvent", "Successfully removed pending waitlist from user's collection.");
-
-                                    // Step 3: Add entrant to the "declined" waitlist in events
-                                    firebaseConnector.addDataToWaitlist(eventId, userId, declinedEntrantData, "declined",
-                                            added -> {
-                                                Log.d("unregisterForEvent", "Successfully added user to event's declined waitlist.");
-
-                                                // Step 4: Update user's waitlist entry for "declined"
-                                                Map<String, Object> declinedWaitlistData = new HashMap<>();
-                                                declinedWaitlistData.put("eventID", eventId);
-                                                declinedWaitlistData.put("status", "declined");
-                                                declinedWaitlistData.put("timestamp", System.currentTimeMillis());
-                                                declinedWaitlistData.put("eventName", eventName);
-                                                declinedWaitlistData.put("facilityName", facilityName);
-                                                declinedWaitlistData.put("eventDates", eventDates);
-                                                declinedWaitlistData.put("cost", cost);
-
-                                                firebaseConnector.updateUserWaitlist(userId, "declined", eventId, declinedWaitlistData,
-                                                        updated -> {
-                                                            Log.d("unregisterForEvent", "Successfully updated user's declined waitlist.");
-                                                            currentStatus = "declined";
-                                                            Toast.makeText(getContext(), "Unregistered successfully.", Toast.LENGTH_SHORT).show();
-                                                            updateActionButton(actionButton, eventId, userId);
-                                                        },
-                                                        error -> Log.e("unregisterForEvent", "Failed to update user's declined waitlist.", error));
-                                            },
-                                            error -> Log.e("unregisterForEvent", "Failed to add user to event's declined waitlist.", error));
+                        firebaseConnector.updateUserWaitlist(userId, "pending", eventId, eventData,
+                                waitlistSuccess -> {
+                                    Toast.makeText(getContext(), "Successfully added to pending waitlist (both user and event).", Toast.LENGTH_SHORT).show();
                                 },
-                                error -> Log.e("unregisterForEvent", "Failed to remove pending waitlist from user's collection.", error));
+                                waitlistFailure -> {
+                                    Toast.makeText(getContext(), "Failed to update user's pending waitlist.", Toast.LENGTH_SHORT).show();
+                                    Log.e("entrantViewEventFragment", "Error updating user's pending waitlist", waitlistFailure);
+                                });
                     },
-                    error -> Log.e("unregisterForEvent", "Failed to remove user from event's pending waitlist.", error));
-        }, error -> Log.e("unregisterForEvent", "Error fetching user profile", error));
+                    eventWaitlistFailure -> {
+                        Toast.makeText(getContext(), "Failed to register for event's pending waitlist.", Toast.LENGTH_SHORT).show();
+                        Log.e("entrantViewEventFragment", "Error registering for event's pending waitlist", eventWaitlistFailure);
+                    });
+        }, userInfoFailure -> {
+            Toast.makeText(getContext(), "Error fetching user profile", Toast.LENGTH_SHORT).show();
+            Log.e("entrantViewEventFragment", "Failed to fetch user profile", userInfoFailure);
+        });
     }
 
 
 
+
+    private void unregisterForEvent(String eventId, String userId, Button actionButton) {
+        if (eventId == null || userId == null) {
+            Toast.makeText(getContext(), "Missing event or user ID.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        firebaseConnector.getUserEventsByID(eventId,
+                eventData -> {
+
+                    String eventName = (String) eventData.getOrDefault("eventName", "N/A");
+                    String facilityName = (String) eventData.getOrDefault("facility", "N/A");
+                    String eventDates = "Event Dates: " +
+                            (eventData.get("RunTimeStartDate") != null ?
+                                    new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(((Timestamp) eventData.get("RunTimeStartDate")).toDate()) : "N/A")
+                            + " - " +
+                            (eventData.get("RunTimeEndDate") != null ?
+                                    new SimpleDateFormat("MMM dd, yyyy", Locale.getDefault()).format(((Timestamp) eventData.get("RunTimeEndDate")).toDate()) : "N/A");
+                    String cost = (String) eventData.getOrDefault("eventPrice", "Free");
+
+                    firebaseConnector.getUserInfo(userId, userInfo -> {
+                        if (userInfo == null) {
+                            Toast.makeText(getContext(), "User information not found.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        Map<String, Object> declinedEntrantData = new HashMap<>();
+                        declinedEntrantData.put("firstName", userInfo.getOrDefault("firstName", "N/A"));
+                        declinedEntrantData.put("lastName", userInfo.getOrDefault("lastName", "N/A"));
+                        declinedEntrantData.put("email", userInfo.getOrDefault("email", "N/A"));
+                        declinedEntrantData.put("phone", userInfo.getOrDefault("phone", "N/A"));
+                        declinedEntrantData.put("profilePictureUrl", userInfo.getOrDefault("profilePictureUrl", null));
+                        declinedEntrantData.put("notificationsEnabled", userInfo.getOrDefault("notifsActivated", false));
+                        declinedEntrantData.put("entrantlatitude", userInfo.getOrDefault("latitude", "N/A"));
+                        declinedEntrantData.put("entrantlongitude", userInfo.getOrDefault("longitude", "N/A"));
+
+                        //remove the entrant from the "pending" waitlist in events
+                        firebaseConnector.removeDataFromWaitlist(eventId, userId, "pending",
+                                success -> {
+                                    Log.d("unregisterForEvent", "Successfully removed user from event's pending waitlist.");
+
+                                    //remove the pending waitlist entry from the user's collection
+                                    firebaseConnector.removeUserWaitlistEvent(userId, "pending", eventId,
+                                            removed -> {
+                                                Log.d("unregisterForEvent", "Successfully removed pending waitlist from user's collection.");
+
+                                                //add entrant to the "declined" waitlist in events
+                                                firebaseConnector.addDataToWaitlist(eventId, userId, declinedEntrantData, "declined",
+                                                        added -> {
+                                                            Log.d("unregisterForEvent", "Successfully added user to event's declined waitlist.");
+
+                                                            //update user's waitlist entry for "declined"
+                                                            Map<String, Object> declinedWaitlistData = new HashMap<>();
+                                                            declinedWaitlistData.put("eventID", eventId);
+                                                            declinedWaitlistData.put("status", "declined");
+                                                            declinedWaitlistData.put("timestamp", System.currentTimeMillis());
+                                                            declinedWaitlistData.put("eventName", eventName);
+                                                            declinedWaitlistData.put("facilityName", facilityName);
+                                                            declinedWaitlistData.put("eventDates", eventDates);
+                                                            declinedWaitlistData.put("cost", cost);
+
+                                                            firebaseConnector.updateUserWaitlist(userId, "declined", eventId, declinedWaitlistData,
+                                                                    updated -> {
+                                                                        Log.d("unregisterForEvent", "Successfully updated user's declined waitlist.");
+                                                                        currentStatus = "declined";
+                                                                        Toast.makeText(getContext(), "Unregistered successfully.", Toast.LENGTH_SHORT).show();
+                                                                        updateActionButton(actionButton, eventId, userId);
+                                                                    },
+                                                                    error -> Log.e("unregisterForEvent", "Failed to update user's declined waitlist.", error));
+                                                        },
+                                                        error -> Log.e("unregisterForEvent", "Failed to add user to event's declined waitlist.", error));
+                                            },
+                                            error -> Log.e("unregisterForEvent", "Failed to remove pending waitlist from user's collection.", error));
+                                },
+                                error -> Log.e("unregisterForEvent", "Failed to remove user from event's pending waitlist.", error));
+                    }, error -> Log.e("unregisterForEvent", "Error fetching user profile", error));
+                },
+                error -> {
+                    Toast.makeText(getContext(), "Failed to fetch event details for unregistration.", Toast.LENGTH_SHORT).show();
+                    Log.e("unregisterForEvent", "Error fetching event details", error);
+                });
+    }
 }
