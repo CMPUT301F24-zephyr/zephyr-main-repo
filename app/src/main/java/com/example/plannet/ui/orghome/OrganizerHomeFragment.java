@@ -2,6 +2,7 @@ package com.example.plannet.ui.orghome;
 
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +13,14 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.example.plannet.FirebaseConnector;
 import com.example.plannet.R;
 import com.example.plannet.databinding.FragmentHomeOrganizerBinding;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 /**
  * Organizer Homescreen fragment. Provides the general navigation options for an organizer.
@@ -25,6 +30,8 @@ public class OrganizerHomeFragment extends Fragment {
     private FragmentHomeOrganizerBinding binding;
     private OrganizerHomeViewModel organizerHomeViewModel;
     private DocumentReference userQrRef;
+    String userID1;
+
 
     /**
      * configurations upon creating fragment such as viewmodels and initializations
@@ -37,10 +44,9 @@ public class OrganizerHomeFragment extends Fragment {
 
         // Initialize ViewModel
         organizerHomeViewModel = new ViewModelProvider(this).get(OrganizerHomeViewModel.class);
-
         // Initialize Firebase DocumentReference to retrieve DB info
-        String userID1 = Settings.Secure.getString(requireContext().getContentResolver(), Settings.Secure.ANDROID_ID);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        userID1 = Settings.Secure.getString(requireContext().getContentResolver(), Settings.Secure.ANDROID_ID);
         userQrRef = db.collection("users").document(userID1);
     }
 
@@ -73,6 +79,8 @@ public class OrganizerHomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        checkIfUserIsAdmin(userID1);
+
         // Set up button click listeners
         binding.buttonNewEvent.setOnClickListener(v -> {
             NavController navController = Navigation.findNavController(v);
@@ -90,6 +98,11 @@ public class OrganizerHomeFragment extends Fragment {
             navController.navigate(R.id.action_home_to_entrant);
         });
 
+        binding.buttonAdmin.setOnClickListener(v -> {
+            NavController navController = Navigation.findNavController(v);
+            navController.navigate(R.id.action_home_to_admin);
+        });
+
         // Fetch and display facility title if available
         userQrRef.get().addOnSuccessListener(documentSnapshot -> {
             if (binding != null && documentSnapshot.exists()) {
@@ -101,6 +114,44 @@ public class OrganizerHomeFragment extends Fragment {
         });
     }
 
+
+    /**
+     * checks if a user is listed as an admin on firebase by looping through the documents and comparing userIDs
+     * @param userID
+     */
+    public void checkIfUserIsAdmin(String userID) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference adminCollection = db.collection("admin");
+
+        adminCollection.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                QuerySnapshot querySnapshot = task.getResult();
+                boolean isAdmin = false;
+
+                if (querySnapshot != null) {
+                    for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                        if (document.getId().equals(userID)) {
+                            isAdmin = true;
+                            // Show admin button here
+                            //
+                            binding.buttonAdmin.setVisibility(View.VISIBLE);
+                            break;
+                        }
+                    }
+                }
+
+                if (isAdmin) {
+                    Log.d("AdminCheck", "User is an admin.");
+                    // Perform admin-specific actions here
+                } else {
+                    Log.d("AdminCheck", "User is not an admin.");
+                    // Perform non-admin-specific actions here
+                }
+            } else {
+                Log.e("FirebaseError", "Error fetching admin documents", task.getException());
+            }
+        });
+    }
     /**
      * Method for setting the binding to null when the view is destroyed to avoid errors.
      */

@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_home_to_entrant"
             app:destination="@id/navigation_entranthome" />
+        <action
+            android:id="@+id/action_home_to_admin"
+            app:destination="@id/navigation_adminhome" />
 
     </fragment>
 
@@ -81,6 +84,9 @@
         <action
             android:id="@+id/action_home_to_event_list"
             app:destination="@id/navigation_event_list" />
+        <action
+            android:id="@+id/action_entranthome_to_admin"
+            app:destination="@id/navigation_adminhome" />
     </fragment>
 
     <fragment
@@ -183,6 +189,18 @@
         <action
             android:id="@+id/action_navigation_sendnotification_to_navigation_notificationmanager"
             app:destination="@id/navigation_notificationmanager" />
+    </fragment>
+
+
+
+    <fragment
+        android:id="@+id/navigation_adminhome"
+        android:name="com.example.plannet.ui.adminhome.AdminHomeFragment"
+        android:label="admin"
+        tools:layout="@layout/fragment_home_admin">
+        <action
+            android:id="@+id/action_adminHome_to_userMode"
+            app:destination="@id/navigation_entranthome" />
     </fragment>
 
 
