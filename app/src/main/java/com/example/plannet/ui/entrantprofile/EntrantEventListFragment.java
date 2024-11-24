@@ -64,6 +64,7 @@ public class EntrantEventListFragment extends Fragment {
                     bundle.putString("posterPath", selectedEvent.getPosterPath());
                     bundle.putString("eventStatus", selectedEvent.getStatus());
                     bundle.putString("eventLocation", selectedEvent.getLocation());
+                    bundle.putString("eventStatus", selectedEvent.getStatus());
 
                     Log.d("EntrantEventListFragment", "Bundle Content: " + bundle.toString());
 
