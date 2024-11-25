@@ -60,6 +60,7 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.11.0")
     implementation(libs.fragment.testing)
     implementation(libs.play.services.location)
+    implementation(libs.rules)
 
 
     annotationProcessor("com.github.bumptech.glide:compiler:4.11.0")

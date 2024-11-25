@@ -62,8 +62,9 @@ public class ProjectInstrumentedTest {
         onView(withId(R.id.buttonNewEvent)).check(matches(isDisplayed()));
         Espresso.onIdle();
         // Check OrganizerCreateEventFragment UI elements
-        onView(withId(R.id.buttonQrCodes)).check(matches(isDisplayed()));
-        Espresso.onIdle();
+        // Commented out the next 2 lines because we removed this button
+//        onView(withId(R.id.buttonQrCodes)).check(matches(isDisplayed()));
+//        Espresso.onIdle();
         onView(withId(R.id.buttonDraw)).check(matches(isDisplayed()));
         Espresso.onIdle();
     }

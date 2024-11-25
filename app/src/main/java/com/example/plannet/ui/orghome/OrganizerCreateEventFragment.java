@@ -2,8 +2,11 @@ package com.example.plannet.ui.orghome;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
@@ -17,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -28,6 +32,10 @@ import com.example.plannet.Organizer.Facility;
 import com.example.plannet.QRGenerator;
 import com.example.plannet.R;
 import com.example.plannet.databinding.FragmentOrganizerCreateEventBinding;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -49,12 +57,16 @@ public class OrganizerCreateEventFragment extends Fragment {
     // event information
     private EditText nameEdit, priceEdit, maxEntrantsEdit, descriptionEdit, lastRegEdit, runtimeStartEdit, runtimeEndEdit, waitlistMaxEdit;
     private CheckBox waitlistLimitCheckbox, geolocationCheckbox;
-    private ImageView qrImageView;
+    private ImageView qrImageView, poster;
 
     private Button generateQrButton;
     private Button cancelButton;
 
     private QRGenerator qrGenerator;
+
+    // Poster image selector stuff
+    private Uri selectedImageUri;  // For the selected poster
+    private static final int PICK_IMAGE_REQUEST = 1001;  // Copied from EntrantProfileDisplayFragment.java
 
     //private OrganizerData orgData;
     private FirebaseConnector dbConnector = new FirebaseConnector();
@@ -128,8 +140,10 @@ public class OrganizerCreateEventFragment extends Fragment {
         runtimeStartEdit = binding.runtimeStartEdit;
         runtimeEndEdit = binding.runtimeEndEdit;
         waitlistLimitCheckbox = binding.waitlistLimitCheckbox;
+        waitlistMaxEdit = binding.waitlistMaxEdit;
         geolocationCheckbox = binding.geolocationCheckbox;
         generateQrButton = binding.generateQrButton;
+        poster = binding.addPoster;
         qrGenerator = new QRGenerator();
 
         cancelButton = binding.cancelButton;
@@ -137,6 +151,7 @@ public class OrganizerCreateEventFragment extends Fragment {
         lastRegEdit.setOnClickListener(view -> showDatePicker(lastRegEdit));
         runtimeStartEdit.setOnClickListener(view -> showDatePicker(runtimeStartEdit));
         runtimeEndEdit.setOnClickListener(view -> showDatePicker(runtimeEndEdit));
+        poster.setOnClickListener(view -> openImagePicker());
     }
 
     /**
@@ -174,6 +189,15 @@ public class OrganizerCreateEventFragment extends Fragment {
             Toast.makeText(getContext(), "Facility data is missing. Please create or select a facility.", Toast.LENGTH_SHORT).show();
             return;  // Exit the method to avoid the NullPointerException
         }
+        if (lastRegEdit.getText().toString().isEmpty() ||
+        runtimeEndEdit.getText().toString().isEmpty() ||
+        runtimeStartEdit.getText().toString().isEmpty() ||
+        nameEdit.getText().toString().isEmpty() ||
+        maxEntrantsEdit.getText().toString().isEmpty() ||
+                (waitlistLimitCheckbox.isChecked() && waitlistMaxEdit.getText().toString().isEmpty())) {
+            Toast.makeText(getContext(), "Missing input. Please fill all fields.", Toast.LENGTH_SHORT).show();
+            return;  // Exit the method to avoid the NullPointerException
+        }
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()); // Adjust this format if needed
 
         // Parse date fields
@@ -184,8 +208,7 @@ public class OrganizerCreateEventFragment extends Fragment {
 
         Event event = new Event(
                 nameEdit.getText().toString(),                     // eventName
-                null,                                              // image (assuming null for now)
-                binding.priceEdit.getText().toString(),            // price
+                priceEdit.getText().toString(),                    // price
                 Integer.parseInt(maxEntrantsEdit.getText().toString()), // maxEntrants
                 waitlistLimitCheckbox.isChecked() ? Integer.parseInt(waitlistMaxEdit.getText().toString()) : 0,  // limitWaitlist
                 runtimeStartDate,                                  // eventDate (runtime start)
@@ -200,7 +223,7 @@ public class OrganizerCreateEventFragment extends Fragment {
         // Proceed with creating the event to ship to DB
         Map<String, Object> eventDetails = new HashMap<>();
         eventDetails.put("eventName", nameEdit.getText().toString());
-        eventDetails.put("eventPoster", null); // null for now!
+        eventDetails.put("eventPoster", event.getImage());
         eventDetails.put("eventPrice", binding.priceEdit.getText().toString());
         eventDetails.put("eventMaxEntrants", Integer.parseInt(maxEntrantsEdit.getText().toString()));
         eventDetails.put("eventLimitWaitlist", waitlistLimitCheckbox.isChecked() ? Integer.parseInt(waitlistMaxEdit.getText().toString()) : 0);
@@ -228,6 +251,11 @@ public class OrganizerCreateEventFragment extends Fragment {
                 Toast.makeText(getContext(), "Error creating QR", Toast.LENGTH_SHORT).show();
             }
         }
+
+        // Upload image to firebase Storage
+        uploadPoster(event.getImage(), selectedImageUri,
+                uri -> Log.d("Org Create Event", "Poster uploaded successfully!"),
+                e -> Log.e("Org Create Event", "Error uploading poster to Firebase.", e));
     }
 
     /**
@@ -342,6 +370,52 @@ public class OrganizerCreateEventFragment extends Fragment {
                 .show();
     }
 
+    /**
+     * Set the poster to an image from the user's library. Copied from entrant profile picture implementation.
+     */
+    private void openImagePicker(){
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+
+    /**
+     * Used for changing the imageView of the poster to match the selected image. Copied from entrant profile picture implementation.
+     *
+     * @param requestCode The integer request code originally supplied to
+     *                    startActivityForResult(), allowing you to identify who this
+     *                    result came from.
+     * @param resultCode The integer result code returned by the child activity
+     *                   through its setResult().
+     * @param data An Intent, which can return result data to the caller
+     *               (various data can be attached to Intent "extras").
+     *
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == getActivity().RESULT_OK && data != null && data.getData() != null) {
+            selectedImageUri = data.getData();
+            poster.setImageURI(selectedImageUri); // Display the selected image
+        }
+    }
+
+    private void uploadPoster(String eventImage, Uri uri, OnSuccessListener<Uri> success, OnFailureListener fail) {
+        if (uri == null) {
+            Log.d("uploadPoster", "No image selected - skipping upload");
+            return; // Skip upload if no image is selected
+        }
+
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+        StorageReference path = storageRef.child(eventImage);  // event.getImage = "posters/eventID.jpg"
+
+        path.putFile(selectedImageUri)
+                .addOnSuccessListener(taskSnapshot -> path.getDownloadUrl()
+                        .addOnSuccessListener(success)
+                        .addOnFailureListener(fail))
+                .addOnFailureListener(fail);
+    }
 
     /**
      * destroys view to avoid any errors when exiting fragment
