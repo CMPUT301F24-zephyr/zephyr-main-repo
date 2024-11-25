@@ -66,7 +66,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title"
         app:layout_constraintVertical_bias="0.02"
-        app:srcCompat="@drawable/sign_up_avatar2" />
+        app:srcCompat="@drawable/profile" />
 
     <ImageView
         android:id="@+id/purple_box"

@@ -35,9 +35,6 @@ public class Event implements Serializable {
      *
      * @param eventName
      *      The name of the event.
-     * @param image
-     *      NOTE FROM JON: I SET THIS TO BE A STRING FOR TESTING UNTIL WE FIGURE OUT IMAGES
-     *      The event poster.
      * @param price
      *      The price for the event as a String (optional).
      * @param maxEntrants
@@ -57,12 +54,11 @@ public class Event implements Serializable {
      * @param facility
      *      The facility where the event is.
      */
-    public Event(String eventName, String image, String price, int maxEntrants,
+    public Event(String eventName, String price, int maxEntrants,
                  int limitWaitlist, Date eventDate, Date registrationDateDeadline,
                  Date registrationStartDate, String description, boolean geolocation,
                  String facility) {
         this.eventName = eventName;
-        this.image = image;
         this.price = price;
         this.maxEntrants = maxEntrants;
         this.limitWaitlist = limitWaitlist;
@@ -73,17 +69,18 @@ public class Event implements Serializable {
         this.geolocation = geolocation;
         this.facility = facility;
         this.eventID = generateEventID();
+        this.image = "posters/" + eventID + ".jpg";
 
         this.eventPending = new EventWaitlistPending(this.eventID);
     }
 
     // 2nd constructor for creating local object with an ID that is already on firebase.
-    public Event(String eventID, String eventName, String image, String price, int maxEntrants,
+    public Event(String eventID, String eventName, String price, int maxEntrants,
                  int limitWaitlist, Date eventDate, Date registrationDateDeadline,
                  Date registrationStartDate, String description, boolean geolocation,
                  String facility) {
         this.eventName = eventName;
-        this.image = image;
+        this.image = "posters/" + eventID + ".jpg";
         this.price = price;
         this.maxEntrants = maxEntrants;
         this.limitWaitlist = limitWaitlist;
@@ -122,12 +119,10 @@ public class Event implements Serializable {
         this.eventName = eventName;
     }
 
-    // Set to string for now as we do not have images working yet
     public String getImage() {
         return image;
     }
 
-    // Read comment above
     public void setImage(String image) {
         this.image = image;
     }
