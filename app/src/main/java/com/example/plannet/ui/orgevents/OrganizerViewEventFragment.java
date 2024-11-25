@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,7 +27,7 @@ import java.text.SimpleDateFormat;
 public class OrganizerViewEventFragment extends Fragment {
 
     private FragmentOrganizerViewEventBinding binding;
-    private SimpleDateFormat formatter = new SimpleDateFormat("MMM-dd-yyyy");
+    private Event event = null;  // Default null for error catching
 
     /**
      * onCreateView for what happens when the view is first created.
@@ -47,6 +48,7 @@ public class OrganizerViewEventFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentOrganizerViewEventBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        SimpleDateFormat formatter = new SimpleDateFormat("MMM-dd-yyyy");
 
         String userID1 = Settings.Secure.getString(requireContext().getContentResolver(), Settings.Secure.ANDROID_ID);
 
@@ -70,16 +72,16 @@ public class OrganizerViewEventFragment extends Fragment {
             // Make a toast of error?
         });
 
-        Log.d("View Event", "Arguments received: " + getArguments());
+        Log.d("Organizer View Event", "Arguments received: " + getArguments());
         if (getArguments() != null){
             Log.d("View Event", "Arguments found in bundle.");
             // Retrieve the argument we passed in the bundle before coming here
-            Event event = (Event) getArguments().getSerializable("event");
+            event = (Event) getArguments().getSerializable("event");
 
             if (event != null) {
                 Log.d("View Event", "Event found with name: " + event.getEventName());
                 // We want to set all the fields so it displays correctly
-                binding.title.setText(event.getEventName());
+                binding.title.setText("Event: " + event.getEventName());
                 binding.facilityName.setText(event.getFacility());
                 if (event.getRegistrationStartDate().equals(event.getRegistrationDateDeadline())){
                     // The event is only 1 day long
@@ -99,6 +101,11 @@ public class OrganizerViewEventFragment extends Fragment {
                 binding.descriptionWriting.setText(event.getDescription());
             }
         }
+        else {
+            Log.e("Organizer View Event", "No arguments recieved. Event/bundle did not pass correctly from previous fragment.");
+            binding.title.setText("ERROR!");
+            Toast.makeText(getContext(), "Error passing event. Please click the back arrow.", Toast.LENGTH_SHORT).show();
+        }
 
         // button listener for back button
         binding.backArrow.setOnClickListener(v -> {
@@ -114,9 +121,24 @@ public class OrganizerViewEventFragment extends Fragment {
             }
         });
 
-        // ADD FUNCTIONALITY FOR ENTRANTS BUTTON
+        // button listener for clicking "Entrants" button
+        binding.entrantsButton.setOnClickListener(v -> {
+            if (event != null) {
+                // Bundle the event again to send to new page
+                Bundle passedEventBundle = new Bundle();
+                Log.d("Organizer View Event", "Bundling event with name: " + event.getEventName());
+                passedEventBundle.putSerializable("event", event);
 
-        // ADD FUNCTIONALITY FOR EDIT BUTTON
+                // Navigate to the new fragment
+                NavController navController = Navigation.findNavController(v);
+                // Don't forget to pass the bundle!
+                navController.navigate(R.id.action_organizerViewEventFragment_to_organizerViewEntrantsFragment, passedEventBundle);
+            }
+            else {
+                // Somehow the user got to this page and the event did not bundle
+                Toast.makeText(getContext(), "Error passing event. Please click the back arrow.", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         return root;
     }

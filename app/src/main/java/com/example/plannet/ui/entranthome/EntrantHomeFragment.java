@@ -20,6 +20,10 @@ import com.example.plannet.FirebaseConnector;
 import com.example.plannet.R;
 import com.example.plannet.databinding.FragmentHomeEntrantBinding;
 import com.example.plannet.ui.entranthome.EntrantHomeViewModel;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Map;
 
@@ -64,9 +68,9 @@ public class EntrantHomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment and set up View Binding
         binding = FragmentHomeEntrantBinding.inflate(inflater, container, false);
-
+//        binding.buttonAdminn.setVisibility(View.INVISIBLE);
         String userID = Settings.Secure.getString(requireContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-
+        checkIfUserIsAdmin(userID);
 
         // Initialize EntrantProfile if not already done
         try {
@@ -188,15 +192,59 @@ public class EntrantHomeFragment extends Fragment {
                     .navigate(R.id.navigation_event_list);
         });
 
-        binding.viewProfileButton.setOnClickListener(v -> {
-            NavController navController = Navigation.findNavController(v);
-            navController.navigate(R.id.navigation_entrant_profile_display);
-        });
+//        binding.viewProfileButton.setOnClickListener(v -> {
+//            NavController navController = Navigation.findNavController(v);
+//            navController.navigate(R.id.navigation_entrant_profile_display);
+//        });
 
         // switch role button
         binding.buttonSwitch2.setOnClickListener(v -> {
             NavController navController = Navigation.findNavController(v);
             navController.navigate(R.id.action_entranthome_to_orghome);
+        });
+
+        // admin button
+        binding.buttonAdminn.setOnClickListener(v -> {
+            NavController navController = Navigation.findNavController(v);
+            navController.navigate(R.id.action_entranthome_to_admin);
+        });
+    }
+
+    /**
+     * checks if a user is listed as an admin on firebase by looping through the documents and comparing userIDs
+     * @param userID
+     */
+    public void checkIfUserIsAdmin(String userID) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference adminCollection = db.collection("admin");
+
+        adminCollection.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                QuerySnapshot querySnapshot = task.getResult();
+                boolean isAdmin = false;
+
+                if (querySnapshot != null) {
+                    for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                        if (document.getId().equals(userID)) {
+                            isAdmin = true;
+                            // Show admin button here
+                            //
+                            binding.buttonAdminn.setVisibility(View.VISIBLE);
+                            break;
+                        }
+                    }
+                }
+
+                if (isAdmin) {
+                    Log.d("AdminCheck", "User is an admin.");
+                    // Perform admin-specific actions here
+                } else {
+                    Log.d("AdminCheck", "User is not an admin.");
+                    // Perform non-admin-specific actions here
+                }
+            } else {
+                Log.e("FirebaseError", "Error fetching admin documents", task.getException());
+            }
         });
     }
 

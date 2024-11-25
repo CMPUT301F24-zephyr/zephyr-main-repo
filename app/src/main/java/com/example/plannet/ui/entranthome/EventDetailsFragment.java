@@ -1,4 +1,4 @@
-package com.example.plannet;
+package com.example.plannet.ui.entranthome;
 
 import android.os.Bundle;
 import android.provider.Settings;
@@ -13,20 +13,16 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.plannet.Entrant.EntrantDBConnector;
 import com.example.plannet.Entrant.EntrantProfile;
-import com.example.plannet.Event.EventWaitlistPending;
 import com.example.plannet.R;
-import com.example.plannet.Event.Event;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class EventDetailsFragment extends Fragment {
 
-    private TextView title, facilityName, facilityAddress, eventDates, capacity, cost, end_date, descriptionWriting;
+    private TextView title, facilityName, facilityAddress, eventDates, capacity, cost, end_date, descriptionWriting, geolocation;
     private Button registerButton;
     private ImageView backArrow, poster;
     private EntrantDBConnector dbConnector;
@@ -49,11 +45,11 @@ public class EventDetailsFragment extends Fragment {
         registerButton = root.findViewById(R.id.entrants_button);
         backArrow = root.findViewById(R.id.back_arrow);
         poster = root.findViewById(R.id.poster);
-
+        geolocation = root.findViewById(R.id.text_geolocaion);
 
         Bundle eventBundle = getArguments();
         if (eventBundle != null) {
-            title.setText("Event: " + eventBundle.getString("eventName"));
+            title.setText(eventBundle.getString("eventName"));
             facilityName.setText(eventBundle.getString("facility"));
             facilityAddress.setText(eventBundle.getString("address"));
             end_date.setText(eventBundle.getString("registrationDateDeadline"));
@@ -62,6 +58,7 @@ public class EventDetailsFragment extends Fragment {
             cost.setText("Cost: " + eventBundle.getString("price"));
             end_date.setText(eventBundle.getString("registrationDateDeadline"));
             descriptionWriting.setText(eventBundle.getString("description"));
+            geolocation.setText(eventBundle.getString("geolocation"));
         }
         if (getArguments() != null) {
             eventID = getArguments().getString("eventID");
@@ -81,44 +78,63 @@ public class EventDetailsFragment extends Fragment {
             Toast.makeText(getContext(), "Event ID not found", Toast.LENGTH_SHORT).show();
             return;
         }
-
+        boolean isGeolocationRequired = geolocation.getText() != null && !geolocation.getText().toString().isEmpty();
         dbConnector.getUserInfo(userID,
                 userInfo -> {
-                    // I've constructed a hash map of the user's info here instead of passing the object for the usere
-                    //coz we don't really need to store the object on Firebase
-
-                    //this portion of the code only runs after Firestore returns the data
+                    // Prepare entrant data for both event and user waitlists
                     HashMap<String, Object> entrantData = new HashMap<>();
-                    entrantData.put("name", userInfo.get("firstName") + " " + userInfo.get("lastName"));
+                    entrantData.put("firstName", userInfo.get("firstName"));
+                    entrantData.put("lastName",userInfo.get("lastName"));
                     entrantData.put("email", userInfo.get("email"));
                     entrantData.put("phone", userInfo.get("phone"));
                     entrantData.put("profilePictureUrl", userInfo.get("profilePictureUrl"));
                     entrantData.put("notificationsEnabled", userInfo.get("notifsActivated") != null && (Boolean) userInfo.get("notifsActivated"));
+                    entrantData.put("entrantlatitude", userInfo.get("latitude"));
+                    entrantData.put("entrantlongitude", userInfo.get("longitude"));
+                    // Handle location safely
+                    Object latitudeObj = userInfo.get("latitude");
+                    Object longitudeObj = userInfo.get("longitude");
 
-                    // after firestore returns the data, we call addEntrantToWaitlist to add the entrant to the waitlist
-                    //the register button only works for pending waitlist
+                    if (latitudeObj instanceof Double && longitudeObj instanceof Double) {
+                        entrantData.put("entrantlatitude", latitudeObj);
+                        entrantData.put("entrantlongitude", longitudeObj);
+                    }
+
+                    // Check if geolocation is required and user location is missing
+                    if (isGeolocationRequired && latitudeObj == null) {
+                        Toast.makeText(getContext(), "Location is required to register for this event.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                     dbConnector.addEntrantToWaitlist(eventID, userID, entrantData, "pending",
                             aVoid -> {
-                                EntrantProfile profile = EntrantProfile.getInstance();
-                                if (profile != null) {
-                                    profile.getWaitlistPending().addWaitlist(eventID); // Add eventID
-                                    Toast.makeText(getContext(), "Successfully registered for the pending waitlist", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Log.e("EventDetailsFragment", "EntrantProfile is null. Cannot update local waitlist.");
-                                }
+                                // Add event details to the user's pending waitlist
+                                HashMap<String, Object> eventData = new HashMap<>();
+                                eventData.put("eventID", eventID);
+                                eventData.put("eventName", title.getText().toString());
+                                eventData.put("facilityName", facilityName.getText().toString());
+                                eventData.put("eventDates", eventDates.getText().toString());
+                                eventData.put("cost", cost.getText().toString());
+                                eventData.put("registrationDate", System.currentTimeMillis());
 
-                                Toast.makeText(getContext(), "Successfully registered for the pending waitlist", Toast.LENGTH_SHORT).show();
+                                dbConnector.updateWaitlist(userID, "pending", eventID, eventData,
+                                        waitlistSuccess -> {
+                                            Toast.makeText(getContext(), "Successfully added to pending waitlist (both user and event).", Toast.LENGTH_SHORT).show();
+                                        },
+                                        waitlistFailure -> {
+                                            Toast.makeText(getContext(), "Failed to update user's pending waitlist.", Toast.LENGTH_SHORT).show();
+                                            Log.e("EventDetailsFragment", "Error updating user's pending waitlist", waitlistFailure);
+                                        });
                             },
-                            e -> {
-                                Toast.makeText(getContext(), "Failed to register for the waitlist", Toast.LENGTH_SHORT).show();
-                                Log.e("EventDetailsFragment", "Error registering for waitlist", e);
+                            eventWaitlistFailure -> {
+                                Toast.makeText(getContext(), "Failed to register for event's pending waitlist.", Toast.LENGTH_SHORT).show();
+                                Log.e("EventDetailsFragment", "Error registering for event's pending waitlist", eventWaitlistFailure);
                             });
                 },
-                e -> {
+                userInfoFailure -> {
                     Toast.makeText(getContext(), "Error fetching user profile", Toast.LENGTH_SHORT).show();
-                    Log.e("EventDetailsFragment", "Failed to fetch user profile", e);
+                    Log.e("EventDetailsFragment", "Failed to fetch user profile", userInfoFailure);
                 });
     }
-
 
 }

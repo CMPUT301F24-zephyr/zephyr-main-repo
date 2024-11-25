@@ -4,9 +4,11 @@ import com.example.plannet.Event.EventWaitlistPending;
 import com.example.plannet.FirebaseConnector;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -73,21 +75,41 @@ public class EntrantDBConnector {
      * @param onFailureListener
      *      Triggered if the operation is unsuccessful.
      */
-    public void saveUserInfo(String userID, String firstName, String lastName, String phone, String email,
-                             String profilePictureUrl, OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
+    public void saveUserInfo(String userID, String firstName, String lastName, String phone, String email, String profilePictureUrl, double latitude, double longitude,
+                             OnSuccessListener<Void> onSuccessListener, OnFailureListener onFailureListener) {
+        // Prepare the data to save
+        Map<String, Object> userData = new HashMap<>();
+        userData.put("firstName", firstName);
+        userData.put("lastName", lastName);
+        userData.put("phone", phone);
+        userData.put("email", email);
+        userData.put("profilePictureUrl", profilePictureUrl);
+        userData.put("latitude", latitude);
+        userData.put("longitude", longitude);
 
-        Map<String, Object> userInfo = new HashMap<>();
-        userInfo.put("firstName", firstName);
-        userInfo.put("lastName", lastName);
-        userInfo.put("phone", phone);
-        userInfo.put("email", email);
-        userInfo.put("profilePictureUrl", profilePictureUrl);
-
-        fireCon.addUserInfoToFirestore(userID, userInfo, onSuccessListener, onFailureListener);
+        fireCon.addUserInfoToFirestore(userID, userData, onSuccessListener, onFailureListener);
     }
 
     public void getUserInfo(String userID, OnSuccessListener<Map<String, Object>> onSuccess, OnFailureListener onFailure) {
         fireCon.getUserInfo(userID, onSuccess, onFailure);
     }
+
+    public void updateWaitlist(String userID, String waitlistType, String eventID, HashMap<String, Object> eventData,
+                               OnSuccessListener<Void> onSuccess, OnFailureListener onFailure) {
+        // The path to the "events" sub-collection within the specified waitlist type
+        String collectionPath = "users/" + userID + "/waitlists/" + waitlistType + "/events";
+
+        // Add the eventID as a document within the "events" sub-collection
+        fireCon.addData(collectionPath, eventID, eventData, onSuccess, onFailure);
+    }
+
+
+
+    public void getPendingWaitlist(String userID, OnSuccessListener<List<Map<String, Object>>> onSuccess, OnFailureListener onFailure) {
+        String path = "users/" + userID + "/waitlists/pending/events";
+        fireCon.getSubCollection(path, onSuccess, onFailure);
+    }
+
+
 
 }

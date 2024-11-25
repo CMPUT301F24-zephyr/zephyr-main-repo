@@ -3,13 +3,16 @@ package com.example.plannet;
 import android.util.Log;
 
 import com.example.plannet.Event.Event;
+import com.example.plannet.Entrant.EntrantProfile;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
@@ -222,6 +225,7 @@ public class FirebaseConnector {
 
                                                             // Create an Event object using those attributes
                                                             Event currentEvent = new Event(
+                                                                    eventName,
                                                                     name,
                                                                     "IMAGE PLACEHOLDER",
                                                                     price,
@@ -276,7 +280,7 @@ public class FirebaseConnector {
                               OnSuccessListener<List<Map<String, Object>>> onSuccess,
                               OnFailureListener onFailure) {
         // The path to the collection where events are stored
-        String collectionPath = "events/" + userID + "/waitlist_" + filterStatus.toLowerCase();
+        String collectionPath = "users/" + userID + "/waitlists/" + filterStatus + "/events";
 
         db.collection(collectionPath)
                 .get()
@@ -306,5 +310,113 @@ public class FirebaseConnector {
                 .addOnFailureListener(onFailure);
     }
 
+    public void getSubCollection(String path, OnSuccessListener<List<Map<String, Object>>> onSuccess, OnFailureListener onFailure) {
+        db.collection(path)
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    List<Map<String, Object>> result = new ArrayList<>();
+                    for (DocumentSnapshot doc : querySnapshot.getDocuments()) {
+                        result.add(doc.getData());
+                    }
+                    onSuccess.onSuccess(result);
+                })
+                .addOnFailureListener(onFailure);
+    }
 
+    /**
+     * Creates a list of entrant IDs on the waitlist for an event, accessed from firebase.
+     *
+     * @param eventID
+     *      The String ID of the event to check
+     * @param status
+     *      The string title of the "status" collection to check (i.e. waitlist_pending" to get all the pending entrants)
+     * @param callback
+     *      Used for waiting for the asynchronous firebase calls, rather than a return statement.
+     */
+    public void getEventWaitlistEntrants(String eventID, String status, GetEventWaitlistCallback callback) {
+        List<EntrantProfile> entrants = new ArrayList<>();
+        Log.d("Firestore WaitlistEntrants", "Getting users from waitlist: waitlist_" + status + " For event with ID: " + eventID);
+
+        // pending entrants
+        db.collection("events")
+                .document(eventID)
+                .collection("waitlist_" + status)  // i.e. "pending"
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d("Firestore WaitlistEntrants", "Successfully found collection. Number of documents in collection: " + task.getResult().size());
+                        for (QueryDocumentSnapshot doc : task.getResult()) {
+                            // For each document in this collection...
+                            String userID = doc.getId();
+                            String email = doc.getString("email");
+                            String phone = doc.getString("phone");
+                            boolean notifs = doc.getBoolean("notificationsEnabled");
+                            String firstName = doc.getString("firstName");
+                            String lastName = doc.getString("lastName");
+                            String profilePic = doc.getString("profilePictureUrl");
+                            Log.d("Firestore WaitlistEntrants", "waitlist_" + status + " - user received with ID: " + userID);
+
+                            // Now we create the object:
+                            EntrantProfile entrant = new EntrantProfile(userID, firstName, lastName, email, phone, profilePic, notifs, status);
+                            entrants.add(entrant);
+                        }
+
+                        // Pass the result to the callback
+                        // This will be changed to return the list of objects of EntrantProfile here
+                        callback.getWaitlist(entrants);
+                    } else {
+                        Log.e("Firestore WaitlistEntrants", "waitlist_pending: ERROR GETTING NAMES");
+                    }
+                });
+    }
+
+    /**
+     * method to get all the userIDs in a waitlist and add a new document on firebase which contains the message
+     * @param eventID
+     * @param waitlist
+     * @param message
+     * @param callback
+     */
+    public void RetrieveAndStoreUserIDs(String eventID, String waitlist, String message, FirestoreCallback callback) {
+        // Firestore database reference
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        // Reference to the "events -> eventID -> waitlist" collection
+        CollectionReference waitlistRef = db.collection("events")
+                .document(eventID)
+                .collection(waitlist);
+
+        // Fetch user IDs from the specified waitlist collection
+        waitlistRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                ArrayList<String> userIDs = new ArrayList<>();
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    // Add each document ID (userID) to the list
+                    userIDs.add(document.getId());
+                }
+
+                // Create a map for the "notifications" data
+                Map<String, Object> notificationData = new HashMap<>();
+                notificationData.put("message", message); // organizer message
+                notificationData.put("userIDs", userIDs); // list of user IDs
+
+                // Write the data to the "notifications -> eventID" document
+                db.collection("notifications")
+                        .document(eventID)
+                        .set(notificationData)
+                        .addOnSuccessListener(aVoid -> {
+                            // Success callback
+                            callback.onSuccess(userIDs.toArray(new String[0]));
+                        })
+                        .addOnFailureListener(e -> {
+                            // Failure callback for writing to the database
+                            callback.onFailure(e);
+                        });
+
+            } else {
+                // Failure callback for retrieving user IDs
+                callback.onFailure(task.getException());
+            }
+        });
+    }
 }

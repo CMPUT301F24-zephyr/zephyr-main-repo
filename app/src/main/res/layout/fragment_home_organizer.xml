@@ -32,45 +32,59 @@
 
     <Button
         android:id="@+id/buttonNewEvent"
-        android:layout_width="wrap_content"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="220dp"
         android:backgroundTint="@color/buttonPurple"
         android:fontFamily="@font/poppins"
-        android:text="Create a new event"
+        android:text="Create New Event"
         android:textAllCaps="false"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/buttonDraw"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.519"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <Button
         android:id="@+id/buttonDraw"
-        android:layout_width="279dp"
-        android:layout_height="59dp"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
         android:backgroundTint="@color/buttonPurple"
         android:fontFamily="@font/poppins"
-        android:text="Draw Attendees for Events"
+        android:text="Draw Lottery Manager"
         android:textAllCaps="false"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.519"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.479" />
+        app:layout_constraintVertical_bias="0.417" />
 
     <Button
         android:id="@+id/button_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Switch Role"
+        android:text="Entrant Mode"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.79" />
+
+    <Button
+        android:id="@+id/button_admin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ADMIN MODE"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.806" />
+        app:layout_constraintTop_toBottomOf="@+id/button_switch"
+        app:layout_constraintVertical_bias="0.09" />
 </androidx.constraintlayout.widget.ConstraintLayout>

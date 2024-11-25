@@ -1,98 +1,70 @@
-package com.example.plannet;
+package com.example.plannet.ui.entranthome;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.ImageView;
 
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.plannet.Event.Event;
+import com.example.plannet.R;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.ResultPoint;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
-import com.journeyapps.barcodescanner.DecoratedBarcodeView;
-import com.journeyapps.barcodescanner.DefaultDecoderFactory;
+import com.journeyapps.barcodescanner.BarcodeView;
 
-import java.io.Serializable;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
 
-
+//Logic: onCreate -> single scan -> pass to fetch and validate -> display event
+// needs an EntrantViewEvent activity that is binded to the xml for it. Wil make onClickListener button there
 public class EntrantScanEventFragment extends Fragment {
 
-    private FirebaseFirestore firebaseDB;
-    private static final int CAMERA_PERMISSION_REQUEST_CODE = 100;
-    private DecoratedBarcodeView barcodeView;
-
+    FirebaseFirestore firebaseDB;
+    ImageView backArrow;
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_qr_code_scanner, container, false);
+
+        // Commented this out for now -- Moe
+        //BarcodeView barcodeView = view.findViewById(R.id.barcode_scanner);
         firebaseDB = FirebaseFirestore.getInstance();
 
-        if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(requireActivity(),
-                    new String[]{Manifest.permission.CAMERA}, CAMERA_PERMISSION_REQUEST_CODE);
-        } else {
-            initializeScanner(view);
-        }
-
-        // Bypass scanning for testing
+        //bypass the scanning for now
         view.findViewById(R.id.bypass_scan_button).setOnClickListener(v -> {
             String testHashedData = "codesensei1732082703215";  // Replace with your actual hashed data in Firebase
             fetchEventDetails(testHashedData);
         });
+        backArrow = view.findViewById(R.id.back_arrow);
+        backArrow.setOnClickListener(v -> requireActivity().onBackPressed());
 
+        // Commented this out for now - Moe
+//        // Start scanning
+//        barcodeView.decodeSingle(new BarcodeCallback() {
+//            @Override
+//            public void barcodeResult(BarcodeResult result) {
+//                String qrData = result.getText();
+//                if (qrData != null) {
+//                    fetchEventDetails(qrData);
+//                }
+//            }
+//        });
         return view;
     }
 
-    // Initialize the BarcodeView for scanning
-    private void initializeScanner(View view) {
-        barcodeView = view.findViewById(R.id.barcode_scanner);
-        Log.d("QRScan", "BarcodeView initialized.");
-
-        barcodeView.decodeSingle(new BarcodeCallback() {
-            @Override
-            public void barcodeResult(BarcodeResult result) {
-                if (result != null && result.getText() != null) {
-                    Log.d("QRScan", "Detected barcode: " + result.getText());
-                    fetchEventDetails(result.getText());
-                } else {
-                    Log.d("QRScan", "No valid barcode detected.");
-                }
-            }
-
-            @Override
-            public void possibleResultPoints(List<ResultPoint> resultPoints) {
-                Log.d("QRScan", "Result points: " + resultPoints);
-            }
-        });
-
-    }
-
-    // fetch event details from Firebase and navigate
-    private void fetchEventDetails(String qrData) {
+    // Method to fetch event details from Firebase and start EventDetailsActivity
+    void fetchEventDetails(String qrData) {
         firebaseDB.collection("events").document(qrData).get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {
+                // Manually create an Event object to handle mismatched field names
                 Event event = new Event();
 
-                // Firestore document to Event object
+                // Set individual fields using document data due to naming incompatibility -- fix this later
                 event.setEventName(documentSnapshot.getString("eventName"));
                 event.setFacility(documentSnapshot.getString("facility"));
                 event.setPrice(documentSnapshot.getString("eventPrice"));
@@ -101,7 +73,7 @@ public class EntrantScanEventFragment extends Fragment {
                 event.setDescription(documentSnapshot.getString("description"));
                 event.setGeolocation(documentSnapshot.getBoolean("geolocation"));
 
-                // Convert Timestamps for date fields and set them and check for null
+                // Convert Timestamps for date fields and set them
                 Timestamp startTimestamp = documentSnapshot.getTimestamp("RunTimeStartDate");
                 if (startTimestamp != null) event.setRegistrationStartDate(startTimestamp.toDate());
 
@@ -119,6 +91,11 @@ public class EntrantScanEventFragment extends Fragment {
                 Bundle eventBundle = new Bundle();
                 eventBundle.putString("eventName", event.getEventName());
                 eventBundle.putString("facility", event.getFacility());
+
+                //eventBundle.putString("registrationDates", regDate + " - " + startDate + " to " + endDate);
+
+                //for now I'm passing the codesensei test event, but we gotta change this
+                //field to the actual event ID later
                 eventBundle.putString("eventID", qrData);
                 eventBundle.putString("registrationStartDate", startDate);
                 eventBundle.putString("registrationDateDeadline", regDate);
@@ -126,34 +103,16 @@ public class EntrantScanEventFragment extends Fragment {
                 eventBundle.putInt("maxEntrants", event.getMaxEntrants());
                 eventBundle.putString("price", event.getPrice());
                 eventBundle.putString("description", event.getDescription());
-
                 // Navigate to EventDetailsFragment with the event data
                 NavHostFragment.findNavController(EntrantScanEventFragment.this)
                         .navigate(R.id.action_qrCodeScan_to_eventDetailsFragment, eventBundle);
 
             } else {
                 Log.e("QRScan", "No event data found for this event ID.");
-                Toast.makeText(requireContext(), "No event found for this QR code.", Toast.LENGTH_SHORT).show();
             }
         }).addOnFailureListener(e -> {
             Log.e("QRScan", "Error fetching event details", e);
-            Toast.makeText(requireContext(), "Error fetching event details.", Toast.LENGTH_SHORT).show();
         });
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (barcodeView != null) {
-            barcodeView.resume();
-        }
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (barcodeView != null) {
-            barcodeView.pause();
-        }
-    }
 }
