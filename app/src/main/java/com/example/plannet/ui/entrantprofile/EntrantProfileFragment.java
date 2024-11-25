@@ -130,7 +130,7 @@ public class EntrantProfileFragment extends Fragment {
         String firstName = firstNameEdit.getText().toString();
         String lastName = lastNameEdit.getText().toString();
         String phone = phoneEdit.getText().toString();
-        String email = phoneEdit.getText().toString();
+        String email = emailEdit.getText().toString();
 
         // Fetch user location
         FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext());
@@ -221,6 +221,10 @@ public class EntrantProfileFragment extends Fragment {
                     Log.e("EntrantProfileFragment", "Error saving profile", e);
                 });
     }
+
+    /**
+     * get the user location
+     */
     private void getUserLocation() {
         if (requireActivity().checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // Request location permission if not granted
@@ -236,7 +240,7 @@ public class EntrantProfileFragment extends Fragment {
                         double longitude = location.getLongitude();
                         Log.d("EntrantProfileFragment", "Latitude: " + latitude + ", Longitude: " + longitude);
 
-                        Toast.makeText(requireContext(), "Location: " + latitude + ", " + longitude, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), "Location saved!", Toast.LENGTH_SHORT).show();
 
                         // You can now pass these coordinates to Google Maps API or store them in the database
                     } else {

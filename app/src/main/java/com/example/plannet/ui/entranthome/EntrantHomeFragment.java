@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,7 +37,7 @@ public class EntrantHomeFragment extends Fragment {
 
     private FragmentHomeEntrantBinding binding;
     private EntrantHomeViewModel entrantHomeViewModel;
-
+    private Button adminButton;
 
 
     /**
@@ -70,6 +71,7 @@ public class EntrantHomeFragment extends Fragment {
         // Inflate the layout for this fragment and set up View Binding
         binding = FragmentHomeEntrantBinding.inflate(inflater, container, false);
 //        binding.buttonAdminn.setVisibility(View.INVISIBLE);
+        adminButton = binding.buttonAdminn;
         String userID = Settings.Secure.getString(requireContext().getContentResolver(), Settings.Secure.ANDROID_ID);
         checkIfUserIsAdmin(userID);
 
@@ -201,7 +203,7 @@ public class EntrantHomeFragment extends Fragment {
         });
 
         // admin button
-        binding.buttonAdminn.setOnClickListener(v -> {
+        adminButton.setOnClickListener(v -> {
             NavController navController = Navigation.findNavController(v);
             navController.navigate(R.id.action_entranthome_to_admin);
         });
@@ -253,7 +255,7 @@ public class EntrantHomeFragment extends Fragment {
                             isAdmin = true;
                             // Show admin button here
                             //
-                            binding.buttonAdminn.setVisibility(View.VISIBLE);
+                            adminButton.setVisibility(View.VISIBLE);
                             break;
                         }
                     }

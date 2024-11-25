@@ -30,18 +30,24 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.Map;
 
-
+/**
+ * updating a current entrant profile
+ */
 public class EntrantProfileDisplayFragment extends Fragment{
     private EntrantProfileDisplayBinding binding;
     private EntrantProfileViewModel entrantProfileViewModel;
     private String userID;
     private Uri selectedImageUri; // For the selected profile picture
     private static final int PICK_IMAGE_REQUEST = 1001;
+    private FusedLocationProviderClient fusedLocationClient;
+    double latitude;
+    double longitude;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = EntrantProfileDisplayBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext());
 
 
         userID = Settings.Secure.getString(requireContext().getContentResolver(), Settings.Secure.ANDROID_ID);
@@ -62,7 +68,13 @@ public class EntrantProfileDisplayFragment extends Fragment{
         binding.imageView11.setOnClickListener(v -> openImagePicker());
 
         // update button
-        binding.button.setOnClickListener(v -> updateUserProfile());
+        binding.updateButton.setOnClickListener(v -> updateUserProfile());
+
+        // get location button
+        binding.buttonGetLocation.setOnClickListener(v -> {
+            // get the user location coordinates applicable with google maps API
+            getUserLocation();
+        });
 
         // remove pfp button
         binding.removePfp.setOnClickListener(v -> defaultProfilePic(userID));
@@ -138,6 +150,37 @@ public class EntrantProfileDisplayFragment extends Fragment{
             // Make "remove picture" button visible
             binding.removePfp.setVisibility(View.VISIBLE);
         }
+    }
+
+    /**
+     * get the user location
+     */
+    private void getUserLocation() {
+        if (requireActivity().checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // Request location permission if not granted
+            requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 100);
+            return;
+        }
+
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(requireActivity(), location -> {
+                    if (location != null) {
+                        // Use the location for your application
+                        latitude = location.getLatitude();
+                        longitude = location.getLongitude();
+                        Log.d("EntrantProfileFragment", "Latitude: " + latitude + ", Longitude: " + longitude);
+
+                        Toast.makeText(requireContext(), "Location updated!", Toast.LENGTH_SHORT).show();
+
+                        // You can now pass these coordinates to Google Maps API or store them in the database
+                    } else {
+                        Toast.makeText(requireContext(), "Unable to retrieve location. Try again.", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("EntrantProfileFragment", "Error getting location", e);
+                    Toast.makeText(requireContext(), "Error retrieving location.", Toast.LENGTH_SHORT).show();
+                });
     }
 
     private void updateUserProfile() {

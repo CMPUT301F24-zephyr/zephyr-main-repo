@@ -32,6 +32,19 @@ public class FirebaseConnector {
         db = FirebaseFirestore.getInstance(); // lab5
     }
 
+    public void checkIfDeviceIDinDB(String collectionName, String deviceID, CheckDeviceIDCallback callback) {
+        db.collection(collectionName)
+                .document(deviceID)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        callback.onDeviceIDFound();
+                    } else {
+                        callback.onDeviceIDNotFound();
+                    }
+                })
+                .addOnFailureListener(callback::onError);
+    }
 
     public void addData(String collectionPath, String documentID, HashMap<String, Object> data,
                         OnSuccessListener<Void> onSuccess, OnFailureListener onFailure) {
