@@ -46,7 +46,6 @@ public class EntrantScanEventFragmentTest {
         DocumentSnapshot mockSnapshot = mock(DocumentSnapshot.class);
         Event mockEvent = new Event(
                 "Sample Event",
-                null,
                 "$50",
                 100,
                 10,

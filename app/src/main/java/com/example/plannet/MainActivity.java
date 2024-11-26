@@ -16,6 +16,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.plannet.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.LabelVisibilityMode;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.FirebaseApp;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -30,6 +31,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Initialize Firebase
+        FirebaseApp.initializeApp(this);
+        Log.d("Main Activity", "Initialized App in Firebase");
+
+
         // Initialize SharedViewModel
         mainActivityViewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
 
@@ -41,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
                 R.id.navigation_organizer_create_event, R.id.navigation_entranthome, R.id.navigation_qr_code_scan,
                 R.id.navigation_event_details, R.id.navigation_entrantprofile, R.id.navigation_entrantnotifications, R.id.navigation_notificationmanager,
                 R.id.navigation_entrantprofile, R.id.navigation_event_details, R.id.navigation_entrant_profile_display, R.id.navigation_event_list,
-                R.id.organizerViewEventFragment, R.id.organizerViewEntrantsFragment, R.id.organizerViewEntrantInfoFragment)
+                R.id.organizerViewEventFragment, R.id.organizerViewEntrantsFragment, R.id.organizerViewEntrantInfoFragment, R.id.navigation_adminhome)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
@@ -49,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Hide the navigation bar on the welcome screen
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
-            if (destination.getId() == R.id.navigation_first_time_user|| destination.getId() == R.id.navigation_entrantprofile) {
+            if (destination.getId() == R.id.navigation_first_time_user|| destination.getId() == R.id.navigation_entrantprofile || destination.getId() == R.id.navigation_adminhome) {
                 navView.setVisibility(View.GONE);
             } else {
                 navView.setVisibility(View.VISIBLE);

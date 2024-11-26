@@ -15,11 +15,16 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
+import com.bumptech.glide.Glide;
 import com.example.plannet.Entrant.EntrantProfile;
 import com.example.plannet.FirebaseConnector;
 import com.example.plannet.R;
 import com.example.plannet.databinding.FragmentHomeEntrantBinding;
 import com.example.plannet.ui.entranthome.EntrantHomeViewModel;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Map;
 
@@ -64,9 +69,9 @@ public class EntrantHomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment and set up View Binding
         binding = FragmentHomeEntrantBinding.inflate(inflater, container, false);
-
+//        binding.buttonAdminn.setVisibility(View.INVISIBLE);
         String userID = Settings.Secure.getString(requireContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-
+        checkIfUserIsAdmin(userID);
 
         // Initialize EntrantProfile if not already done
         try {
@@ -163,10 +168,6 @@ public class EntrantHomeFragment extends Fragment {
         );
     }
 
-
-
-
-
     /**
      * last in the sequence. this contains all misc items such as buttonlisteneres, etc..
      * @param view The View returned by {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
@@ -198,6 +199,102 @@ public class EntrantHomeFragment extends Fragment {
             NavController navController = Navigation.findNavController(v);
             navController.navigate(R.id.action_entranthome_to_orghome);
         });
+
+        // admin button
+        binding.buttonAdminn.setOnClickListener(v -> {
+            NavController navController = Navigation.findNavController(v);
+            navController.navigate(R.id.action_entranthome_to_admin);
+        });
+    }
+
+    /**
+     * onResume method. Called every time this fragment is shown. This is used to ensure the profile
+     * picture updates if the user changes it.
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        FirebaseConnector firebaseConnector = new FirebaseConnector();
+        String userID = Settings.Secure.getString(requireContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+
+        // fetch profile picture from Firebase every time the view is loaded (in case the user changes it)
+        firebaseConnector.getUserInfo(userID,
+                userInfo -> {
+                    String profilePictureUrl = (String) userInfo.get("profilePictureUrl");
+                    if (profilePictureUrl != null && !profilePictureUrl.isEmpty()) {
+                        Log.d("EntrantHomeFragment", "Loading profile picture with URL: " + profilePictureUrl);
+                        loadProfilePicture(profilePictureUrl);
+                    } else {
+                        // If not, get default profile picture from a web API that generates pictures using a seed
+                        Log.d("EntrantHomeFragment", "No profile picture uploaded, generating profile picture from name: " + userID);
+                        generateDefaultProfilePic(userID);
+                    }
+                },
+                error -> Log.e("EntrantHomeFragment", "Failed to refresh profile picture", error)
+        );
+    }
+
+    /**
+     * checks if a user is listed as an admin on firebase by looping through the documents and comparing userIDs
+     * @param userID
+     */
+    public void checkIfUserIsAdmin(String userID) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference adminCollection = db.collection("admin");
+
+        adminCollection.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                QuerySnapshot querySnapshot = task.getResult();
+                boolean isAdmin = false;
+
+                if (querySnapshot != null) {
+                    for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                        if (document.getId().equals(userID)) {
+                            isAdmin = true;
+                            // Show admin button here
+                            //
+                            binding.buttonAdminn.setVisibility(View.VISIBLE);
+                            break;
+                        }
+                    }
+                }
+
+                if (isAdmin) {
+                    Log.d("AdminCheck", "User is an admin.");
+                    // Perform admin-specific actions here
+                } else {
+                    Log.d("AdminCheck", "User is not an admin.");
+                    // Perform non-admin-specific actions here
+                }
+            } else {
+                Log.e("FirebaseError", "Error fetching admin documents", task.getException());
+            }
+        });
+    }
+
+    /**
+     * Generates a profile picture using the web API RoboHash (https://robohash.org/) based on the user's ID
+     *
+     * @param username
+     *      The user ID to generate the picture from
+     */
+    private void generateDefaultProfilePic(String username) {
+        Glide.with(this)
+                .load("https://robohash.org/" + username + ".png")
+                .placeholder(R.drawable.profile)
+                .into(binding.profilePicture);
+    }
+
+    /**
+     * Loads a profile picture if a user has one set
+     * @param pictureURL
+     */
+    private void loadProfilePicture(String pictureURL){
+        Glide.with(this)
+                .load(pictureURL)
+                .placeholder(R.drawable.profile)  // Placeholder while it loads
+                .error(R.drawable.profile)  // If error loading, just set to default
+                .into(binding.profilePicture);
     }
 
     /**

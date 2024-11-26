@@ -1,7 +1,5 @@
 package com.example.plannet.ui.entrantprofile;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -29,7 +27,6 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.bumptech.glide.Glide;
 
 import java.util.Map;
 
@@ -67,6 +64,9 @@ public class EntrantProfileDisplayFragment extends Fragment{
         // update button
         binding.button.setOnClickListener(v -> updateUserProfile());
 
+        // remove pfp button
+        binding.removePfp.setOnClickListener(v -> defaultProfilePic(userID));
+
         return root;
     }
 
@@ -96,6 +96,12 @@ public class EntrantProfileDisplayFragment extends Fragment{
             if (profilePictureUrl != null) {
                 // Use a library like Glide or Picasso to load the image
                 Glide.with(requireContext()).load(profilePictureUrl).into(binding.imageView11);
+                // Make "remove picture" button visible
+                binding.removePfp.setVisibility(View.VISIBLE);
+            }
+            else {
+                // set profile picture to default
+                defaultProfilePic(userID);
             }
         }
     }
@@ -106,12 +112,31 @@ public class EntrantProfileDisplayFragment extends Fragment{
         startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
 
+    private void defaultProfilePic(String username) {
+        binding.removePfp.setVisibility(View.GONE);  // Cannot remove the default picture
+        selectedImageUri = null;  // No image is selected, set this to null so default picture is not saved to firebase
+
+        // Delete profile picture from firebase if it exists
+        StorageReference ref = FirebaseStorage.getInstance().getReference("profile_pictures/" + username + ".jpg");
+
+        ref.delete()
+                .addOnSuccessListener(success -> Log.d("EntrantProfileFragment", "Deleted profile picture from firebase"))
+                .addOnFailureListener(fail -> Log.d("EntrantProfileFragment", "No profile picture to delete on firebase"));
+
+        Glide.with(this)
+                .load("https://robohash.org/" + username + ".png")
+                .placeholder(R.drawable.profile)
+                .into(binding.imageView11);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == getActivity().RESULT_OK && data != null && data.getData() != null) {
             selectedImageUri = data.getData();
             binding.imageView11.setImageURI(selectedImageUri); // Display the selected image
+            // Make "remove picture" button visible
+            binding.removePfp.setVisibility(View.VISIBLE);
         }
     }
 

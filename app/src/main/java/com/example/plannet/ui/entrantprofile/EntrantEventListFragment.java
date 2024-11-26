@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.bumptech.glide.Glide;
 import com.example.plannet.Event.EventData;
 import com.example.plannet.FirebaseConnector;
 import com.example.plannet.R;
@@ -165,10 +166,26 @@ public class EntrantEventListFragment extends Fragment {
     /**
      * Fetches events from Firebase based on active filters.
      * If no filters are active, fetches all events.
+     * Additionally gets the user's profile picture from firebase and sets it.
      */
     private void fetchEvents() {
         FirebaseConnector firebaseConnector = new FirebaseConnector();
         String userID = Settings.Secure.getString(requireContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+
+        firebaseConnector.getPicture("profile", userID,
+                URL -> {
+                    Glide.with(this)
+                            .load(URL)
+                            .placeholder(R.drawable.profile)
+                            .into((ImageView) this.getView().findViewById(R.id.profile_picture));
+                },
+                exception -> {
+                    // No profile picture was found. Generate the default for this ID
+                    Glide.with(this)
+                            .load("https://robohash.org/" + userID + ".png")
+                            .placeholder(R.drawable.profile)
+                            .into((ImageView) this.getView().findViewById(R.id.profile_picture));
+                });
 
         // If no filters are active, fetch all events
         if (activeFilters.isEmpty()) {
