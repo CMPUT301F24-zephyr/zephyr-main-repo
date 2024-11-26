@@ -119,6 +119,7 @@
             android:id="@+id/action_qrCodeScan_to_eventDetailsFragment"
             app:destination="@id/navigation_event_details" />
     </fragment>
+
     <fragment
         android:id="@+id/navigation_event_details"
         android:name="com.example.plannet.ui.entranthome.EventDetailsFragment"
@@ -168,8 +169,14 @@
         android:label="Event List"
         tools:layout="@layout/entrant_event_list">
         <action
-            android:id="@+id/action_event_list_to_event_details"
-            app:destination="@id/navigation_event_details" />
+            android:id="@+id/action_eventList_to_viewEventFragment"
+            app:destination="@+id/entrant_View_Event_Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/entrant_View_Event_Fragment"
+        android:name="com.example.plannet.ui.entrantprofile.entrantViewEventFragment"
+        android:label="Entrant View Event"
+        tools:layout="@layout/entrant_view_event">
     </fragment>
     <fragment
         android:id="@+id/organizerViewEntrantInfoFragment"

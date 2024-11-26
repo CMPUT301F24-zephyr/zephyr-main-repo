@@ -566,4 +566,30 @@ public class FirebaseConnector {
             }).addOnFailureListener(onFailureListener);
         }
     }
+
+    public void addDataToWaitlist(String eventID, String userID, Map<String, Object> entrantData, String waitlistType,
+                                  OnSuccessListener<Void> onSuccess, OnFailureListener onFailure) {
+        String path = "events/" + eventID + "/waitlist_" + waitlistType;
+        addData(path, userID, new HashMap<>(entrantData), onSuccess, onFailure);
+    }
+
+    public void removeDataFromWaitlist(String eventID, String userID, String waitlistType,
+                                       OnSuccessListener<Void> onSuccess, OnFailureListener onFailure) {
+        String path = "events/" + eventID + "/waitlist_" + waitlistType;
+        deleteData(path, userID, onSuccess, onFailure);
+    }
+
+    public void updateUserWaitlist(String userID, String waitlistType, String eventID, Map<String, Object> eventData,
+                                   OnSuccessListener<Void> onSuccess, OnFailureListener onFailure) {
+        // Correct the path to reference a valid collection
+        String path = "users/" + userID + "/waitlists/" + waitlistType + "/events";
+        addData(path, eventID, new HashMap<>(eventData), onSuccess, onFailure);
+    }
+
+
+    public void removeUserWaitlistEvent(String userID, String waitlistType, String eventID,
+                                        OnSuccessListener<Void> onSuccess, OnFailureListener onFailure) {
+        String path = "users/" + userID + "/waitlists/" + waitlistType + "/events";
+        deleteData(path, eventID, onSuccess, onFailure);
+    }
 }
