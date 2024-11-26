@@ -149,7 +149,9 @@ public class EntrantHomeFragment extends Fragment {
                             (String) userInfo.get("email"),
                             (String) userInfo.get("phone"),
                             (String) userInfo.get("profilePictureUrl"),
-                            userInfo.get("notifsActivated") != null && (Boolean) userInfo.get("notifsActivated")
+                            userInfo.get("notifsActivated") != null && (Boolean) userInfo.get("notifsActivated"),
+                            userInfo.get("latitude") != null ? (Double) userInfo.get("latitude") : 0.0,
+                            userInfo.get("longitude") != null ? (Double) userInfo.get("longitude") : 0.0
                     );
 
                     // Fetch and populate joined events into waitlists

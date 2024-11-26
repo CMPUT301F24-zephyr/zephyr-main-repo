@@ -22,6 +22,17 @@
 
     </fragment>
 
+    <fragment
+        android:id="@+id/navigation_entrantmap"
+        android:name="com.example.plannet.ui.orgevents.OrganizerViewEntrantMapFragment"
+        android:label="Entrant Map"
+        tools:layout="@layout/fragment_organizer_view_entrant_map" >
+
+<!--        <action-->
+<!--            android:id="@+id/action_map_to_entrantlist"-->
+<!--            app:destination="@id/organizerViewEntrantInfoFragment"-->
+    </fragment>
+
 
     <fragment
         android:id="@+id/navigation_orgprofile"
@@ -168,6 +179,9 @@
         <action
             android:id="@+id/action_organizerViewEntrantInfoFragment_to_organizerViewEntrantsFragment"
             app:destination="@id/organizerViewEntrantsFragment" />
+        <action
+            android:id="@+id/action_organizerViewEntrantInfoFragment_to_organizerViewEntrantMapFragment"
+            app:destination="@id/navigation_entrantmap" />
     </fragment>
 
     <fragment

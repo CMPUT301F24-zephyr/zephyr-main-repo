@@ -25,10 +25,12 @@
         android:id="@+id/title_underline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/line_separator"
+        android:layout_marginBottom="9dp"
+        app:layout_constraintBottom_toTopOf="@+id/profile_picture"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title"/>=
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:srcCompat="@drawable/line_separator" />=
 
     <ImageView
         android:id="@+id/back_arrow"
@@ -41,18 +43,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/back_arrow" />
-
-    <ImageView
-        android:id="@+id/edit_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        app:layout_constraintBottom_toBottomOf="@+id/title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.8"
-        app:layout_constraintStart_toEndOf="@id/title"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.87"
-        app:srcCompat="@drawable/edit_symbol" />
 
     <ImageView
         android:id="@+id/profile_picture"

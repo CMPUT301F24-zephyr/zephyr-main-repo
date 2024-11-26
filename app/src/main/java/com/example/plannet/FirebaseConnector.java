@@ -368,10 +368,17 @@ public class FirebaseConnector {
                             String firstName = doc.getString("firstName");
                             String lastName = doc.getString("lastName");
                             String profilePic = doc.getString("profilePictureUrl");
+
+                            // Handle potential null values for latitude and longitude
+                            Double latitudeObj = doc.getDouble("entrantlatitude");
+                            Double longitudeObj = doc.getDouble("entrantlongitude");
+
+                            double latitude = latitudeObj != null ? latitudeObj : 0.0;
+                            double longitude = longitudeObj != null ? longitudeObj : 0.0;
                             Log.d("Firestore WaitlistEntrants", "waitlist_" + status + " - user received with ID: " + userID);
 
                             // Now we create the object:
-                            EntrantProfile entrant = new EntrantProfile(userID, firstName, lastName, email, phone, profilePic, notifs, status);
+                            EntrantProfile entrant = new EntrantProfile(userID, firstName, lastName, email, phone, profilePic, notifs, status, latitude, longitude);
                             entrants.add(entrant);
                         }
 

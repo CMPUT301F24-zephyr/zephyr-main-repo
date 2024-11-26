@@ -38,6 +38,7 @@ public class EntrantScanEventFragment extends Fragment {
         //bypass the scanning for now
         view.findViewById(R.id.bypass_scan_button).setOnClickListener(v -> {
             String testHashedData = "codesensei1732082703215";  // Replace with your actual hashed data in Firebase
+            // karaoke1732584453970 (different event) -- for testing
             fetchEventDetails(testHashedData);
         });
         backArrow = view.findViewById(R.id.back_arrow);

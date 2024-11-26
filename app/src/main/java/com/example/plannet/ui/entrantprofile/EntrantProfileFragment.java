@@ -201,7 +201,9 @@ public class EntrantProfileFragment extends Fragment {
                             email,
                             phone,
                             profilePictureUrl, // Includes the profile picture URL
-                            true // Assuming notifications are enabled by default
+                            true, // Assuming notifications are enabled by default
+                            latitude,
+                            longitude
                     );
 
                     Log.d("EntrantProfileFragment", "EntrantProfile initialized: " + entrantProfile.getName());
