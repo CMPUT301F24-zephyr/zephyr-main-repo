@@ -18,6 +18,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.LatLng;
 
+/**
+ * class to view entrants location
+ * sources used: https://www.youtube.com/watch?v=XimcwP-OzFg
+ *
+ */
 public class OrganizerViewEntrantMapFragment extends Fragment {
 
     private FragmentOrganizerViewEntrantMapBinding binding;
