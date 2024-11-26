@@ -347,8 +347,9 @@
 
     <ImageView
         android:id="@+id/add_poster"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        app:layout_constraintDimensionRatio="1:1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/line2"
         app:layout_constraintEnd_toEndOf="@+id/purple_box"
         app:layout_constraintHorizontal_bias="0.9"

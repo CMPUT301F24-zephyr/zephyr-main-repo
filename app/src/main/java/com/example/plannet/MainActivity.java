@@ -19,6 +19,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.plannet.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.LabelVisibilityMode;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.FirebaseApp;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -32,6 +33,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Initialize Firebase
+        FirebaseApp.initializeApp(this);
+        Log.d("Main Activity", "Initialized App in Firebase");
+
 
         // Initialize SharedViewModel
         mainActivityViewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);

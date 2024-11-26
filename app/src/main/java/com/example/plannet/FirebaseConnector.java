@@ -14,6 +14,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.SetOptions;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -227,7 +229,6 @@ public class FirebaseConnector {
                                                             Event currentEvent = new Event(
                                                                     eventName,
                                                                     name,
-                                                                    "IMAGE PLACEHOLDER",
                                                                     price,
                                                                     maxEntrants,
                                                                     waitlistLimit,
@@ -418,5 +419,38 @@ public class FirebaseConnector {
                 callback.onFailure(task.getException());
             }
         });
+    }
+
+    /**
+     * Retrieves a picture from firebase image storage with a specified ID.
+     *
+     * @param type
+     *      "poster" or "profile", to specify if searching for a poster or a profile picture
+     * @param id
+     *      The ID of the picture in firebase. This is the userID for a profile picture and the eventID for a poster.
+     * @param onSuccessListener
+     *      Success listener as firebase is asynchronous
+     * @param onFailureListener
+     *      Failure listener as firebase is asynchronous
+     */
+    public void getPicture(String type, String id, OnSuccessListener<String> onSuccessListener, OnFailureListener onFailureListener) {
+        // Get the firebase storage and reference. Keep in this method since it is only used for pictures
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+
+        if (type.equals("poster")){
+            StorageReference path = storageRef.child(id);  // For posters, event.getImage() is the path to the image.
+            path.getDownloadUrl().addOnSuccessListener(uri -> {
+                Log.d("Firestore", "Poster found for event with poster path: " + id);
+                onSuccessListener.onSuccess(uri.toString());
+            }).addOnFailureListener(onFailureListener);
+        }
+        else if (type.equals("profile")){
+            StorageReference path = storageRef.child("profile_pictures/" + id + ".jpg");
+            path.getDownloadUrl().addOnSuccessListener(uri -> {
+                Log.d("Firestore", "Profile picture found for user with id: " + id);
+                onSuccessListener.onSuccess(uri.toString());
+            }).addOnFailureListener(onFailureListener);
+        }
     }
 }
