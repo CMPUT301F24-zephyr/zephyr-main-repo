@@ -18,6 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * notification preferences for entrant
@@ -69,5 +70,20 @@ public class EntrantNotificationsFragment extends Fragment {
         });
 
         return view;
+    }
+
+    /**
+     * Helper method to queue a notification for the user in Firebase.
+     */
+    public void queueNotificationForUser(String userID, String message) {
+        Map<String, Object> notification = new HashMap<>();
+        // Add ID and message directly
+        notification.put("userIDs", userID);
+        notification.put("message", message);
+
+        firebaseDB.collection("notifications")
+                .add(notification)
+                .addOnSuccessListener(documentReference -> Log.d("NotificationHelper", "Notification queued: " + message))
+                .addOnFailureListener(e -> Log.e("NotificationHelper", "Error queuing notification", e));
     }
 }

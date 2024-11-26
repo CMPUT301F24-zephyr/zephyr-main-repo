@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import com.example.plannet.Entrant.EntrantDBConnector;
 import com.example.plannet.Entrant.EntrantProfile;
 import com.example.plannet.R;
+import com.example.plannet.ui.entrantnotifications.EntrantNotificationsFragment;
 
 import java.util.HashMap;
 
@@ -120,6 +121,8 @@ public class EventDetailsFragment extends Fragment {
                                 dbConnector.updateWaitlist(userID, "pending", eventID, eventData,
                                         waitlistSuccess -> {
                                             Toast.makeText(getContext(), "Successfully added to pending waitlist (both user and event).", Toast.LENGTH_SHORT).show();
+                                            EntrantNotificationsFragment notificationsFragment = new EntrantNotificationsFragment();
+                                            notificationsFragment.queueNotificationForUser(userID, "You have been added to the pending waitlist for the event: " + title.getText().toString());
                                         },
                                         waitlistFailure -> {
                                             Toast.makeText(getContext(), "Failed to update user's pending waitlist.", Toast.LENGTH_SHORT).show();
