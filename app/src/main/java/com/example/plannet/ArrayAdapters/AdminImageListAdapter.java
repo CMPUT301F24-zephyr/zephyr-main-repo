@@ -32,7 +32,6 @@ public class AdminImageListAdapter extends ArrayAdapter<String> {
 
         ImageView imageView = convertView.findViewById(R.id.image_thumbnail);
 
-        // Get the URL of the image
         String imageUrl = imageUrls.get(position);
 
         // connect the image into the imageview with Glide
