@@ -550,6 +550,11 @@ public class AdminHomeFragment extends Fragment {
         return taskCompletionSource.getTask();
     }
 
+    /**
+     * get events with mapping from their event name using Map function
+     * Source: https://cloud.google.com/firestore/docs/query-data/queries
+     * @return
+     */
     public Task<Pair<ArrayList<String>, Map<String, String>>> getAllEventsWithMapping() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference eventsCollection = db.collection("events");
