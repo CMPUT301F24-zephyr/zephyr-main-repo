@@ -4,6 +4,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+/**
+ *  Entrant home view model for the home fragment
+ */
 public class EntrantHomeViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;

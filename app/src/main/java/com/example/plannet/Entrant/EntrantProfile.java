@@ -76,6 +76,17 @@ public class EntrantProfile implements Serializable {
         this.waitlistStatus = waitlistStatus;  // i.e. "Pending"
     }
 
+    /**
+     * Creates a new singleton instance of EntrantProfile.
+     * @param context
+     * @param userId
+     * @param name
+     * @param email
+     * @param phoneNumber
+     * @param profilePictureUrl
+     * @param notifsActivated
+     * @return
+     */
     public static EntrantProfile getInstance(Context context, String userId, String name, String email, String phoneNumber, String profilePictureUrl, boolean notifsActivated) {
         if (context == null) {
             throw new IllegalArgumentException("Context cannot be null");

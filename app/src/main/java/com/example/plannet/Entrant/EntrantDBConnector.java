@@ -25,7 +25,7 @@ public class EntrantDBConnector {
     }
 
     /**
-     *
+     * Adds entrant to waitlist on firebase
      * @param eventID
      * @param entrantID
      * @param entrantData
@@ -90,10 +90,25 @@ public class EntrantDBConnector {
         fireCon.addUserInfoToFirestore(userID, userData, onSuccessListener, onFailureListener);
     }
 
+    /**
+     *
+     * @param userID
+     * @param onSuccess
+     * @param onFailure
+     */
     public void getUserInfo(String userID, OnSuccessListener<Map<String, Object>> onSuccess, OnFailureListener onFailure) {
         fireCon.getUserInfo(userID, onSuccess, onFailure);
     }
 
+    /**
+     * Updates waitlist in the Firestore database.
+     * @param userID
+     * @param waitlistType
+     * @param eventID
+     * @param eventData
+     * @param onSuccess
+     * @param onFailure
+     */
     public void updateWaitlist(String userID, String waitlistType, String eventID, HashMap<String, Object> eventData,
                                OnSuccessListener<Void> onSuccess, OnFailureListener onFailure) {
         // The path to the "events" sub-collection within the specified waitlist type
@@ -104,7 +119,12 @@ public class EntrantDBConnector {
     }
 
 
-
+    /**
+     * returns the pending waitlist of an event
+     * @param userID
+     * @param onSuccess
+     * @param onFailure
+     */
     public void getPendingWaitlist(String userID, OnSuccessListener<List<Map<String, Object>>> onSuccess, OnFailureListener onFailure) {
         String path = "users/" + userID + "/waitlists/pending/events";
         fireCon.getSubCollection(path, onSuccess, onFailure);

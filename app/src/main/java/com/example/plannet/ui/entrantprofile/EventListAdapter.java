@@ -14,12 +14,20 @@ import com.example.plannet.R;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Adapter class for entrant event list items
+ */
 public class EventListAdapter extends android.widget.BaseAdapter {
 
     private final Context context;
     private final List<EventData> eventList;
     private List<EventData> filteredEventList;
 
+    /**
+     * Constructor for the adapter
+     * @param context
+     * @param eventList
+     */
     public EventListAdapter(Context context, List<EventData> eventList) {
         this.context = context;
         this.eventList = eventList;

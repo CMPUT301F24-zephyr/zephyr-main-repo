@@ -31,11 +31,25 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-
+/**
+ * Admin Home Fragment
+ */
 public class AdminHomeFragment extends Fragment {
 
     private FragmentHomeAdminBinding binding;
 
+    /**
+     *
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Initialize View Binding
@@ -43,6 +57,12 @@ public class AdminHomeFragment extends Fragment {
         return binding.getRoot();
     }
 
+    /**
+     *
+     * @param view The View returned by {@link #onCreateView(LayoutInflater, ViewGroup, Bundle)}.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     */
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -224,6 +244,10 @@ public class AdminHomeFragment extends Fragment {
         return taskCompletionSource.getTask();
     }
 
+    /**
+     *
+     * @return
+     */
     public Task<Pair<ArrayList<String>, Map<String, String>>> getAllEventsWithMapping() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference eventsCollection = db.collection("events");
@@ -347,6 +371,9 @@ public class AdminHomeFragment extends Fragment {
         builder.show();
     }
 
+    /**
+     * Destroys view
+     */
     @Override
     public void onDestroyView() {
         super.onDestroyView();

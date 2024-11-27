@@ -24,6 +24,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Date;
 
+/**
+ * Firebase connector class for interacting with the Firebase Realtime Database.
+ */
 public class FirebaseConnector {
 
     private FirebaseFirestore db;
@@ -32,7 +35,14 @@ public class FirebaseConnector {
         db = FirebaseFirestore.getInstance(); // lab5
     }
 
-
+    /**
+     * Adds data to a specified collection in the database.
+     * @param collectionPath
+     * @param documentID
+     * @param data
+     * @param onSuccess
+     * @param onFailure
+     */
     public void addData(String collectionPath, String documentID, HashMap<String, Object> data,
                         OnSuccessListener<Void> onSuccess, OnFailureListener onFailure) {
         db.collection(collectionPath)
@@ -42,6 +52,13 @@ public class FirebaseConnector {
                 .addOnFailureListener(onFailure);
     }
 
+    /**
+     * Deletes data from a specified collection in the database.
+     * @param collectionPath
+     * @param documentID
+     * @param onSuccess
+     * @param onFailure
+     */
     public void deleteData(String collectionPath, String documentID,
                            OnSuccessListener<Void> onSuccess, OnFailureListener onFailure) {
         db.collection(collectionPath)
@@ -82,6 +99,12 @@ public class FirebaseConnector {
                 });
     }
 
+    /**
+     *
+     * @param deviceID
+     * @param eventID
+     * @param eventDetails
+     */
     public void addEventToDB(String deviceID, String eventID, Map<String, Object> eventDetails) {
         // Add the eventID to the user's createdEvents array
         db.collection("users").document(deviceID)
@@ -115,6 +138,11 @@ public class FirebaseConnector {
                     Log.e("FirebaseConnector", "Failed to add eventID to joinedEvents", e);
                 });
     }
+
+    /**
+     * Adds a user to the Firestore database
+     * @param uniqueID
+     */
     public void addUserToFirestore(String uniqueID) {
         Map<String, Object> user = new HashMap<>();
         user.put("UUID", uniqueID);
@@ -124,6 +152,14 @@ public class FirebaseConnector {
                 .addOnSuccessListener(aVoid -> Log.d("Firestore", "User added to Firestore"))
                 .addOnFailureListener(e -> Log.e("Firestore", "Error saving user", e));
     }
+
+    /**
+     * Adds user information to the Firestore database
+     * @param uniqueID
+     * @param userInfo
+     * @param onSuccessListener
+     * @param onFailureListener
+     */
     public void addUserInfoToFirestore(String uniqueID, Map<String, Object> userInfo,
                                        OnSuccessListener<Void> onSuccessListener,
                                        OnFailureListener onFailureListener) {
@@ -134,6 +170,12 @@ public class FirebaseConnector {
                 .addOnFailureListener(onFailureListener);
     }
 
+    /**
+     * Checks if the facility data is valid for a user
+     * @param userID
+     * @param onSuccess
+     * @param onFailure
+     */
     public void checkIfFacilityDataIsValid(String userID, OnSuccessListener<Map<String, Object>> onSuccess, OnFailureListener onFailure) {
         db.collection("users").document(userID).get()
                 .addOnSuccessListener(documentSnapshot -> {
@@ -152,6 +194,12 @@ public class FirebaseConnector {
                 .addOnFailureListener(onFailure);
     }
 
+    /**
+     * Returns user information from the Firestore database
+     * @param userID
+     * @param onSuccess
+     * @param onFailure
+     */
     public void getUserInfo(String userID, OnSuccessListener<Map<String, Object>> onSuccess, OnFailureListener onFailure) {
         db.collection("users").document(userID)
                 .collection("userInfo").document("profile")
@@ -166,6 +214,12 @@ public class FirebaseConnector {
                 .addOnFailureListener(onFailure);
     }
 
+    /**
+     * Gets event information from the Firestore database
+     * @param eventID
+     * @param onSuccess
+     * @param onFailure
+     */
     public void getUserEventsByID(String eventID, OnSuccessListener<Map<String, Object>> onSuccess, OnFailureListener onFailure) {
         db.collection("events").document(eventID)
                 .get()
@@ -185,8 +239,11 @@ public class FirebaseConnector {
     }
 
 
-
-
+    /**
+     *
+     * @param userID
+     * @param callback
+     */
     // See OrganizerHashedQrListFragment.java for how to use
     // Resource for callback: https://www.baeldung.com/java-callback-functions
     public void getOrganizerEventsList(String userID, GetOrganizerEventsCallback callback) {
@@ -277,6 +334,13 @@ public class FirebaseConnector {
                 });
     }
 
+    /**
+     * Returns user events
+     * @param userID
+     * @param filterStatus
+     * @param onSuccess
+     * @param onFailure
+     */
     public void getUserEvents(String userID, String filterStatus,
                               OnSuccessListener<List<Map<String, Object>>> onSuccess,
                               OnFailureListener onFailure) {
@@ -295,6 +359,12 @@ public class FirebaseConnector {
                 .addOnFailureListener(onFailure); // Handle failures
     }
 
+    /**
+     *
+     * @param userID
+     * @param onSuccess
+     * @param onFailure
+     */
     public void getJoinedEvents(String userID, OnSuccessListener<List<String>> onSuccess, OnFailureListener onFailure) {
         db.collection("users").document(userID)
                 .get()
@@ -311,6 +381,12 @@ public class FirebaseConnector {
                 .addOnFailureListener(onFailure);
     }
 
+    /**
+     * returns subcollection of a collection
+     * @param path
+     * @param onSuccess
+     * @param onFailure
+     */
     public void getSubCollection(String path, OnSuccessListener<List<Map<String, Object>>> onSuccess, OnFailureListener onFailure) {
         db.collection(path)
                 .get()
@@ -454,18 +530,44 @@ public class FirebaseConnector {
         }
     }
 
+    /**
+     * Adds data to a specified waitlist subcollection in the database.
+     * @param eventID
+     * @param userID
+     * @param entrantData
+     * @param waitlistType
+     * @param onSuccess
+     * @param onFailure
+     */
     public void addDataToWaitlist(String eventID, String userID, Map<String, Object> entrantData, String waitlistType,
                                   OnSuccessListener<Void> onSuccess, OnFailureListener onFailure) {
         String path = "events/" + eventID + "/waitlist_" + waitlistType;
         addData(path, userID, new HashMap<>(entrantData), onSuccess, onFailure);
     }
 
+    /**
+     * Removes data from a specified waitlist subcollection in the database.
+     * @param eventID
+     * @param userID
+     * @param waitlistType
+     * @param onSuccess
+     * @param onFailure
+     */
     public void removeDataFromWaitlist(String eventID, String userID, String waitlistType,
                                        OnSuccessListener<Void> onSuccess, OnFailureListener onFailure) {
         String path = "events/" + eventID + "/waitlist_" + waitlistType;
         deleteData(path, userID, onSuccess, onFailure);
     }
 
+    /**
+     * Adds data to a specified waitlist subcollection in the database under the user collection
+     * @param userID
+     * @param waitlistType
+     * @param eventID
+     * @param eventData
+     * @param onSuccess
+     * @param onFailure
+     */
     public void updateUserWaitlist(String userID, String waitlistType, String eventID, Map<String, Object> eventData,
                                    OnSuccessListener<Void> onSuccess, OnFailureListener onFailure) {
         // Correct the path to reference a valid collection
@@ -473,7 +575,14 @@ public class FirebaseConnector {
         addData(path, eventID, new HashMap<>(eventData), onSuccess, onFailure);
     }
 
-
+    /**
+     * Removes data from a specified waitlist subcollection in the database under the user collection
+     * @param userID
+     * @param waitlistType
+     * @param eventID
+     * @param onSuccess
+     * @param onFailure
+     */
     public void removeUserWaitlistEvent(String userID, String waitlistType, String eventID,
                                         OnSuccessListener<Void> onSuccess, OnFailureListener onFailure) {
         String path = "users/" + userID + "/waitlists/" + waitlistType + "/events";
