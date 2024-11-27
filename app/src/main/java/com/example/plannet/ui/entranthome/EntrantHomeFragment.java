@@ -224,14 +224,17 @@ public class EntrantHomeFragment extends Fragment {
         // fetch profile picture from Firebase every time the view is loaded (in case the user changes it)
         firebaseConnector.getUserInfo(userID,
                 userInfo -> {
-                    String profilePictureUrl = (String) userInfo.get("profilePictureUrl");
-                    if (profilePictureUrl != null && !profilePictureUrl.isEmpty()) {
-                        Log.d("EntrantHomeFragment", "Loading profile picture with URL: " + profilePictureUrl);
-                        loadProfilePicture(profilePictureUrl);
+                    if (isAdded() && binding != null) { // Ensure the fragment is still attached
+                        String profilePictureUrl = (String) userInfo.get("profilePictureUrl");
+                        if (profilePictureUrl != null && !profilePictureUrl.isEmpty()) {
+                            Log.d("EntrantHomeFragment", "Loading profile picture with URL: " + profilePictureUrl);
+                            loadProfilePicture(profilePictureUrl);
+                        } else {
+                            Log.d("EntrantHomeFragment", "No profile picture uploaded, generating profile picture from name: " + userID);
+                            generateDefaultProfilePic(userID);
+                        }
                     } else {
-                        // If not, get default profile picture from a web API that generates pictures using a seed
-                        Log.d("EntrantHomeFragment", "No profile picture uploaded, generating profile picture from name: " + userID);
-                        generateDefaultProfilePic(userID);
+                        Log.e("EntrantHomeFragment", "Fragment is not attached or binding is null");
                     }
                 },
                 error -> Log.e("EntrantHomeFragment", "Failed to refresh profile picture", error)
@@ -283,10 +286,14 @@ public class EntrantHomeFragment extends Fragment {
      *      The user ID to generate the picture from
      */
     private void generateDefaultProfilePic(String username) {
-        Glide.with(this)
-                .load("https://robohash.org/" + username + ".png")
-                .placeholder(R.drawable.profile)
-                .into(binding.profilePicture);
+        if (binding != null) {
+            Glide.with(this)
+                    .load("https://robohash.org/" + username + ".png")
+                    .placeholder(R.drawable.profile)
+                    .into(binding.profilePicture);
+        } else {
+            Log.e("EntrantHomeFragment", "Binding is null in generateDefaultProfilePic");
+        }
     }
 
     /**

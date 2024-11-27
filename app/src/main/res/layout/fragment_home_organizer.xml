@@ -34,24 +34,24 @@
         android:id="@+id/buttonNewEvent"
         android:layout_width="280dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="220dp"
         android:backgroundTint="@color/buttonPurple"
         android:fontFamily="@font/poppins"
         android:text="Create New Event"
         android:textAllCaps="false"
         android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/buttonDraw"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.519"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintTop_toBottomOf="@+id/imageView7"
+        app:layout_constraintVertical_bias="0.165"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <Button
         android:id="@+id/buttonDraw"
         android:layout_width="280dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="384dp"
         android:backgroundTint="@color/buttonPurple"
         android:fontFamily="@font/poppins"
         android:text="Draw Lottery Manager"
@@ -61,8 +61,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.519"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.417" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonNewEvent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/button_switch"
@@ -72,8 +72,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.79" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonDraw"
+        app:layout_constraintVertical_bias="0.652" />
 
     <Button
         android:id="@+id/button_admin"
