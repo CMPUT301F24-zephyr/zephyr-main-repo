@@ -19,6 +19,7 @@ fragmentTesting = "1.8.5"
 rules = "1.6.1"
 legacySupportV4 = "1.0.0"
 playServicesLocation = "21.3.0"
+playServicesMaps = "19.0.0"
 
 [libraries]
 firebase-messaging = { module = "com.google.firebase:firebase-messaging", version.ref = "firebaseMessaging" }
@@ -39,6 +40,7 @@ fragment-testing = { group = "androidx.fragment", name = "fragment-testing", ver
 rules = { group = "androidx.test", name = "rules", version.ref = "rules" }
 legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacySupportV4" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
+play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -31,7 +32,7 @@ public class OrganizerHomeFragment extends Fragment {
     private OrganizerHomeViewModel organizerHomeViewModel;
     private DocumentReference userQrRef;
     String userID1;
-
+    private Button adminButton;
 
     /**
      * configurations upon creating fragment such as viewmodels and initializations
@@ -78,6 +79,7 @@ public class OrganizerHomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        adminButton = binding.buttonAdmin;
 
         checkIfUserIsAdmin(userID1);
 
@@ -135,7 +137,7 @@ public class OrganizerHomeFragment extends Fragment {
                             isAdmin = true;
                             // Show admin button here
                             //
-                            binding.buttonAdmin.setVisibility(View.VISIBLE);
+                            adminButton.setVisibility(View.VISIBLE);
                             break;
                         }
                     }

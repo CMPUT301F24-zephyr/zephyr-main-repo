@@ -28,6 +28,10 @@ public class EntrantProfile implements Serializable {
     // For organizer's... organization (simple fix!)
     private String waitlistStatus;
 
+    // location
+    private double latitude;
+    private double longitude;
+
     //Empty constructor for Firebase
     public EntrantProfile() {}
 
@@ -62,7 +66,7 @@ public class EntrantProfile implements Serializable {
         this.waitlistRejected = new EntrantWaitlistRejected();
     }
 
-    public EntrantProfile(String userId, String firstName, String lastName, String email, String phoneNumber, String profilePictureUrl, boolean notifsActivated, String waitlistStatus) {
+    public EntrantProfile(String userId, String firstName, String lastName, String email, String phoneNumber, String profilePictureUrl, boolean notifsActivated, String waitlistStatus, double latitude, double longitude) {
         // This constructor has firstName and lastName rather than just Name, and ignores deviceID. Used by organizers.
         // Additionally does not care about waitlist status, as it is just used to store info about an entrant for organizer viewing
         this.userId = userId;
@@ -74,14 +78,20 @@ public class EntrantProfile implements Serializable {
         this.notifsActivated = notifsActivated;
         this.name = firstName + " " + lastName;
         this.waitlistStatus = waitlistStatus;  // i.e. "Pending"
+        // added these 2
+        this.latitude = latitude;
+        this.longitude = longitude;
+
     }
 
-    public static EntrantProfile getInstance(Context context, String userId, String name, String email, String phoneNumber, String profilePictureUrl, boolean notifsActivated) {
+    public static EntrantProfile getInstance(Context context, String userId, String name, String email, String phoneNumber, String profilePictureUrl, boolean notifsActivated, double latitude, double longitude) {
         if (context == null) {
             throw new IllegalArgumentException("Context cannot be null");
         }
         if (instance == null) {
             instance = new EntrantProfile(context, userId, name, email, phoneNumber, profilePictureUrl, notifsActivated);
+            instance.setLatitude(latitude);
+            instance.setLongitude(longitude);
         }
         return instance;
     }
@@ -190,5 +200,21 @@ public class EntrantProfile implements Serializable {
 
     public String getFirstName() {
         return firstName;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 }

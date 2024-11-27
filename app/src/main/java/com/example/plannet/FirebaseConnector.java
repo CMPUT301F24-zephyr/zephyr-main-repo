@@ -24,6 +24,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Date;
 
+/**
+ * all related DB tasks are found in this class.
+ */
 public class FirebaseConnector {
 
     private FirebaseFirestore db;
@@ -32,7 +35,34 @@ public class FirebaseConnector {
         db = FirebaseFirestore.getInstance(); // lab5
     }
 
+    /**
+     * check if device is already on DB
+     * @param collectionName
+     * @param deviceID
+     * @param callback
+     */
+    public void checkIfDeviceIDinDB(String collectionName, String deviceID, CheckDeviceIDCallback callback) {
+        db.collection(collectionName)
+                .document(deviceID)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        callback.onDeviceIDFound();
+                    } else {
+                        callback.onDeviceIDNotFound();
+                    }
+                })
+                .addOnFailureListener(callback::onError);
+    }
 
+    /**
+     * add data from a given collectionPath & documentID
+     * @param collectionPath
+     * @param documentID
+     * @param data
+     * @param onSuccess
+     * @param onFailure
+     */
     public void addData(String collectionPath, String documentID, HashMap<String, Object> data,
                         OnSuccessListener<Void> onSuccess, OnFailureListener onFailure) {
         db.collection(collectionPath)
@@ -42,6 +72,13 @@ public class FirebaseConnector {
                 .addOnFailureListener(onFailure);
     }
 
+    /**
+     * delete data from a given collectionPath & documentID
+     * @param collectionPath
+     * @param documentID
+     * @param onSuccess
+     * @param onFailure
+     */
     public void deleteData(String collectionPath, String documentID,
                            OnSuccessListener<Void> onSuccess, OnFailureListener onFailure) {
         db.collection(collectionPath)
@@ -51,6 +88,12 @@ public class FirebaseConnector {
                 .addOnFailureListener(onFailure);
     }
 
+    /**
+     * check if device is already on DB
+     * @param deviceID
+     * @param onSuccess
+     * @param onFailure
+     */
     public void checkIfDeviceExists(String deviceID, OnSuccessListener<DocumentSnapshot> onSuccess, OnFailureListener onFailure) {
         db.collection("users").document(deviceID).get()
                 .addOnSuccessListener(onSuccess)
@@ -82,6 +125,12 @@ public class FirebaseConnector {
                 });
     }
 
+    /**
+     * add event information to DB
+     * @param deviceID
+     * @param eventID
+     * @param eventDetails
+     */
     public void addEventToDB(String deviceID, String eventID, Map<String, Object> eventDetails) {
         // Add the eventID to the user's createdEvents array
         db.collection("users").document(deviceID)
@@ -104,6 +153,11 @@ public class FirebaseConnector {
                 });
     }
 
+    /**
+     * add a joined event to a user's profile on DB
+     * @param deviceID
+     * @param eventID
+     */
     public void addJoinedEvent(String deviceID, String eventID) {
         // Adds eventID to the joinedEvents array under the user's document
         db.collection("users").document(deviceID)
@@ -115,6 +169,11 @@ public class FirebaseConnector {
                     Log.e("FirebaseConnector", "Failed to add eventID to joinedEvents", e);
                 });
     }
+
+    /**
+     * add a user to the DB from their userID
+     * @param uniqueID
+     */
     public void addUserToFirestore(String uniqueID) {
         Map<String, Object> user = new HashMap<>();
         user.put("UUID", uniqueID);
@@ -124,6 +183,14 @@ public class FirebaseConnector {
                 .addOnSuccessListener(aVoid -> Log.d("Firestore", "User added to Firestore"))
                 .addOnFailureListener(e -> Log.e("Firestore", "Error saving user", e));
     }
+
+    /**
+     * add a user to the DB from their userID
+     * @param uniqueID
+     * @param userInfo
+     * @param onSuccessListener
+     * @param onFailureListener
+     */
     public void addUserInfoToFirestore(String uniqueID, Map<String, Object> userInfo,
                                        OnSuccessListener<Void> onSuccessListener,
                                        OnFailureListener onFailureListener) {
@@ -134,6 +201,12 @@ public class FirebaseConnector {
                 .addOnFailureListener(onFailureListener);
     }
 
+    /**
+     * checks if a organizer's facility data is valid or not
+     * @param userID
+     * @param onSuccess
+     * @param onFailure
+     */
     public void checkIfFacilityDataIsValid(String userID, OnSuccessListener<Map<String, Object>> onSuccess, OnFailureListener onFailure) {
         db.collection("users").document(userID).get()
                 .addOnSuccessListener(documentSnapshot -> {
@@ -152,6 +225,12 @@ public class FirebaseConnector {
                 .addOnFailureListener(onFailure);
     }
 
+    /**
+     * get all a user's info from DB
+     * @param userID
+     * @param onSuccess
+     * @param onFailure
+     */
     public void getUserInfo(String userID, OnSuccessListener<Map<String, Object>> onSuccess, OnFailureListener onFailure) {
         db.collection("users").document(userID)
                 .collection("userInfo").document("profile")
@@ -166,6 +245,12 @@ public class FirebaseConnector {
                 .addOnFailureListener(onFailure);
     }
 
+    /**
+     * get userEvents by their userID (we may not be using this anymore)
+     * @param eventID
+     * @param onSuccess
+     * @param onFailure
+     */
     public void getUserEventsByID(String eventID, OnSuccessListener<Map<String, Object>> onSuccess, OnFailureListener onFailure) {
         db.collection("events").document(eventID)
                 .get()
@@ -185,10 +270,12 @@ public class FirebaseConnector {
     }
 
 
-
-
-    // See OrganizerHashedQrListFragment.java for how to use
-    // Resource for callback: https://www.baeldung.com/java-callback-functions
+    /**
+     * get all organizer events using their userID
+     * Resource for callback: https://www.baeldung.com/java-callback-functions
+     * @param userID
+     * @param callback
+     */
     public void getOrganizerEventsList(String userID, GetOrganizerEventsCallback callback) {
         ArrayList<Event> events = new ArrayList<>();
 
@@ -277,6 +364,13 @@ public class FirebaseConnector {
                 });
     }
 
+    /**
+     * get events from a user with a filter status
+     * @param userID
+     * @param filterStatus
+     * @param onSuccess
+     * @param onFailure
+     */
     public void getUserEvents(String userID, String filterStatus,
                               OnSuccessListener<List<Map<String, Object>>> onSuccess,
                               OnFailureListener onFailure) {
@@ -295,6 +389,12 @@ public class FirebaseConnector {
                 .addOnFailureListener(onFailure); // Handle failures
     }
 
+    /**
+     * get a user's joined events list from DB
+     * @param userID
+     * @param onSuccess
+     * @param onFailure
+     */
     public void getJoinedEvents(String userID, OnSuccessListener<List<String>> onSuccess, OnFailureListener onFailure) {
         db.collection("users").document(userID)
                 .get()
@@ -311,6 +411,12 @@ public class FirebaseConnector {
                 .addOnFailureListener(onFailure);
     }
 
+    /**
+     * get documents from a subcollection with a given path as parameter
+     * @param path
+     * @param onSuccess
+     * @param onFailure
+     */
     public void getSubCollection(String path, OnSuccessListener<List<Map<String, Object>>> onSuccess, OnFailureListener onFailure) {
         db.collection(path)
                 .get()
@@ -355,10 +461,17 @@ public class FirebaseConnector {
                             String firstName = doc.getString("firstName");
                             String lastName = doc.getString("lastName");
                             String profilePic = doc.getString("profilePictureUrl");
+
+                            // Handle potential null values for latitude and longitude
+                            Double latitudeObj = doc.getDouble("entrantlatitude");
+                            Double longitudeObj = doc.getDouble("entrantlongitude");
+
+                            double latitude = latitudeObj != null ? latitudeObj : 0.0;
+                            double longitude = longitudeObj != null ? longitudeObj : 0.0;
                             Log.d("Firestore WaitlistEntrants", "waitlist_" + status + " - user received with ID: " + userID);
 
                             // Now we create the object:
-                            EntrantProfile entrant = new EntrantProfile(userID, firstName, lastName, email, phone, profilePic, notifs, status);
+                            EntrantProfile entrant = new EntrantProfile(userID, firstName, lastName, email, phone, profilePic, notifs, status, latitude, longitude);
                             entrants.add(entrant);
                         }
 

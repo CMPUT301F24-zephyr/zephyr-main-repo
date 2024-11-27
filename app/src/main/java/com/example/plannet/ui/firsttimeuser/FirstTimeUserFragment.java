@@ -46,13 +46,13 @@ public class FirstTimeUserFragment extends Fragment {
 
         // Initialize Firestore and SharedPreferences
         db = new FirebaseConnector();
-        sharedPreferences = requireActivity().getSharedPreferences("app_preferences", Context.MODE_PRIVATE);
+        //sharedPreferences = requireActivity().getSharedPreferences("app_preferences", Context.MODE_PRIVATE);
         //Log.d("FirstTimeUserFragment", "CHECKPOINT");
         // Set up button click listener
         Button getStartedButton = view.findViewById(R.id.button_welcome);
         getStartedButton.setOnClickListener(v -> {
             String uniqueID = Settings.Secure.getString(requireContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-            sharedPreferences.edit().putString("unique_id", uniqueID).apply();
+            //sharedPreferences.edit().putString("unique_id", uniqueID).apply();
 
             // Add user to Firestore
             db.addUserToFirestore(uniqueID);

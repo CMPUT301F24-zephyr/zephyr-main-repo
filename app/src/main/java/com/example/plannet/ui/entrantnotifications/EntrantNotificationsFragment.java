@@ -48,13 +48,13 @@ public class EntrantNotificationsFragment extends Fragment {
                         boolean isActivated = documentSnapshot.getBoolean("notifsActivated");
                         notifSwitch.setChecked(isActivated);
                     } else {
-                        // default value = fase
-                        notifSwitch.setChecked(false);
+                        // default value = true
+                        notifSwitch.setChecked(true);
                         firebaseDB.document(profilePath)
                                 .set(new HashMap<String, Object>() {{
-                                    put("notifsActivated", false);
+                                    put("notifsActivated", true);
                                 }}, SetOptions.merge())
-                                .addOnSuccessListener(aVoid -> Log.d("Firestore", "Default notifsActivated set to false"))
+                                .addOnSuccessListener(aVoid -> Log.d("Firestore", "Default notifsActivated set to true"))
                                 .addOnFailureListener(e -> Log.e("Firestore", "Error setting default value", e));
                     }
                 })
