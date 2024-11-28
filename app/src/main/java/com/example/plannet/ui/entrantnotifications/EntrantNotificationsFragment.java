@@ -75,12 +75,13 @@ public class EntrantNotificationsFragment extends Fragment {
     /**
      * Helper method to queue a notification for the user in Firebase.
      */
-    public void queueNotificationForUser(String userID, String message) {
+    public void queueNotification(String userID, String message) {
         Map<String, Object> notification = new HashMap<>();
-        // Add ID and message directly
+        // Add ID and message
         notification.put("userIDs", userID);
         notification.put("message", message);
 
+        //Update firebase with new information
         firebaseDB.collection("notifications")
                 .add(notification)
                 .addOnSuccessListener(documentReference -> Log.d("NotificationHelper", "Notification queued: " + message))
