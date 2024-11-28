@@ -15,6 +15,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
 import com.example.plannet.Event.EventData;
@@ -49,6 +51,37 @@ public class EntrantEventListFragment extends Fragment {
 
         backArrow = root.findViewById(R.id.back_arrow);
         backArrow.setOnClickListener(v -> requireActivity().onBackPressed());
+        eventListView.setOnItemClickListener((parent, view, position, id) -> {
+            if (position >= 0 && position < eventDataList.size()) {
+                EventData selectedEvent = eventDataList.get(position);
+
+                if (selectedEvent != null) {
+                    Log.d("EntrantEventListFragment", "Selected Event: " + selectedEvent);
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString("eventID", selectedEvent.getEventId());
+                    bundle.putString("eventName", selectedEvent.getName());
+                    bundle.putString("eventDescription", selectedEvent.getEventDescription());
+                    bundle.putString("posterPath", selectedEvent.getPosterPath());
+                    bundle.putString("eventStatus", selectedEvent.getStatus());
+                    bundle.putString("eventLocation", selectedEvent.getLocation());
+                    bundle.putString("eventStatus", selectedEvent.getStatus());
+
+                    Log.d("EntrantEventListFragment", "Bundle Content: " + bundle.toString());
+
+                    NavController navController = Navigation.findNavController(view);
+                    navController.navigate(R.id.action_eventList_to_viewEventFragment, bundle);
+                } else {
+                    Log.e("EntrantEventListFragment", "Selected Event is null!");
+                }
+            } else {
+                Log.e("EntrantEventListFragment", "Invalid position clicked: " + position);
+            }
+        });
+
+
+
+
 
         // Fetch all events initially
         fetchEvents();
@@ -169,13 +202,14 @@ public class EntrantEventListFragment extends Fragment {
             firebaseConnector.getSubCollection(collectionPath,
                     events -> {
                         for (Map<String, Object> event : events) {
+                            String eventId = (String) event.get("eventID");
                             String eventName = (String) event.get("eventName");
                             String eventLocation = (String) event.get("facilityName");
                             String eventStatus = filter;
                             String eventDescription = (String) event.get("eventDescription");
                             String posterPath = (String) event.get("posterPath");
 
-                            eventDataList.add(new EventData(eventName, eventDescription, posterPath, eventStatus, eventLocation));
+                            eventDataList.add(new EventData(eventId, eventName, eventDescription, posterPath, eventStatus, eventLocation));
                         }
                         eventListAdapter.notifyDataSetChanged(); // Notify adapter of data changes
                     },

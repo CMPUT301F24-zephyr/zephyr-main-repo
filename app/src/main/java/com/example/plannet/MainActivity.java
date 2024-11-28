@@ -1,11 +1,15 @@
 package com.example.plannet;
 
 import android.content.Intent;
+import static androidx.core.content.ContentProviderCompat.requireContext;
+
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 
 import com.example.plannet.Notification.NotificationService;
@@ -25,7 +29,7 @@ import com.google.firebase.FirebaseApp;
 public class MainActivity extends AppCompatActivity {
     // view model to transfer userID
     private MainActivityViewModel mainActivityViewModel;
-
+    FirebaseConnector db = new FirebaseConnector();
     private ActivityMainBinding binding;
 //    private FirebaseConnector db;
     private boolean check = true;
@@ -33,11 +37,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Initialize Firebase
-        FirebaseApp.initializeApp(this);
-        Log.d("Main Activity", "Initialized App in Firebase");
-
 
         // Initialize SharedViewModel
         mainActivityViewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
@@ -59,10 +58,10 @@ public class MainActivity extends AppCompatActivity {
                 R.id.navigation_organizer_create_event, R.id.navigation_entranthome, R.id.navigation_qr_code_scan,
                 R.id.navigation_event_details, R.id.navigation_entrantprofile, R.id.navigation_entrantnotifications, R.id.navigation_notificationmanager,
                 R.id.navigation_entrantprofile, R.id.navigation_event_details, R.id.navigation_entrant_profile_display, R.id.navigation_event_list,
-                R.id.organizerViewEventFragment, R.id.organizerViewEntrantsFragment, R.id.organizerViewEntrantInfoFragment, R.id.navigation_adminhome)
+                R.id.organizerViewEventFragment, R.id.organizerViewEntrantsFragment, R.id.organizerViewEntrantInfoFragment, R.id.navigation_adminhome, R.id.navigation_entrantmap)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+//        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
         // Hide the navigation bar on the welcome screen
@@ -90,20 +89,28 @@ public class MainActivity extends AppCompatActivity {
         });
         //Log.d("MainActivity", "CHECKPOINT");
 
-        // Handle unique ID and navigate to welcome screen if necessary
-        SharedPreferences sharedPreferences = getSharedPreferences("app_preferences", MODE_PRIVATE);
-        String uniqueID = sharedPreferences.getString("unique_id", null);
+        String uniqueID = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
 
-        // this deletes your locally cached UUID -- for testing...... (must also delete UUID from DB if wanting to start over)
-        //sharedPreferences.edit().remove("unique_id").apply();
-        // check your local device ID (just for testing)
-        //Log.e("MainActivity", "Device ID = " + uniqueID);
+        db.checkIfDeviceIDinDB("users", uniqueID, new CheckDeviceIDCallback() {
+            @Override
+            public void onDeviceIDFound() {
+                Log.d("MainActivity", "Device ID found in database.");
+                mainActivityViewModel.setUniqueID(uniqueID);
+                navController.navigate(R.id.navigation_entranthome);
+            }
 
-        if (uniqueID == null) {
-            // Navigate to the welcome screen if no unique ID is found
-            navController.navigate(R.id.navigation_first_time_user);
-        }
-        mainActivityViewModel.setUniqueID(uniqueID);
+            @Override
+            public void onDeviceIDNotFound() {
+                Log.d("MainActivity", "Device ID not found in database. Redirecting to first-time user screen.");
+                navController.navigate(R.id.navigation_first_time_user);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                Log.e("MainActivity", "Error checking Device ID in database.", e);
+                Toast.makeText(MainActivity.this, "Error verifying user. Please try again.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     /**

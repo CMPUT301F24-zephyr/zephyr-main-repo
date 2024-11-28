@@ -55,9 +55,12 @@ public class SendNotificationFragment extends Fragment {
         CheckBox selectedEntrantsCheckBox = binding.checkboxSelectedEntrants;
         CheckBox cancelledEntrantsCheckBox = binding.checkboxCancelledEntrants;
 
+
+        // back button listener
+        binding.backArrow.setOnClickListener(v -> requireActivity().onBackPressed());
+
+
         // Set OnClickListener for the Button
-
-
         binding.sendNotificationButton.setOnClickListener(v -> {
             String body = binding.messageInput.getText().toString();
 

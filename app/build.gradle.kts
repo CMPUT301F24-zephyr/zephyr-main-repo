@@ -61,9 +61,13 @@ dependencies {
     implementation(libs.fragment.testing)
     implementation(libs.play.services.location)
     implementation(libs.rules)
+    implementation(libs.play.services.maps)
 
 
     annotationProcessor("com.github.bumptech.glide:compiler:4.11.0")
+
+    //Google Maps
+    implementation("com.google.android.gms:play-services-maps:18.1.0")
 
 
 
