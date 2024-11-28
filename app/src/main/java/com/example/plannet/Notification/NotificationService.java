@@ -64,7 +64,6 @@ public class NotificationService extends Service {
 
 
     private void startListeningForNotifications() {
-        String userID = "7c2b80ce1fae5be1";
         db.collection("notifications")
                 .whereArrayContains("userIDs", userID)
                 .addSnapshotListener((snapshots, error) -> {
