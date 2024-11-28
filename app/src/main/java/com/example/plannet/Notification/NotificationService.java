@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.ServiceInfo;
 import android.os.Build;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -19,11 +20,13 @@ public class NotificationService extends Service {
 
     private FirebaseFirestore db;
     private static final String CHANNEL_ID = "NotificationServiceChannel";
+    private String userID;
 
     @Override
     public void onCreate() {
         super.onCreate();
         startForegroundService();
+        userID = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         db = FirebaseFirestore.getInstance();
         createNotificationChannel();
         startListeningForNotifications();
