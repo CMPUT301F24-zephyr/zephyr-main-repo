@@ -51,6 +51,10 @@ public class EntrantProfileViewModel extends ViewModel {
         );
     }
 
+    /**
+     * Getter method for entrant details.
+     * @return
+     */
     public LiveData<Map<String, Object>> getEntrantDetails() {
         return entrantDetails;
     }

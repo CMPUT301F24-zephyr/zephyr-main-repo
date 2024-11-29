@@ -22,6 +22,9 @@ import com.example.plannet.ui.entrantnotifications.EntrantNotificationsFragment;
 
 import java.util.HashMap;
 
+/**
+ * Fragment to display details of an event.
+ */
 public class EventDetailsFragment extends Fragment {
 
     private TextView title, facilityName, facilityAddress, eventDates, capacity, cost, end_date, descriptionWriting, geolocation;
@@ -93,7 +96,7 @@ public class EventDetailsFragment extends Fragment {
                     entrantData.put("notificationsEnabled", userInfo.get("notifsActivated") != null && (Boolean) userInfo.get("notifsActivated"));
                     entrantData.put("entrantlatitude", userInfo.get("latitude"));
                     entrantData.put("entrantlongitude", userInfo.get("longitude"));
-                    // Handle location safely
+                    //handle location safely
                     Object latitudeObj = userInfo.get("latitude");
                     Object longitudeObj = userInfo.get("longitude");
 
@@ -102,7 +105,7 @@ public class EventDetailsFragment extends Fragment {
                         entrantData.put("entrantlongitude", longitudeObj);
                     }
 
-                    // Check if geolocation is required and user location is missing
+                    //check if geolocation is required and user location is missing
                     if (isGeolocationRequired && latitudeObj == null) {
                         Toast.makeText(getContext(), "Location is required to register for this event.", Toast.LENGTH_SHORT).show();
                         return;

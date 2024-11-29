@@ -31,7 +31,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.Map;
 
 /**
- * updating a current entrant profile
+ * Fragment for displaying and updating the profile of an entrant
  */
 public class EntrantProfileDisplayFragment extends Fragment{
     private EntrantProfileDisplayBinding binding;
@@ -43,6 +43,18 @@ public class EntrantProfileDisplayFragment extends Fragment{
     double latitude;
     double longitude;
 
+    /**
+     *
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = EntrantProfileDisplayBinding.inflate(inflater, container, false);
@@ -82,6 +94,10 @@ public class EntrantProfileDisplayFragment extends Fragment{
         return root;
     }
 
+    /**
+     * Updates entrant info
+     * @param entrantInfo
+     */
     private void updateUI(Map<String, Object> entrantInfo) {
         if (entrantInfo != null) {
             binding.firstNameEdit.setText((String) entrantInfo.get("firstName"));
@@ -118,6 +134,7 @@ public class EntrantProfileDisplayFragment extends Fragment{
         }
     }
 
+
     private void openImagePicker() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");
@@ -141,6 +158,17 @@ public class EntrantProfileDisplayFragment extends Fragment{
                 .into(binding.imageView11);
     }
 
+    /**
+     *
+     * @param requestCode The integer request code originally supplied to
+     *                    startActivityForResult(), allowing you to identify who this
+     *                    result came from.
+     * @param resultCode The integer result code returned by the child activity
+     *                   through its setResult().
+     * @param data An Intent, which can return result data to the caller
+     *               (various data can be attached to Intent "extras").
+     *
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

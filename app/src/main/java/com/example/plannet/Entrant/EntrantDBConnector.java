@@ -25,7 +25,7 @@ public class EntrantDBConnector {
     }
 
     /**
-     *
+     * Adds entrant to waitlist on firebase
      * @param eventID
      * @param entrantID
      * @param entrantData
@@ -101,7 +101,7 @@ public class EntrantDBConnector {
     }
 
     /**
-     * updates waitlist with new information directly from DB
+     * Updates waitlist in the Firestore database.
      * @param userID
      * @param waitlistType
      * @param eventID
@@ -120,7 +120,7 @@ public class EntrantDBConnector {
 
 
     /**
-     * get pending waitlist directly from DB
+     * returns the pending waitlist of an event
      * @param userID
      * @param onSuccess
      * @param onFailure

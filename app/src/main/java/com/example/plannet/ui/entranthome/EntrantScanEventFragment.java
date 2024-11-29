@@ -35,7 +35,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-
+/**
+ * Fragment for QR code scanning and passing event details for display
+ */
 public class EntrantScanEventFragment extends Fragment {
 
     private FirebaseFirestore firebaseDB;
@@ -43,6 +45,18 @@ public class EntrantScanEventFragment extends Fragment {
     private DecoratedBarcodeView barcodeView;
     ImageView backArrow;
 
+    /**
+     *
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return
+     */
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_qr_code_scanner, container, false);
@@ -67,7 +81,10 @@ public class EntrantScanEventFragment extends Fragment {
         return view;
     }
 
-    // Initialize the BarcodeView for scanning
+    /**
+     * Initilizes the BarcodeView for scanning
+     * @param view
+     */
     private void initializeScanner(View view) {
         barcodeView = view.findViewById(R.id.barcode_scanner);
         Log.d("QRScan", "BarcodeView initialized.");
@@ -91,7 +108,10 @@ public class EntrantScanEventFragment extends Fragment {
 
     }
 
-    // fetch event details from Firebase and navigate
+    /**
+     * Fetches event details from Firebase and navigate
+     * @param qrData
+     */
     private void fetchEventDetails(String qrData) {
         firebaseDB.collection("events").document(qrData).get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.exists()) {

@@ -3,6 +3,9 @@ package com.example.plannet.Entrant;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Locally manages the waitlists for entrants(unused)
+ */
 public class EntrantManager {
     private static EntrantManager instance;
 
