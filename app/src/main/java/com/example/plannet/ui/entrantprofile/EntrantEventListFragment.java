@@ -29,6 +29,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Fragment for displaying a list of events for entrants
+ */
 public class EntrantEventListFragment extends Fragment {
     private ListView eventListView;
     private EventListAdapter eventListAdapter;
@@ -36,12 +39,23 @@ public class EntrantEventListFragment extends Fragment {
     private ImageView backArrow;
     private Set<String> activeFilters; // To keep track of selected filters
 
+    /**
+     *
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     *
+     * @return
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.entrant_event_list, container, false);
 
-        // Initialize variables
         eventListView = root.findViewById(R.id.event_item_container);
         eventDataList = new ArrayList<>();
         eventListAdapter = new EventListAdapter(requireContext(), eventDataList);
@@ -80,13 +94,8 @@ public class EntrantEventListFragment extends Fragment {
         });
 
 
-
-
-
-        // Fetch all events initially
         fetchEvents();
 
-        // Initialize filter buttons
         Button pendingButton = root.findViewById(R.id.filter_pending);
         Button acceptedButton = root.findViewById(R.id.filter_accepted);
         Button chosenButton = root.findViewById(R.id.filter_chosen);
@@ -109,17 +118,13 @@ public class EntrantEventListFragment extends Fragment {
      */
     private void toggleFilter(String filter) {
         if (activeFilters.contains(filter)) {
-            // Filter is already active, remove it
             activeFilters.remove(filter);
         } else {
-            // Add filter to active filters
             activeFilters.add(filter);
         }
 
-        // Update button colors for all filters
         refreshButtonStates();
 
-        // Fetch events based on updated filters
         fetchEvents();
     }
 
@@ -127,7 +132,6 @@ public class EntrantEventListFragment extends Fragment {
      * Refreshes the colors of all filter buttons based on the current active filters.
      */
     private void refreshButtonStates() {
-        // Update Pending button
         Button pendingButton = getView().findViewById(R.id.filter_pending);
         if (activeFilters.contains("pending")) {
             pendingButton.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.white));
@@ -137,7 +141,6 @@ public class EntrantEventListFragment extends Fragment {
             pendingButton.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.buttonGrey));
         }
 
-        // Update Accepted button
         Button acceptedButton = getView().findViewById(R.id.filter_accepted);
         if (activeFilters.contains("accepted")) {
             acceptedButton.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.enrolled));
@@ -145,7 +148,6 @@ public class EntrantEventListFragment extends Fragment {
             acceptedButton.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.buttonGrey));
         }
 
-        // Update Chosen button
         Button chosenButton = getView().findViewById(R.id.filter_chosen);
         if (activeFilters.contains("chosen")) {
             chosenButton.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.chosen));
@@ -153,7 +155,6 @@ public class EntrantEventListFragment extends Fragment {
             chosenButton.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.buttonGrey));
         }
 
-        // Update Declined button
         Button declinedButton = getView().findViewById(R.id.filter_declined);
         if (activeFilters.contains("declined")) {
             declinedButton.setBackgroundTintList(ContextCompat.getColorStateList(requireContext(), R.color.cancelled));
@@ -180,22 +181,21 @@ public class EntrantEventListFragment extends Fragment {
                             .into((ImageView) this.getView().findViewById(R.id.profile_picture));
                 },
                 exception -> {
-                    // No profile picture was found. Generate the default for this ID
                     Glide.with(this)
                             .load("https://robohash.org/" + userID + ".png")
                             .placeholder(R.drawable.profile)
                             .into((ImageView) this.getView().findViewById(R.id.profile_picture));
                 });
 
-        // If no filters are active, fetch all events
+
         if (activeFilters.isEmpty()) {
-            eventDataList.clear(); // Clear the current list
+            eventDataList.clear();
             eventListAdapter.notifyDataSetChanged();
             return;
         }
 
-        // Fetch events for each active filter
-        eventDataList.clear(); // Clear the current list
+
+        eventDataList.clear();
         for (String filter : activeFilters) {
             String collectionPath = "users/" + userID + "/waitlists/" + filter + "/events";
 
@@ -211,7 +211,7 @@ public class EntrantEventListFragment extends Fragment {
 
                             eventDataList.add(new EventData(eventId, eventName, eventDescription, posterPath, eventStatus, eventLocation));
                         }
-                        eventListAdapter.notifyDataSetChanged(); // Notify adapter of data changes
+                        eventListAdapter.notifyDataSetChanged();
                     },
                     error -> Log.e("EntrantEventListFragment", "Error fetching events for filter: " + filter, error)
             );

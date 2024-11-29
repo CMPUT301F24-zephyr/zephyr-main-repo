@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Date;
 
 /**
- * all related DB tasks are found in this class.
+ * Firebase connector class for interacting with the Firebase Realtime Database.
  */
 public class FirebaseConnector {
 
@@ -73,7 +73,7 @@ public class FirebaseConnector {
     }
 
     /**
-     * delete data from a given collectionPath & documentID
+     * Deletes data from a specified collection in the database.
      * @param collectionPath
      * @param documentID
      * @param onSuccess
@@ -171,7 +171,7 @@ public class FirebaseConnector {
     }
 
     /**
-     * add a user to the DB from their userID
+     * Adds a user to the Firestore database
      * @param uniqueID
      */
     public void addUserToFirestore(String uniqueID) {
@@ -185,7 +185,7 @@ public class FirebaseConnector {
     }
 
     /**
-     * add a user to the DB from their userID
+     * Adds user information to the Firestore database
      * @param uniqueID
      * @param userInfo
      * @param onSuccessListener
@@ -202,7 +202,7 @@ public class FirebaseConnector {
     }
 
     /**
-     * checks if a organizer's facility data is valid or not
+     * Checks if the facility data is valid for a user
      * @param userID
      * @param onSuccess
      * @param onFailure
@@ -226,7 +226,7 @@ public class FirebaseConnector {
     }
 
     /**
-     * get all a user's info from DB
+     * Returns user information from the Firestore database
      * @param userID
      * @param onSuccess
      * @param onFailure
@@ -246,7 +246,7 @@ public class FirebaseConnector {
     }
 
     /**
-     * get userEvents by their userID (we may not be using this anymore)
+     * Gets event information from the Firestore database
      * @param eventID
      * @param onSuccess
      * @param onFailure
@@ -365,7 +365,7 @@ public class FirebaseConnector {
     }
 
     /**
-     * get events from a user with a filter status
+     * Returns user events
      * @param userID
      * @param filterStatus
      * @param onSuccess
@@ -412,7 +412,7 @@ public class FirebaseConnector {
     }
 
     /**
-     * get documents from a subcollection with a given path as parameter
+     * returns subcollection of a collection
      * @param path
      * @param onSuccess
      * @param onFailure
@@ -545,18 +545,44 @@ public class FirebaseConnector {
         }
     }
 
+    /**
+     * Adds data to a specified waitlist subcollection in the database.
+     * @param eventID
+     * @param userID
+     * @param entrantData
+     * @param waitlistType
+     * @param onSuccess
+     * @param onFailure
+     */
     public void addDataToWaitlist(String eventID, String userID, Map<String, Object> entrantData, String waitlistType,
                                   OnSuccessListener<Void> onSuccess, OnFailureListener onFailure) {
         String path = "events/" + eventID + "/waitlist_" + waitlistType;
         addData(path, userID, new HashMap<>(entrantData), onSuccess, onFailure);
     }
 
+    /**
+     * Removes data from a specified waitlist subcollection in the database.
+     * @param eventID
+     * @param userID
+     * @param waitlistType
+     * @param onSuccess
+     * @param onFailure
+     */
     public void removeDataFromWaitlist(String eventID, String userID, String waitlistType,
                                        OnSuccessListener<Void> onSuccess, OnFailureListener onFailure) {
         String path = "events/" + eventID + "/waitlist_" + waitlistType;
         deleteData(path, userID, onSuccess, onFailure);
     }
 
+    /**
+     * Adds data to a specified waitlist subcollection in the database under the user collection
+     * @param userID
+     * @param waitlistType
+     * @param eventID
+     * @param eventData
+     * @param onSuccess
+     * @param onFailure
+     */
     public void updateUserWaitlist(String userID, String waitlistType, String eventID, Map<String, Object> eventData,
                                    OnSuccessListener<Void> onSuccess, OnFailureListener onFailure) {
         // Correct the path to reference a valid collection
@@ -564,7 +590,14 @@ public class FirebaseConnector {
         addData(path, eventID, new HashMap<>(eventData), onSuccess, onFailure);
     }
 
-
+    /**
+     * Removes data from a specified waitlist subcollection in the database under the user collection
+     * @param userID
+     * @param waitlistType
+     * @param eventID
+     * @param onSuccess
+     * @param onFailure
+     */
     public void removeUserWaitlistEvent(String userID, String waitlistType, String eventID,
                                         OnSuccessListener<Void> onSuccess, OnFailureListener onFailure) {
         String path = "users/" + userID + "/waitlists/" + waitlistType + "/events";
