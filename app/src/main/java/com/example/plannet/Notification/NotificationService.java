@@ -26,7 +26,9 @@ public class NotificationService extends Service {
     public void onCreate() {
         super.onCreate();
         startForegroundService();
+        Log.d("NotificationService", "Service started");
         userID = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        Log.d("NotificationService", "UserID: " + userID);
         db = FirebaseFirestore.getInstance();
         createNotificationChannel();
         startListeningForNotifications();
@@ -65,35 +67,29 @@ public class NotificationService extends Service {
 
     private void startListeningForNotifications() {
         db.collection("notifications")
-                .whereArrayContains("userIDs", userID)
+                .document(userID)//.whereArrayContains("userIDs", userID)
                 .addSnapshotListener((snapshots, error) -> {
                     if (error != null) {
                         error.printStackTrace();
                         return;
                     }
 
-                    if (snapshots != null && !snapshots.isEmpty()) {
-                        for (DocumentChange change : snapshots.getDocumentChanges()) {
-                            if (change.getType() == DocumentChange.Type.ADDED) {
-                                String message = change.getDocument().getString("message");
-                                String docId = change.getDocument().getId();
-                                Log.d("NotificationService", "New notification detected: " + message);
-                                showSystemNotification(message);
+                    if (snapshots != null) {
+                        String title = snapshots.getString("title");
+                        String body = snapshots.getString("body");
+                        Log.d("NotificationService", "New notification detected: " + title);
+                        showSystemNotification(title, body);
 
-                                db.collection("notifications").document(docId)
-                                        .delete()
-                                        .addOnSuccessListener(aVoid -> {
-                                            // Notification deleted
-                                        })
-                                        .addOnFailureListener(Throwable::printStackTrace);
-                            }
-                        }
+                        db.collection("notifications").document(userID)
+                                .delete()
+                                .addOnSuccessListener(aVoid -> Log.d("NotificationService", "Notification deleted for userID: " + userID))
+                                .addOnFailureListener(e -> Log.e("NotificationService", "Error deleting notification", e));
                     }
                 });
     }
 
-    private void showSystemNotification(String message) {
-        Log.d("NotificationService", "Displaying notification with message: " + message);
+    private void showSystemNotification(String title, String body) {
+        Log.d("NotificationService", "Displaying notification with message: " + title);
 
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         if (manager == null) {
@@ -103,8 +99,8 @@ public class NotificationService extends Service {
 
         // Build and display the notification
         NotificationCompat.Builder notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("New Notification")
-                .setContentText(message)
+                .setContentTitle(title)
+                .setContentText(body)
                 .setSmallIcon(android.R.drawable.ic_dialog_info)
                 .setPriority(NotificationCompat.PRIORITY_HIGH);
 
