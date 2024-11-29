@@ -21,6 +21,7 @@ import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
 import com.example.plannet.Entrant.EntrantDBConnector;
+import com.example.plannet.FirebaseConnector;
 import com.example.plannet.R;
 import com.example.plannet.databinding.EntrantProfileDisplayBinding;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -28,10 +29,11 @@ import com.google.android.gms.location.LocationServices;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Fragment for displaying and updating the profile of an entrant
+ * Fragment for displaying and updating the profile of an entrant for first time
  */
 public class EntrantProfileDisplayFragment extends Fragment{
     private EntrantProfileDisplayBinding binding;
@@ -42,6 +44,7 @@ public class EntrantProfileDisplayFragment extends Fragment{
     private FusedLocationProviderClient fusedLocationClient;
     double latitude;
     double longitude;
+    private FirebaseConnector db = new FirebaseConnector();
 
     /**
      *
@@ -59,7 +62,6 @@ public class EntrantProfileDisplayFragment extends Fragment{
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = EntrantProfileDisplayBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext());
 
 
         userID = Settings.Secure.getString(requireContext().getContentResolver(), Settings.Secure.ANDROID_ID);
@@ -105,20 +107,6 @@ public class EntrantProfileDisplayFragment extends Fragment{
             binding.phoneEdit.setText((String) entrantInfo.get("phone"));
             binding.emailEdit.setText((String) entrantInfo.get("email"));
 
-//            // Handle latitude and longitude safely
-//            Object latitudeObj = entrantInfo.get("latitude");
-//            Object longitudeObj = entrantInfo.get("longitude");
-//
-//            if (latitudeObj instanceof Double && longitudeObj instanceof Double) {
-//                double latitude = (Double) latitudeObj;
-//                double longitude = (Double) longitudeObj;
-//
-//                // Set the location field to display the coordinates
-//                binding.locationEdit.setText(latitude + ", " + longitude);
-//            } else {
-//                // Default message if location is unavailable
-//                binding.locationEdit.setText("Location not available");
-//            }
 
             String profilePictureUrl = (String) entrantInfo.get("profilePictureUrl");
             if (profilePictureUrl != null) {
@@ -184,6 +172,7 @@ public class EntrantProfileDisplayFragment extends Fragment{
      * get the user location
      */
     private void getUserLocation() {
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext());
         if (requireActivity().checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // Request location permission if not granted
             requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 100);
@@ -193,14 +182,24 @@ public class EntrantProfileDisplayFragment extends Fragment{
         fusedLocationClient.getLastLocation()
                 .addOnSuccessListener(requireActivity(), location -> {
                     if (location != null) {
-                        // Use the location for your application
                         latitude = location.getLatitude();
                         longitude = location.getLongitude();
                         Log.d("EntrantProfileFragment", "Latitude: " + latitude + ", Longitude: " + longitude);
-
+                        Map<String, Object> userData = new HashMap<>();
+                        userData.put("latitude", latitude);
+                        userData.put("longitude", longitude);
+                        db.updateUserLocation(
+                                userID,
+                                userData,
+                                success -> {
+                                    Log.d("UpdateLocation", "User location updated successfully!");
+                                },
+                                failure -> {
+                                    Log.e("UpdateLocation", "Failed to update user location", failure);
+                                }
+                        );
                         Toast.makeText(requireContext(), "Location updated!", Toast.LENGTH_SHORT).show();
 
-                        // You can now pass these coordinates to Google Maps API or store them in the database
                     } else {
                         Toast.makeText(requireContext(), "Unable to retrieve location. Try again.", Toast.LENGTH_SHORT).show();
                     }
@@ -217,53 +216,34 @@ public class EntrantProfileDisplayFragment extends Fragment{
         String phone = binding.phoneEdit.getText().toString();
         String email = binding.emailEdit.getText().toString();
 
-        // Fetch the user's location
-        FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext());
-        if (requireActivity().checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 100);
-            return;
+
+
+        if (selectedImageUri != null) {
+            // Upload the profile picture to Firebase Storage
+            String fileName = "profile_pictures/" + userID + ".jpg";
+            StorageReference storageRef = FirebaseStorage.getInstance().getReference(fileName);
+
+            storageRef.putFile(selectedImageUri)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        // Get the download URL and save it to the database
+                        storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                            String profilePictureUrl = uri.toString();
+                            saveUserInfoToDatabase(firstName, lastName, phone, email, profilePictureUrl, latitude, longitude);
+                        });
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(getContext(), "Failed to upload profile picture.", Toast.LENGTH_SHORT).show();
+                        Log.e("EntrantProfileFragment", "Error uploading profile picture", e);
+                    });
+        } else {
+            // Save user info without updating the profile picture
+            saveUserInfoToDatabase(firstName, lastName, phone, email, null, latitude, longitude);
         }
-
-        fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(requireActivity(), location -> {
-                    if (location != null) {
-                        double latitude = location.getLatitude();
-                        double longitude = location.getLongitude();
-
-                        if (selectedImageUri != null) {
-                            // Upload the profile picture to Firebase Storage
-                            String fileName = "profile_pictures/" + userID + ".jpg";
-                            StorageReference storageRef = FirebaseStorage.getInstance().getReference(fileName);
-
-                            storageRef.putFile(selectedImageUri)
-                                    .addOnSuccessListener(taskSnapshot -> {
-                                        // Get the download URL and save it to the database
-                                        storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                                            String profilePictureUrl = uri.toString();
-                                            saveUserInfoToDatabase(firstName, lastName, phone, email, profilePictureUrl, latitude, longitude);
-                                        });
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        Toast.makeText(getContext(), "Failed to upload profile picture.", Toast.LENGTH_SHORT).show();
-                                        Log.e("EntrantProfileFragment", "Error uploading profile picture", e);
-                                    });
-                        } else {
-                            // Save user info without updating the profile picture
-                            saveUserInfoToDatabase(firstName, lastName, phone, email, null, latitude, longitude);
-                        }
-                    } else {
-                        Toast.makeText(getContext(), "Unable to retrieve location. Please try again.", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    Log.e("EntrantProfileFragment", "Error getting location", e);
-                    Toast.makeText(getContext(), "Error retrieving location.", Toast.LENGTH_SHORT).show();
-                });
     }
 
     private void saveUserInfoToDatabase(String firstName, String lastName, String phone, String email, String profilePictureUrl, double latitude, double longitude) {
         EntrantDBConnector entrantDBConnector = new EntrantDBConnector();
-        entrantDBConnector.saveUserInfo(userID, firstName, lastName, phone, email, profilePictureUrl, latitude, longitude,
+        entrantDBConnector.saveUserInfo(userID, firstName, lastName, phone, email, profilePictureUrl,
                 aVoid -> {
                     Toast.makeText(getContext(), "Profile updated successfully", Toast.LENGTH_SHORT).show();
 

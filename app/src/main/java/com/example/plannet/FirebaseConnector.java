@@ -196,7 +196,7 @@ public class FirebaseConnector {
                                        OnFailureListener onFailureListener) {
         db.collection("users").document(uniqueID)
                 .collection("userInfo").document("profile")
-                .set(userInfo)
+                .set(userInfo, SetOptions.merge())
                 .addOnSuccessListener(onSuccessListener)
                 .addOnFailureListener(onFailureListener);
     }
@@ -243,6 +243,47 @@ public class FirebaseConnector {
                     }
                 })
                 .addOnFailureListener(onFailure);
+    }
+
+    /**
+     * upload user location to DB
+     */
+    public void updateUserLocation(String uniqueID, Map<String, Object> userInfo,
+                                       OnSuccessListener<Void> onSuccessListener,
+                                       OnFailureListener onFailureListener) {
+        db.collection("users").document(uniqueID)
+                .collection("userInfo").document("profile")
+                .set(userInfo, SetOptions.merge())
+                .addOnSuccessListener(onSuccessListener)
+                .addOnFailureListener(onFailureListener);
+    }
+
+    /**
+     * fetch user location
+     */
+    public void fetchUserLocation(String uniqueID,
+                                  OnSuccessListener<Map<String, Object>> onSuccessListener,
+                                  OnFailureListener onFailureListener) {
+        db.collection("users").document(uniqueID)
+                .collection("userInfo").document("profile")
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        Map<String, Object> data = documentSnapshot.getData();
+                        if (data != null && data.containsKey("latitude") && data.containsKey("longitude")) {
+                            onSuccessListener.onSuccess(data);
+                        } else {
+                            onFailureListener.onFailure(
+                                    new Exception("Latitude or longitude field is missing")
+                            );
+                        }
+                    } else {
+                        onFailureListener.onFailure(
+                                new Exception("Document does not exist")
+                        );
+                    }
+                })
+                .addOnFailureListener(onFailureListener);
     }
 
     /**
@@ -471,7 +512,7 @@ public class FirebaseConnector {
                             Log.d("Firestore WaitlistEntrants", "waitlist_" + status + " - user received with ID: " + userID);
 
                             // Now we create the object:
-                            EntrantProfile entrant = new EntrantProfile(userID, firstName, lastName, email, phone, profilePic, notifs, status, latitude, longitude);
+                            EntrantProfile entrant = new EntrantProfile(userID, firstName, lastName, email, phone, profilePic, notifs, status);
                             entrants.add(entrant);
                         }
 
