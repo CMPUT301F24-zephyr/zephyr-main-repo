@@ -39,6 +39,7 @@ public class EntrantNotifications {
         // Add the notification to Firestore
         firebaseDB.collection("notifications")
                 .document(userID)
+                //https://firebase.google.com/docs/reference/android/com/google/firebase/firestore/SetOptions
                 .set(notification, SetOptions.merge())
                 .addOnSuccessListener(aVoid ->
                         Log.d("EntrantNotifications", "Notification queued: " + title))
