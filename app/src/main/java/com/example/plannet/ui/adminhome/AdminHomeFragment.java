@@ -41,14 +41,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * admin fragment with list dialogs to show the intended tasks
- * Sources:
- * https://javascript.plainenglish.io/introduction-to-firebase-storage-2-retrieve-delete-files-3875f11e6a89
- * https://www.geeksforgeeks.org/custom-arrayadapter-with-listview-in-android/
- * https://firebase.google.com/docs/storage/web/download-files
- */
+
 public class AdminHomeFragment extends Fragment {
+    /**
+     * admin fragment with list dialogs to show the intended tasks
+     * Sources:
+     * https://javascript.plainenglish.io/introduction-to-firebase-storage-2-retrieve-delete-files-3875f11e6a89
+     * https://www.geeksforgeeks.org/custom-arrayadapter-with-listview-in-android/
+     * https://firebase.google.com/docs/storage/web/download-files
+     */
 
     private FragmentHomeAdminBinding binding;
 
@@ -86,6 +87,9 @@ public class AdminHomeFragment extends Fragment {
             getAllEventsWithMapping().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     Pair<ArrayList<String>, Map<String, String>> result = task.getResult();
+                    // using mapping and updating both objects synchrounosly to help with
+                    // deleting entries with names as fields
+                    // similar to a dictionary in python
                     ArrayList<String> eventNames = result.first;
                     Map<String, String> nameToIdMap = result.second;
 
@@ -329,7 +333,7 @@ public class AdminHomeFragment extends Fragment {
                         taskCompletionSource.setResult(imageUrls);
                     });
                 } else {
-                    taskCompletionSource.setResult(imageUrls); // No images found
+                    taskCompletionSource.setResult(imageUrls);
                 }
             } else {
                 taskCompletionSource.setException(task.getException());
@@ -513,6 +517,13 @@ public class AdminHomeFragment extends Fragment {
         return taskCompletionSource.getTask();
     }
 
+    /**
+     * deletes an event from the database
+     * @param eventName
+     * @param nameToIdMap
+     * @param collection
+     * @param listener
+     */
     private void deleteEventFromDatabase(String eventName, Map<String, String> nameToIdMap, String collection, OnDeleteCompleteListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String documentId = nameToIdMap.get(eventName); // Get the document ID using the eventName

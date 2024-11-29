@@ -1,7 +1,7 @@
 package com.example.plannet;
 
 /**
- * interface to retrieve data from firestore and store them in a String array
+ * interface to retrieve data from firestore with onSuccess/onFailure as response
  */
 public interface FirestoreCallback {
     void onSuccess(String[] userIDs);

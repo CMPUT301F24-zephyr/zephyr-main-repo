@@ -29,6 +29,11 @@ public class EventWaitlistAccepted {
         return type;
     }
 
+    /**
+     * add entrant profile to accepted entrants list
+     * @param entrant
+     * @return
+     */
     public boolean addEntrant(EntrantProfile entrant) {
         if (entrant != null && !this.acceptedEntrants.contains(entrant)) {
 
@@ -37,6 +42,12 @@ public class EventWaitlistAccepted {
         }
         return false;
     }
+
+    /**
+     * removes an entrant from acceptedEntrants list
+     * @param entrant
+     * @return
+     */
     public boolean removeEntrant(EntrantProfile entrant) {
         if (entrant != null && this.acceptedEntrants.contains(entrant)) {
             this.acceptedEntrants.remove(entrant);

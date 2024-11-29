@@ -89,11 +89,19 @@ public class EntrantNotificationsFragment extends Fragment {
         return view;
     }
 
+    /**
+     * method to enable notifications which makes a new NotificationService intent (activity)
+     * followed by a toast message
+     */
     private void enableNotifications() {
         Intent intent = new Intent(requireContext(), NotificationService.class);
         requireContext().startService(intent);
         Toast.makeText(requireContext(), "Notifications enabled", Toast.LENGTH_SHORT).show();
     }
+    /**
+     * method to disable notifications which makes a new NotificationService intent (activity)
+     * followed by a toast message
+     */
     private void disableNotifications() {
         Intent intent = new Intent(requireContext(), NotificationService.class);
         requireContext().stopService(intent);

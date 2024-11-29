@@ -33,6 +33,17 @@ public class NotificationPermissionActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * after asking user for request on notifications, it will set that value in sharedpreferences
+     * for memory and so it can be accessed by the notifSwitch
+     * @param requestCode The request code passed in {@link #requestPermissions(
+     * android.app.Activity, String[], int)}
+     * @param permissions The requested permissions. Never null.
+     * @param grantResults The grant results for the corresponding permissions
+     *     which is either {@link android.content.pm.PackageManager#PERMISSION_GRANTED}
+     *     or {@link android.content.pm.PackageManager#PERMISSION_DENIED}. Never null.
+     *
+     */
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -43,19 +54,17 @@ public class NotificationPermissionActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = preferences.edit();
 
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Update SharedPreferences to reflect the enabled state
                 editor.putBoolean("notificationsEnabled", true);
                 editor.apply();
 
                 Toast.makeText(this, "Notifications enabled successfully", Toast.LENGTH_SHORT).show();
             } else {
-                // Update SharedPreferences to reflect the disabled state
                 editor.putBoolean("notificationsEnabled", false);
                 editor.apply();
 
                 Toast.makeText(this, "Notifications permission denied", Toast.LENGTH_SHORT).show();
             }
-            finish(); // Close the activity after handling
+            finish(); // Closes the activity after the service is used
         }
     }
 }

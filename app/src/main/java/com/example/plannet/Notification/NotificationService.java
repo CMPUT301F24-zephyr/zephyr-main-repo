@@ -18,6 +18,10 @@ import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class NotificationService extends Service {
+    /**
+     * notification service that starts the service in the foreground for notification
+     * activity
+     */
 
     private FirebaseFirestore db;
     private static final String CHANNEL_ID = "NotificationServiceChannel";
@@ -37,6 +41,9 @@ public class NotificationService extends Service {
         startListeningForNotifications();
     }
 
+    /**
+     * creates notification channel to service for future requests
+     */
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
@@ -51,6 +58,9 @@ public class NotificationService extends Service {
         }
     }
 
+    /**
+     * starts foreground services to listen for updates in the foreground
+     */
     private void startForegroundService() {
         // Build the notification
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
@@ -68,6 +78,9 @@ public class NotificationService extends Service {
     }
 
 
+    /**
+     * notification listener to grab notifications from the database
+     */
     private void startListeningForNotifications() {
         db.collection("notifications")
                 .document(userID)//.whereArrayContains("userIDs", userID)
@@ -91,6 +104,11 @@ public class NotificationService extends Service {
                 });
     }
 
+    /**
+     * show the system notification to user
+     * @param title
+     * @param body
+     */
     private void showSystemNotification(String title, String body) {
         Log.d("NotificationService", "Displaying notification with message: " + title);
 

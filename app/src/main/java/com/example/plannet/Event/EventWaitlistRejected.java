@@ -28,6 +28,11 @@ public class EventWaitlistRejected {
         return type;
     }
 
+    /**
+     * adds an entrant to rejected entrants list
+     * @param entrant
+     * @return
+     */
     public boolean addEntrant(EntrantProfile entrant) {
         if (entrant != null && !this.rejectedEntrants.contains(entrant)) {
 
@@ -37,6 +42,11 @@ public class EventWaitlistRejected {
         return false;
     }
 
+    /**
+     * removes an entrant to rejected entrants list
+     * @param entrant
+     * @return
+     */
     public boolean removeEntrant(EntrantProfile entrant) {
         if (entrant != null && this.rejectedEntrants.contains(entrant)) {
             this.rejectedEntrants.remove(entrant);
