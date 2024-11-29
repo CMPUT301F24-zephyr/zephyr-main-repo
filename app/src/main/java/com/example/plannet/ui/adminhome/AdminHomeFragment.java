@@ -1,6 +1,7 @@
 package com.example.plannet.ui.adminhome;
 
 import android.app.AlertDialog;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,23 +16,39 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.example.plannet.ArrayAdapters.AdminImageListAdapter;
 import com.example.plannet.R;
 import com.example.plannet.databinding.FragmentHomeAdminBinding;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
+/**
+ * admin fragment with list dialogs to show the intended tasks
+ * Sources:
+ * https://javascript.plainenglish.io/introduction-to-firebase-storage-2-retrieve-delete-files-3875f11e6a89
+ * https://www.geeksforgeeks.org/custom-arrayadapter-with-listview-in-android/
+ * https://firebase.google.com/docs/storage/web/download-files
+ */
 public class AdminHomeFragment extends Fragment {
 
     private FragmentHomeAdminBinding binding;
@@ -66,7 +83,20 @@ public class AdminHomeFragment extends Fragment {
                 }
             });
         });
-        binding.viewAllFacilities.setOnClickListener(v -> showListDialog("Facilities", "", getAllFacilities()));
+        binding.viewAllFacilities.setOnClickListener(v -> {
+            fetchFacilitiesFromFirebase().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    ArrayList<String> facilities = task.getResult();
+                    if (!facilities.isEmpty()) {
+                        showFacilitiesDialog("Facilities", facilities);
+                    } else {
+                        Toast.makeText(requireContext(), "No facilities found.", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "Failed to fetch facilities.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
         binding.viewHashedQR.setOnClickListener(v -> {
             getAllHashes().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
@@ -84,7 +114,49 @@ public class AdminHomeFragment extends Fragment {
                 }
             });
         });
-        binding.viewAllImages.setOnClickListener(v -> showListDialog("Images", "", getAllImages()));
+        binding.viewAllPosters.setOnClickListener(v -> {
+            fetchImagesFromFirebase("profile_pictures").addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    ArrayList<String> imageUrls = task.getResult();
+                    if (!imageUrls.isEmpty()) {
+                        showImagesDialog("Images", imageUrls);
+                    } else {
+                        Toast.makeText(requireContext(), "No images found.", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "Failed to fetch images.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
+        binding.viewAllProfilePics.setOnClickListener(v -> {
+            fetchImagesFromFirebase("profile_pictures").addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    ArrayList<String> imageUrls = task.getResult();
+                    if (!imageUrls.isEmpty()) {
+                        showImagesDialog("Profile Pictures", imageUrls);
+                    } else {
+                        Toast.makeText(requireContext(), "No profile pictures found.", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "Failed to fetch profile pictures.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
+
+        binding.viewAllPosters.setOnClickListener(v -> {
+            fetchImagesFromFirebase("posters").addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    ArrayList<String> imageUrls = task.getResult();
+                    if (!imageUrls.isEmpty()) {
+                        showImagesDialog("Posters", imageUrls);
+                    } else {
+                        Toast.makeText(requireContext(), "No event posters found.", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "Failed to fetch event posters.", Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
         binding.viewAllProfiles.setOnClickListener(v -> {
             getAllProfiles().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
@@ -153,6 +225,168 @@ public class AdminHomeFragment extends Fragment {
     }
 
     /**
+     * show a dialog with images under firebase storage
+     */
+    private void showImagesDialog(String title, ArrayList<String> imageUrls) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle(title);
+
+        // Custom adapter to show image thumbnails
+        AdminImageListAdapter adapter = new AdminImageListAdapter(requireContext(), imageUrls);
+        ListView listView = new ListView(requireContext());
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            String selectedImageUrl = imageUrls.get(position);
+
+            // Ask for confirmation before deleting
+            new AlertDialog.Builder(requireContext())
+                    .setTitle("Delete Image")
+                    .setMessage("Are you sure you want to delete this image?")
+                    .setPositiveButton("Delete", (dialog, which) -> {
+                        deleteImageFromFirebase(selectedImageUrl, success -> {
+                            if (success) {
+                                imageUrls.remove(position);
+                                adapter.notifyDataSetChanged();
+                                Toast.makeText(requireContext(), "Image deleted successfully.", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(requireContext(), "Failed to delete image.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    })
+                    .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                    .show();
+        });
+
+        builder.setView(listView);
+        builder.setNegativeButton("Close", (dialog, which) -> dialog.dismiss());
+        builder.show();
+    }
+    /**
+     * delete an image from Firebase using its imageURL
+     * Source: https://javascript.plainenglish.io/introduction-to-firebase-storage-2-retrieve-delete-files-3875f11e6a89
+     */
+    private void deleteImageFromFirebase(String imageUrl, OnDeleteCompleteListener listener) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference imageRef = storage.getReferenceFromUrl(imageUrl);
+
+        imageRef.delete()
+                .addOnSuccessListener(aVoid -> {
+                    Log.d("DeleteImage", "Image deleted successfully.");
+                    listener.onComplete(true);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("DeleteImage", "Failed to delete image.", e);
+                    listener.onComplete(false);
+                });
+    }
+
+    /**
+     * fetch all images from firebase storage
+     */
+    private Task<ArrayList<String>> fetchImagesFromFirebase(String path) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference().child(path); // works for posters + pfp
+
+        TaskCompletionSource<ArrayList<String>> taskCompletionSource = new TaskCompletionSource<>();
+
+        storageRef.listAll().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                ArrayList<String> imageUrls = new ArrayList<>();
+                List<StorageReference> items = task.getResult().getItems();
+
+                if (items != null && !items.isEmpty()) {
+                    // Fetch download URLs for each item
+                    ArrayList<Task<Uri>> urlTasks = new ArrayList<>();
+                    for (StorageReference item : items) {
+                        urlTasks.add(item.getDownloadUrl());
+                    }
+
+                    // Wait for all URL tasks to complete
+                    Tasks.whenAllComplete(urlTasks).addOnCompleteListener(urlTask -> {
+                        for (Task<?> t : urlTasks) {
+                            if (t.isSuccessful()) {
+                                imageUrls.add(((Task<Uri>) t).getResult().toString());
+                            }
+                        }
+                        taskCompletionSource.setResult(imageUrls);
+                    });
+                } else {
+                    taskCompletionSource.setResult(imageUrls); // No images found
+                }
+            } else {
+                taskCompletionSource.setException(task.getException());
+            }
+        });
+
+        return taskCompletionSource.getTask();
+    }
+
+    /**
+     * Show a dialog with a list of facility and a delete option (facility specific)
+     * @param title
+     * @param items
+     */
+    private void showFacilitiesDialog(String title, ArrayList<String> items) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle(title);
+
+        // Adapter to display the list of items
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, items);
+
+        ListView listView = new ListView(requireContext());
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            String selectedItem = items.get(position);
+
+            // Extract facilityName and facilityLocation from the selected item
+            String[] parts = selectedItem.split(" - ");
+            if (parts.length != 2) {
+                Toast.makeText(requireContext(), "Invalid facility format.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            String facilityName = parts[0];
+            String facilityLocation = parts[1];
+
+            // Ask user to confirm deletion
+            new AlertDialog.Builder(requireContext())
+                    .setTitle("Delete Entry")
+                    .setMessage("Are you sure you want to delete " + selectedItem + "?")
+                    .setPositiveButton("Delete", (dialog, which) -> {
+                        // retrieve userID with selected facility then call deleteFacilityFromUser
+                        getUserIdForFacility(facilityName, facilityLocation).addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                String userId = task.getResult();
+                                if (userId != null) {
+                                    deleteFacilityFromUser(userId, success -> {
+                                        if (success) {
+                                            // Update UI after successful deletion
+                                            items.remove(position);
+                                            adapter.notifyDataSetChanged();
+                                            Toast.makeText(requireContext(), "Deleted: " + selectedItem, Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(requireContext(), "Failed to delete: " + selectedItem, Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                } else {
+                                    Toast.makeText(requireContext(), "No matching user found for the facility.", Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                Toast.makeText(requireContext(), "Error finding user for facility.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    })
+                    .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                    .show();
+        });
+
+        builder.setView(listView);
+        builder.setNegativeButton("Close", (dialog, which) -> dialog.dismiss());
+        builder.show();
+    }
+
+    /**
      * delete an entry from a collection on firebase
      */
     private void deleteEntryFromDatabase(String documentId, String collection, OnDeleteCompleteListener listener) {
@@ -168,6 +402,98 @@ public class AdminHomeFragment extends Fragment {
     }
     public interface OnDeleteCompleteListener {
         void onComplete(boolean success);
+    }
+
+    /**
+     * method to remove facility from user profile
+     */
+    private void deleteFacilityFromUser(String userId, OnDeleteCompleteListener listener) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users") // Collection name
+                .document(userId) // User document
+                .update("facility", FieldValue.delete())
+                .addOnSuccessListener(aVoid -> listener.onComplete(true))
+                .addOnFailureListener(e -> {
+                    Log.e("DeleteFacility", "Failed to delete facility for user: " + userId, e);
+                    listener.onComplete(false);
+                });
+    }
+    /**
+     * get userID for a specific facility map
+     */
+    private Task<String> getUserIdForFacility(String facilityName, String facilityLocation) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference usersCollection = db.collection("users");
+
+        TaskCompletionSource<String> taskCompletionSource = new TaskCompletionSource<>();
+
+        usersCollection.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                QuerySnapshot querySnapshot = task.getResult();
+
+                if (querySnapshot != null) {
+                    for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                        Map<String, Object> facility = (Map<String, Object>) document.get("facility");
+
+                        if (facility != null) {
+                            String name = (String) facility.get("name");
+                            String location = (String) facility.get("location");
+
+                            if (facilityName.equals(name) && facilityLocation.equals(location)) {
+                                // if facility is found under a user, return userID
+                                taskCompletionSource.setResult(document.getId());
+                                return;
+                            }
+                        }
+                    }
+                }
+
+                // No match found
+                taskCompletionSource.setResult(null);
+            } else {
+                // Error occurred while querying Firestore
+                taskCompletionSource.setException(task.getException());
+            }
+        });
+
+        return taskCompletionSource.getTask();
+    }
+
+    /**
+     * fetch facility map objects from Firebase and populate into ArrayList<String>
+     * @return
+     */
+    private Task<ArrayList<String>> fetchFacilitiesFromFirebase() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference usersCollection = db.collection("users");
+
+        TaskCompletionSource<ArrayList<String>> taskCompletionSource = new TaskCompletionSource<>();
+
+        usersCollection.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                QuerySnapshot querySnapshot = task.getResult();
+                ArrayList<String> facilities = new ArrayList<>();
+
+                if (querySnapshot != null) {
+                    for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+                        Map<String, Object> facility = (Map<String, Object>) document.get("facility");
+                        if (facility != null) {
+                            String facilityName = (String) facility.get("name");
+                            String facilityLocation = (String) facility.get("location");
+                            if (facilityName != null && facilityLocation != null) {
+                                facilities.add(facilityName + " - " + facilityLocation);
+                            }
+                        }
+                    }
+                }
+                taskCompletionSource.setResult(facilities);
+            } else {
+                // default empty list base case
+                taskCompletionSource.setResult(new ArrayList<>());
+            }
+        });
+
+        return taskCompletionSource.getTask();
     }
 
     private void deleteEventFromDatabase(String eventName, Map<String, String> nameToIdMap, String collection, OnDeleteCompleteListener listener) {
@@ -224,6 +550,11 @@ public class AdminHomeFragment extends Fragment {
         return taskCompletionSource.getTask();
     }
 
+    /**
+     * get events with mapping from their event name using Map function
+     * Source: https://cloud.google.com/firestore/docs/query-data/queries
+     * @return
+     */
     public Task<Pair<ArrayList<String>, Map<String, String>>> getAllEventsWithMapping() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference eventsCollection = db.collection("events");
@@ -256,27 +587,6 @@ public class AdminHomeFragment extends Fragment {
         return taskCompletionSource.getTask();
     }
 
-    /**
-     * Array data for facilities
-     */
-    private ArrayList<String> getAllFacilities() {
-        ArrayList<String> facilities = new ArrayList<>();
-        facilities.add("Facility 1");
-        facilities.add("Facility 2");
-        facilities.add("Facility 3");
-        return facilities;
-    }
-
-    /**
-     * Array data for images
-     */
-    private ArrayList<String> getAllImages() {
-        ArrayList<String> images = new ArrayList<>();
-        images.add("Image 1");
-        images.add("Image 2");
-        images.add("Image 3");
-        return images;
-    }
 
     /**
      * fetches all userIDs from firebase under events

@@ -25,10 +25,13 @@
         android:id="@+id/imageView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/line_separator"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/title"/>
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintVertical_bias="0.018"
+        app:srcCompat="@drawable/line_separator" />
 
     <Button
         android:id="@+id/viewAllEvents"
@@ -41,69 +44,89 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@id/viewAllFacilities"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+
+        app:layout_constraintTop_toBottomOf="@+id/viewAllPosters"
+        app:layout_constraintVertical_bias="0.11"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <Button
         android:id="@+id/viewAllFacilities"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:backgroundTint="@color/admin_buttons"
         android:fontFamily="@font/poppins"
         android:text="View all facilities"
         android:textAllCaps="false"
         android:textSize="20sp"
-        android:layout_marginTop="20dp"
+        app:layout_constraintBottom_toTopOf="@id/viewHashedQR"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/viewAllEvents"
-        app:layout_constraintBottom_toTopOf="@id/viewHashedQR" />
+        app:layout_constraintTop_toBottomOf="@id/viewAllEvents" />
 
     <Button
         android:id="@+id/viewHashedQR"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:backgroundTint="@color/admin_buttons"
         android:fontFamily="@font/poppins"
         android:text="View all QR hashes"
-        android:layout_marginTop="20dp"
         android:textAllCaps="false"
         android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@id/viewAllProfilePics"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/viewAllFacilities"
-        app:layout_constraintBottom_toTopOf="@id/viewAllImages" />
+        app:layout_constraintTop_toBottomOf="@id/viewAllFacilities" />
 
     <Button
-        android:id="@+id/viewAllImages"
+        android:id="@+id/viewAllProfilePics"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:backgroundTint="@color/admin_buttons"
         android:fontFamily="@font/poppins"
-        android:text="View all images"
-        android:layout_marginTop="20dp"
+        android:text="View all avatars"
         android:textAllCaps="false"
         android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@id/viewAllProfiles"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/viewAllProfiles"
         app:layout_constraintTop_toBottomOf="@id/viewHashedQR" />
 
     <Button
         android:id="@+id/viewAllProfiles"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:backgroundTint="@color/admin_buttons"
         android:fontFamily="@font/poppins"
         android:text="View all profiles"
         android:textAllCaps="false"
-        android:layout_marginTop="20dp"
         android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/button_entrant_mode"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/viewAllImages"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/viewAllProfilePics" />
+
+    <Button
+        android:id="@+id/viewAllPosters"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/admin_buttons"
+        android:fontFamily="@font/poppins"
+        android:text="View all posters"
+        android:textAllCaps="false"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.159" />
 
     <Button
         android:id="@+id/button_entrant_mode"
@@ -114,7 +137,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewAllProfiles"
-        app:layout_constraintVertical_bias="0.479" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.893" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
