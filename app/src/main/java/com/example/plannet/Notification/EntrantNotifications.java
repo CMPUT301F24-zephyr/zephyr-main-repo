@@ -25,7 +25,7 @@ public class EntrantNotifications {
      * @param body The notification message.
      */
     public void queueNotification(String userID, String title, String body) {
-        if (userID == null ||title.isEmpty() || body.isEmpty()) {
+        if (userID == null ||title== null || body== null) {
             Log.e("EntrantNotifications", "Invalid input.");
             return;
         }
