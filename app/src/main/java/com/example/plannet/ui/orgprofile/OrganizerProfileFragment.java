@@ -21,7 +21,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class OrganizerProfileFragment extends Fragment {
-
+    /**
+     * organizer profile where organizers can edit their facility info
+     */
     private EditText facilityEdit, locationEdit;
     private FragmentOrganizerProfileBinding binding;
     private OrganizerProfileViewModel organizerProfileViewModel;

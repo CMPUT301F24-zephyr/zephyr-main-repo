@@ -1,5 +1,8 @@
 package com.example.plannet.ui.entrantnotifications;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,7 +15,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Switch;
+import android.widget.Toast;
 
+import com.example.plannet.Notification.NotificationService;
 import com.example.plannet.R;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
@@ -21,12 +26,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * notification preferences for entrant
+ * notification preferences for entrant using system/shared preferences
  */
 public class EntrantNotificationsFragment extends Fragment {
     private FirebaseFirestore firebaseDB;
     private String userID;
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        View view = getView();
+
+        if (view != null) {
+            SharedPreferences preferences = requireContext().getSharedPreferences("NotificationPrefs", Context.MODE_PRIVATE);
+            boolean isEnabled = preferences.getBoolean("notificationsEnabled", false);
+
+            Switch notifSwitch = view.findViewById(R.id.notif_switch);
+            notifSwitch.setChecked(isEnabled);
+        }
+    }
     /**
      *
      * @param inflater The LayoutInflater object that can be used to inflate
@@ -48,40 +67,45 @@ public class EntrantNotificationsFragment extends Fragment {
 
         userID = Settings.Secure.getString(requireContext().getContentResolver(), Settings.Secure.ANDROID_ID);
 
+        SharedPreferences preferences = requireContext().getSharedPreferences("NotificationPrefs", Context.MODE_PRIVATE);
+        boolean isEnabled = preferences.getBoolean("notificationsEnabled", false);
+
         Switch notifSwitch = view.findViewById(R.id.notif_switch);
+        notifSwitch.setChecked(isEnabled);
 
-        // Firestore path: users -> userID -> userInfo -> profile
-        String profilePath = String.format("users/%s/userInfo/profile", userID);
-
-        // Retrieve and display current state from Firestore
-        firebaseDB.document(profilePath)
-                .get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists() && documentSnapshot.contains("notifsActivated")) {
-                        boolean isActivated = documentSnapshot.getBoolean("notifsActivated");
-                        notifSwitch.setChecked(isActivated);
-                    } else {
-                        // default value = true
-                        notifSwitch.setChecked(true);
-                        firebaseDB.document(profilePath)
-                                .set(new HashMap<String, Object>() {{
-                                    put("notifsActivated", true);
-                                }}, SetOptions.merge())
-                                .addOnSuccessListener(aVoid -> Log.d("Firestore", "Default notifsActivated set to true"))
-                                .addOnFailureListener(e -> Log.e("Firestore", "Error setting default value", e));
-                    }
-                })
-                .addOnFailureListener(e -> Log.e("Firestore", "Error fetching user data", e));
-
-        // Update Firestore when the Switch is toggled
+        // Switch listener to handle changes and update as needed
         notifSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            firebaseDB.document(profilePath)
-                    .update("notifsActivated", isChecked)
-                    .addOnSuccessListener(aVoid -> Log.d("Firestore", "Notification preference updated: " + isChecked))
-                    .addOnFailureListener(e -> Log.e("Firestore", "Error updating notification preference", e));
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("notificationsEnabled", isChecked);
+            editor.apply();
+
+            if (isChecked) {
+                enableNotifications();
+            } else {
+                disableNotifications();
+            }
         });
 
         return view;
+    }
+
+    /**
+     * method to enable notifications which makes a new NotificationService intent (activity)
+     * followed by a toast message
+     */
+    private void enableNotifications() {
+        Intent intent = new Intent(requireContext(), NotificationService.class);
+        requireContext().startService(intent);
+        Toast.makeText(requireContext(), "Notifications enabled", Toast.LENGTH_SHORT).show();
+    }
+    /**
+     * method to disable notifications which makes a new NotificationService intent (activity)
+     * followed by a toast message
+     */
+    private void disableNotifications() {
+        Intent intent = new Intent(requireContext(), NotificationService.class);
+        requireContext().stopService(intent);
+        Toast.makeText(requireContext(), "Notifications disabled", Toast.LENGTH_SHORT).show();
     }
 
 }

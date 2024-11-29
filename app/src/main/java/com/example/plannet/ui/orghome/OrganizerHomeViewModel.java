@@ -5,7 +5,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 public class OrganizerHomeViewModel extends ViewModel {
-
+    /**
+     * view model for organizer home fragment
+     */
     private final MutableLiveData<String> mText;
 
     public OrganizerHomeViewModel() {

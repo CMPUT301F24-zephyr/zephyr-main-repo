@@ -9,7 +9,7 @@ import java.io.Serializable;
  */
 public class EntrantProfile implements Serializable {
 
-    private static EntrantProfile instance; //Singleton instance for later use
+    private static EntrantProfile instance; // Singleton instance for later use
     private String userId;
     private String name;
     private String email;
@@ -28,30 +28,19 @@ public class EntrantProfile implements Serializable {
     // For organizer's... organization (simple fix!)
     private String waitlistStatus;
 
-    // location
-    private double latitude;
-    private double longitude;
-
-    //Empty constructor for Firebase
+    // Empty constructor for Firebase
     public EntrantProfile() {}
 
     /**
-     *
      * Constructor for creating a new EntrantProfile object.
      *
-     * @param context
-     *      Context passed for toast
-     * @param userId
-     *      userId of user
-     * @param name
-     *      entrant name
-     * @param email
-     *      entrant email
-     * @param phoneNumber
-     *      entrant phone number
-     * @param profilePictureUrl
-     *      entrant profile pricture url
-     * @param notifsActivated
+     * @param context            Context passed for toast
+     * @param userId             userId of user
+     * @param name               entrant name
+     * @param email              entrant email
+     * @param phoneNumber        entrant phone number
+     * @param profilePictureUrl  entrant profile picture url
+     * @param notifsActivated    notifications activation status
      */
     private EntrantProfile(Context context, String userId, String name, String email, String phoneNumber, String profilePictureUrl, boolean notifsActivated) {
         this.userId = userId;
@@ -66,7 +55,7 @@ public class EntrantProfile implements Serializable {
         this.waitlistRejected = new EntrantWaitlistRejected();
     }
 
-    public EntrantProfile(String userId, String firstName, String lastName, String email, String phoneNumber, String profilePictureUrl, boolean notifsActivated, String waitlistStatus, double latitude, double longitude) {
+    public EntrantProfile(String userId, String firstName, String lastName, String email, String phoneNumber, String profilePictureUrl, boolean notifsActivated, String waitlistStatus) {
         // This constructor has firstName and lastName rather than just Name, and ignores deviceID. Used by organizers.
         // Additionally does not care about waitlist status, as it is just used to store info about an entrant for organizer viewing
         this.userId = userId;
@@ -77,33 +66,27 @@ public class EntrantProfile implements Serializable {
         this.profilePictureUrl = profilePictureUrl;
         this.notifsActivated = notifsActivated;
         this.name = firstName + " " + lastName;
-        this.waitlistStatus = waitlistStatus;  // i.e. "Pending"
-        // added these 2
-        this.latitude = latitude;
-        this.longitude = longitude;
-
+        this.waitlistStatus = waitlistStatus;  // e.g., "Pending"
     }
 
     /**
      * Creates a new singleton instance of EntrantProfile.
-     * @param context
-     * @param userId
-     * @param name
-     * @param email
-     * @param phoneNumber
-     * @param profilePictureUrl
-     * @param notifsActivated
-     * @return
+     *
+     * @param context            Context passed for toast
+     * @param userId             userId of user
+     * @param name               entrant name
+     * @param email              entrant email
+     * @param phoneNumber        entrant phone number
+     * @param profilePictureUrl  entrant profile picture url
+     * @param notifsActivated    notifications activation status
+     * @return                   The singleton instance of EntrantProfile
      */
-    public static EntrantProfile getInstance(Context context, String userId, String name, String email, String phoneNumber, String profilePictureUrl, boolean notifsActivated, double latitude, double longitude) {
-
+    public static EntrantProfile getInstance(Context context, String userId, String name, String email, String phoneNumber, String profilePictureUrl, boolean notifsActivated) {
         if (context == null) {
             throw new IllegalArgumentException("Context cannot be null");
         }
         if (instance == null) {
             instance = new EntrantProfile(context, userId, name, email, phoneNumber, profilePictureUrl, notifsActivated);
-            instance.setLatitude(latitude);
-            instance.setLongitude(longitude);
         }
         return instance;
     }
@@ -119,14 +102,13 @@ public class EntrantProfile implements Serializable {
         }
         return instance;
     }
+
     /**
      * Clears the instance for cases like user logout.
      */
     public static void clearInstance() {
         instance = null;
     }
-
-
 
     public EntrantWaitlistPending getWaitlistPending() {
         return waitlistPending;
@@ -143,7 +125,6 @@ public class EntrantProfile implements Serializable {
     private String getAndroidID(Context context) {
         return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
     }
-
 
     // Getters and setters
     public String getUserId() {
@@ -212,21 +193,5 @@ public class EntrantProfile implements Serializable {
 
     public String getFirstName() {
         return firstName;
-    }
-
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
     }
 }

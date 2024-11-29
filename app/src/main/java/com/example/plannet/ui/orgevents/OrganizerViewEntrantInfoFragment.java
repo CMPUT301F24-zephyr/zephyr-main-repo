@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -85,16 +86,26 @@ public class OrganizerViewEntrantInfoFragment extends Fragment {
         binding.mapIcon.setOnClickListener(v -> {
             if (binding != null) {
                 //Log.e("EntrantInfo", "latitude = " + entrant.getLatitude() + "longitude = " + entrant.getLongitude());
-                latitude = entrant.getLatitude();
-                longitude = entrant.getLongitude();
-                // Create a Bundle to pass data
-                Bundle bundle = new Bundle();
-                bundle.putDouble("latitude", latitude);
-                bundle.putDouble("longitude", longitude);
+                // fetch user's location from DB
+                dbConnector.fetchUserLocation(
+                        entrant.getUserId(),
+                        data -> {
+                            latitude = (double) data.get("latitude");
+                            longitude = (double) data.get("longitude");
+                            // Create a Bundle to pass data
+                            Bundle bundle = new Bundle();
+                            bundle.putDouble("latitude", latitude);
+                            bundle.putDouble("longitude", longitude);
 
-                // Navigate to OrganizerViewEntrantMapFragment with the Bundle
-                NavController navController = Navigation.findNavController(v);
-                navController.navigate(R.id.action_organizerViewEntrantInfoFragment_to_organizerViewEntrantMapFragment, bundle);
+                            // Navigate to OrganizerViewEntrantMapFragment with the Bundle
+                            NavController navController = Navigation.findNavController(v);
+                            navController.navigate(R.id.action_organizerViewEntrantInfoFragment_to_organizerViewEntrantMapFragment, bundle);
+                        },
+                        error -> {
+                            Log.e("FetchUserLocation", "Failed to fetch location", error);
+                            Toast.makeText(requireContext(), "Error fetching location: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                );
             }
         });
 

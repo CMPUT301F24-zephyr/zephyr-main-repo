@@ -108,7 +108,10 @@ public class SendNotificationFragment extends Fragment {
     }
 
     private void sendNotification(String eventID, String waitlist, String title, String body) {
-        // Send notifications to entrants in specific waitlists
+        /**
+         * Send notifications to entrants in specific waitlists
+         * with a title and body message
+         */
         fireCon.RetrieveUserIDsFromEvent(eventID, waitlist, new FirestoreCallback() {
             @Override
             public void onSuccess(String[] userIDs) {

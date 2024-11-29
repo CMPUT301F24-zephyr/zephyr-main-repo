@@ -46,6 +46,9 @@ import java.util.Locale;
 import java.util.Map;
 
 public class OrganizerCreateEventFragment extends Fragment {
+    /**
+     * fragment where the organizer creates their event and generate a QR code
+     */
     // import data from mainActivityViewModel
     private MainActivityViewModel mainActivityViewModel;
     private String userID1;
