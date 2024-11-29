@@ -4,6 +4,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.pm.ServiceInfo;
 import android.os.Build;
 import android.os.IBinder;
@@ -25,12 +26,14 @@ public class NotificationService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        startForegroundService();
         Log.d("NotificationService", "Service started");
         userID = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         Log.d("NotificationService", "UserID: " + userID);
         db = FirebaseFirestore.getInstance();
         createNotificationChannel();
+        startForegroundService();
+        promptEnableNotifications();
+
         startListeningForNotifications();
     }
 
@@ -57,7 +60,7 @@ public class NotificationService extends Service {
                 .setPriority(NotificationCompat.PRIORITY_LOW);
 
         // Start the service in the foreground
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) { // Android 10+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             startForeground(1, notificationBuilder.build(), ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC);
         } else {
             startForeground(1, notificationBuilder.build());
@@ -109,6 +112,20 @@ public class NotificationService extends Service {
             Log.d("NotificationService", "Notification displayed successfully.");
         } catch (Exception e) {
             Log.e("NotificationService", "Error displaying notification: ", e);
+        }
+    }
+
+    /**
+     * prompt for user to accept or deny notifications
+     */
+    private void promptEnableNotifications() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                // Notify user to enable notifications
+                Intent intent = new Intent(this, NotificationPermissionActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); // Necessary to launch an activity from a service
+                startActivity(intent);
+            }
         }
     }
 
