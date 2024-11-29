@@ -18,6 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * notification preferences for entrant
@@ -82,4 +83,5 @@ public class EntrantNotificationsFragment extends Fragment {
 
         return view;
     }
+
 }

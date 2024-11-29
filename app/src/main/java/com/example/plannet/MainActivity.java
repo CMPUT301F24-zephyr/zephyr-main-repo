@@ -1,8 +1,10 @@
 package com.example.plannet;
 
+import android.content.Intent;
 import static androidx.core.content.ContentProviderCompat.requireContext;
 
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.widget.Toast;
 
 
+import com.example.plannet.Notification.NotificationService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -37,6 +40,15 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize SharedViewModel
         mainActivityViewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
+
+        // Start the notification service, consider other APIs for now
+        Intent serviceIntent = new Intent(this, NotificationService.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(serviceIntent);
+        } else {
+            startService(serviceIntent);
+        }
+
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

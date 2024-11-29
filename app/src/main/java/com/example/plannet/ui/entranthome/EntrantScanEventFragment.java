@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -42,6 +43,7 @@ public class EntrantScanEventFragment extends Fragment {
     private FirebaseFirestore firebaseDB;
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 100;
     private DecoratedBarcodeView barcodeView;
+    ImageView backArrow;
 
     /**
      *
@@ -73,6 +75,8 @@ public class EntrantScanEventFragment extends Fragment {
             String testHashedData = "blahblahbl1732235172282";  // Replace with your actual hashed data in Firebase
             fetchEventDetails(testHashedData);
         });
+        backArrow = view.findViewById(R.id.back_arrow);
+        backArrow.setOnClickListener(v -> requireActivity().onBackPressed());
 
         return view;
     }
