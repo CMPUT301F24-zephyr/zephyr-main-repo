@@ -92,9 +92,13 @@
 
     <ListView
         android:id="@+id/event_item_container"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/button3"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:divider="@color/white"
@@ -111,20 +115,6 @@
         app:layout_constraintEnd_toEndOf="@id/event_item_container"
         app:layout_constraintStart_toStartOf="@id/event_item_container"
         android:src="@drawable/listview_border" />
-
-
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="80dp"
-        android:layout_height="62dp"
-        android:layout_marginBottom="64dp"
-        android:backgroundTint="@color/NavigationBar"
-        android:drawableRight="@drawable/scan_qr_code"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.511"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/event_item_container" />
 
     <ImageView
         android:id="@+id/back_arrow"
