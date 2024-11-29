@@ -35,6 +35,8 @@ public class OrganizerViewEntrantInfoFragment extends Fragment {
     private EntrantProfile entrant = null;  // Default null
     private Event event = null;  // Default null
     private FirebaseConnector dbConnector = new FirebaseConnector();
+    private double latitude;
+    private double longitude;
 
     /**
      * onCreateView for what happens when the view is first created.
@@ -79,6 +81,22 @@ public class OrganizerViewEntrantInfoFragment extends Fragment {
                 //binding.profilePicture.setImageResource(NEW IMAGE);  // Remember to change the profile picture when that is implemented!
             }
         }
+        // set on click listener for map_icon to send to Map fragment class with latitude+longitude in viewmodel and show on map
+        binding.mapIcon.setOnClickListener(v -> {
+            if (binding != null) {
+                //Log.e("EntrantInfo", "latitude = " + entrant.getLatitude() + "longitude = " + entrant.getLongitude());
+                latitude = entrant.getLatitude();
+                longitude = entrant.getLongitude();
+                // Create a Bundle to pass data
+                Bundle bundle = new Bundle();
+                bundle.putDouble("latitude", latitude);
+                bundle.putDouble("longitude", longitude);
+
+                // Navigate to OrganizerViewEntrantMapFragment with the Bundle
+                NavController navController = Navigation.findNavController(v);
+                navController.navigate(R.id.action_organizerViewEntrantInfoFragment_to_organizerViewEntrantMapFragment, bundle);
+            }
+        });
 
         // button listener for back button
         binding.backArrow.setOnClickListener(v -> {

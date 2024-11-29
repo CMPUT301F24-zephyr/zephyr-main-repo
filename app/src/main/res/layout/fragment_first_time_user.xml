@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    android:background="@color/backgroundColor"
+    android:background="@drawable/background_gradient"
     tools:context=".ui.firsttimeuser.FirstTimeUserFragment">
 
     <ImageView
@@ -13,6 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
+        app:layout_constraintBottom_toTopOf="@+id/purple_box"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.619"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,34 +24,39 @@
         android:id="@+id/purple_box"
         android:layout_width="318dp"
         android:layout_height="200dp"
-        android:layout_marginStart="44dp"
-        android:layout_marginBottom="212dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.57"
         app:srcCompat="@drawable/rectangle" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="68dp"
-        android:layout_marginTop="44dp"
         android:fontFamily="@font/poppins"
         android:text="Welcome, user!"
         android:textColor="@color/white"
         android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@+id/purple_box"
+        app:layout_constraintEnd_toEndOf="@+id/purple_box"
+        app:layout_constraintHorizontal_bias="0.514"
         app:layout_constraintStart_toStartOf="@+id/purple_box"
-        app:layout_constraintTop_toTopOf="@+id/purple_box" />
+        app:layout_constraintTop_toTopOf="@+id/purple_box"
+        app:layout_constraintVertical_bias="0.162" />
 
     <Button
         android:id="@+id/button_welcome"
         android:layout_width="165dp"
         android:layout_height="53dp"
-        android:layout_marginStart="76dp"
         android:layout_marginTop="44dp"
         android:background="@color/buttonPurple"
         android:fontFamily="@font/poppins"
         android:text="Get Started"
+        app:layout_constraintBottom_toBottomOf="@+id/purple_box"
+        app:layout_constraintEnd_toEndOf="@+id/purple_box"
         app:layout_constraintStart_toStartOf="@+id/purple_box"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.orgnotifications.SendNotificationFragment"
-    android:background="@color/backgroundColor">
+    android:background="@drawable/background_gradient">
 
     <TextView
         android:id="@+id/title"
@@ -44,6 +44,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintVertical_bias="0.01"/>
 
+    <ImageView
+        android:id="@+id/back_arrow"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.069"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.022"
+        app:srcCompat="@drawable/back_arrow" />
 
     <CheckBox
         android:id="@+id/checkbox_waiting_list"
@@ -55,58 +66,71 @@
         android:textColor="@color/white"
         android:textSize="18sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/checkbox_selected_entrants"
-        app:layout_constraintTop_toBottomOf="@id/send_notification_title" />
+        app:layout_constraintTop_toBottomOf="@id/send_notification_title"
+        app:layout_constraintVertical_bias="0.058" />
 
     <CheckBox
         android:id="@+id/checkbox_selected_entrants"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:buttonTint="@color/buttonPurple"
         android:fontFamily="@font/poppins"
         android:text="Selected entrants"
         android:textColor="@color/white"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@id/checkbox_cancelled_entrants"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/checkbox_waiting_list" />
+        app:layout_constraintTop_toBottomOf="@+id/checkbox_waiting_list"
+        app:layout_constraintVertical_bias="0.027" />
 
     <CheckBox
         android:id="@+id/checkbox_cancelled_entrants"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
         android:buttonTint="@color/buttonPurple"
         android:fontFamily="@font/poppins"
         android:text="Cancelled entrants"
         android:textColor="@color/white"
         android:textSize="18sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/message_input"
-        app:layout_constraintTop_toBottomOf="@id/checkbox_selected_entrants" />
-
-    <TextView
-        android:id="@+id/message_prompt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins"
-        android:text="Message:"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/message_input"
-        app:layout_constraintTop_toTopOf="@+id/message_input" />
+        app:layout_constraintTop_toBottomOf="@+id/checkbox_selected_entrants"
+        app:layout_constraintVertical_bias="0.0" />
 
     <EditText
-        android:id="@+id/message_input"
+        android:id="@+id/body_input"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="116dp"
+        android:backgroundTint="@color/white"
+        android:ems="10"
+        android:fontFamily="@font/poppins"
+        android:hint="Maximum 100 characters"
+        android:inputType="textMultiLine"
+        android:maxLength="100"
+        android:textColor="@color/white"
+        android:textColorHint="@color/buttonGrey"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/send_notification_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toEndOf="@+id/message_prompt"
+        app:layout_constraintTop_toBottomOf="@+id/title_input"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <EditText
+        android:id="@+id/title_input"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/white"
@@ -118,11 +142,28 @@
         android:textColor="@color/white"
         android:textColorHint="@color/buttonGrey"
         android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.1"
-        app:layout_constraintStart_toEndOf="@+id/message_prompt"
-        app:layout_constraintBottom_toTopOf="@id/send_notification_button"
-        app:layout_constraintTop_toBottomOf="@+id/checkbox_cancelled_entrants" />
+        app:layout_constraintHorizontal_bias="0.578"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkbox_cancelled_entrants"
+        app:layout_constraintVertical_bias="0.158" />
+
+    <TextView
+        android:id="@+id/message_prompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:text="Message:"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/body_input"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.047"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/body_input"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/send_notification_button"
@@ -134,9 +175,25 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginBottom="100dp"
-        app:layout_constraintTop_toBottomOf="@id/message_input" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.925" />
+
+    <TextView
+        android:id="@+id/title_prompt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:text="Title:"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/title_input"
+        app:layout_constraintEnd_toStartOf="@+id/title_input"
+        app:layout_constraintHorizontal_bias="0.666"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/title_input" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

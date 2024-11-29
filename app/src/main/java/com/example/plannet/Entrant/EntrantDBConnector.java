@@ -91,7 +91,7 @@ public class EntrantDBConnector {
     }
 
     /**
-     *
+     * retrieves the user information from DB
      * @param userID
      * @param onSuccess
      * @param onFailure

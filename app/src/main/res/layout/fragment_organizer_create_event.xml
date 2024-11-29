@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.orghome.OrganizerCreateEventFragment"
-    android:background="@color/backgroundColor">
+    android:background="@drawable/background_gradient">
 
 
     <TextView
@@ -39,7 +39,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title_underline"
-        app:layout_constraintVertical_bias="0.05"
+        app:layout_constraintVertical_bias="0.294"
         app:srcCompat="@drawable/rectangle_long" />
 
     <ImageView
@@ -391,24 +391,28 @@
         android:id="@+id/cancel_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cancel"
         android:fontFamily="@font/poppins"
+        android:text="Cancel"
         android:textAllCaps="false"
         android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/generate_qr_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/purple_box"
-        app:layout_constraintEnd_toStartOf="@id/generate_qr_button"/>
+        app:layout_constraintVertical_bias="0.304" />
 
     <Button
         android:id="@+id/generate_qr_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Generate QR"
         android:fontFamily="@font/poppins"
+        android:text="Generate QR"
         android:textAllCaps="false"
         android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@id/cancel_button"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/purple_box"/>
+        app:layout_constraintStart_toEndOf="@id/cancel_button"
+        app:layout_constraintTop_toBottomOf="@+id/purple_box"
+        app:layout_constraintVertical_bias="0.304" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

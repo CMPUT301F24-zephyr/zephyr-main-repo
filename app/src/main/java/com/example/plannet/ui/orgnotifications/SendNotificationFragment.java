@@ -16,6 +16,10 @@ import com.example.plannet.Event.Event;
 import com.example.plannet.FirebaseConnector;
 import com.example.plannet.FirestoreCallback;
 import com.example.plannet.databinding.FragmentOrganizerSendNotificationBinding;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * class for org notification manager
@@ -55,32 +59,36 @@ public class SendNotificationFragment extends Fragment {
         CheckBox selectedEntrantsCheckBox = binding.checkboxSelectedEntrants;
         CheckBox cancelledEntrantsCheckBox = binding.checkboxCancelledEntrants;
 
+
+        // back button listener
+        binding.backArrow.setOnClickListener(v -> requireActivity().onBackPressed());
+
+
         // Set OnClickListener for the Button
-
-
         binding.sendNotificationButton.setOnClickListener(v -> {
-            String body = binding.messageInput.getText().toString();
+            String body = binding.bodyInput.getText().toString();
+            String title = binding.titleInput.getText().toString();
 
             // make a switch case/if statements depending on waitlist checks.
             boolean isWaitingListChecked = waitingListCheckBox.isChecked();
             boolean isSelectedEntrantsChecked = selectedEntrantsCheckBox.isChecked();
             boolean isCancelledEntrantsChecked = cancelledEntrantsCheckBox.isChecked();
-            if (body.isEmpty()) {
-                Toast.makeText(getContext(), "Must write a body message!", Toast.LENGTH_SHORT).show();
+            if (body.isEmpty() || title.isEmpty()) {
+                Toast.makeText(getContext(), "Must write a title/body message!", Toast.LENGTH_SHORT).show();
             } else {
 
                 if (isWaitingListChecked) {
                     // send notif to pending users (ones who just signed up)
-                    sendNotification(eventID, "waitlist_pending", body);
+                    sendNotification(eventID, "waitlist_pending", title, body);
                 }
                 if (isSelectedEntrantsChecked) {
                     // send notif to selected/lottery winners entrants
-                    sendNotification(eventID, "waitlist_selected", body);
+                    sendNotification(eventID, "waitlist_selected", title, body);
                 }
                 if (isCancelledEntrantsChecked) {
                     // send notif to cancelled/rejected entrants
                     // this is simply waitlist_pending - waitlist_selected
-                    sendNotification(eventID, "waitlist_cancelled", body);
+                    sendNotification(eventID, "waitlist_cancelled", title, body);
                 }
                 if (!isWaitingListChecked && !isSelectedEntrantsChecked && !isCancelledEntrantsChecked){
                     Toast.makeText(getContext(), "Must make a selection first!", Toast.LENGTH_SHORT).show();
@@ -91,23 +99,37 @@ public class SendNotificationFragment extends Fragment {
             return root;
     }
 
-    private void sendNotification(String eventID, String waitlist, String body) {
+    private void sendNotification(String eventID, String waitlist, String title, String body) {
         // Send notifications to entrants in specific waitlists
-        fireCon.RetrieveAndStoreUserIDs(eventID, waitlist, body, new FirestoreCallback() {
+        fireCon.RetrieveUserIDsFromEvent(eventID, waitlist, new FirestoreCallback() {
             @Override
             public void onSuccess(String[] userIDs) {
-                // Handle success case
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+
                 for (String userID : userIDs) {
                     Log.d("SendNotification", "User ID: " + userID);
+
+                    // notification data in a Map
+                    Map<String, Object> notificationData = new HashMap<>();
+                    notificationData.put("title", title);
+                    notificationData.put("body", body);
+
+                    db.collection("notifications")
+                            .document(userID)
+                            .set(notificationData)
+                            .addOnSuccessListener(aVoid -> Log.d("SendNotification", "Notification sent to: " + userID))
+                            .addOnFailureListener(e -> Log.e("SendNotification", "Failed to send notification to " + userID, e));
                 }
-                Toast.makeText(getContext(), "Notification success!", Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(getContext(), "Notifications sent successfully!", Toast.LENGTH_SHORT).show();
+                binding.bodyInput.setText("");
+                binding.titleInput.setText("");
             }
 
             @Override
             public void onFailure(Exception e) {
-                // Handle failure case
                 Log.e("SendNotification", "Error fetching user IDs: " + e.getMessage());
-                Toast.makeText(getContext(), "Notification delivery failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Notification delivery failed :(", Toast.LENGTH_SHORT).show();
 
             }
         });

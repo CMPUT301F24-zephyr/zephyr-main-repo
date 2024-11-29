@@ -33,14 +33,11 @@
         android:theme="@style/Theme.PlanNet"
         tools:targetApi="31">
 
-        <!-- FCM configuration service -->
-        <service
-            android:name="com.google.firebase.messaging.FirebaseMessagingService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
+        <!-- Google Maps API Key -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBi0ZfaoaW8hogvkpv3z0OznlpYeGyHRK4" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

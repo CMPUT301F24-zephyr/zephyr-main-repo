@@ -36,7 +36,27 @@ public class FirebaseConnector {
     }
 
     /**
-     * Adds data to a specified collection in the database.
+     * check if device is already on DB
+     * @param collectionName
+     * @param deviceID
+     * @param callback
+     */
+    public void checkIfDeviceIDinDB(String collectionName, String deviceID, CheckDeviceIDCallback callback) {
+        db.collection(collectionName)
+                .document(deviceID)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        callback.onDeviceIDFound();
+                    } else {
+                        callback.onDeviceIDNotFound();
+                    }
+                })
+                .addOnFailureListener(callback::onError);
+    }
+
+    /**
+     * add data from a given collectionPath & documentID
      * @param collectionPath
      * @param documentID
      * @param data
@@ -68,6 +88,12 @@ public class FirebaseConnector {
                 .addOnFailureListener(onFailure);
     }
 
+    /**
+     * check if device is already on DB
+     * @param deviceID
+     * @param onSuccess
+     * @param onFailure
+     */
     public void checkIfDeviceExists(String deviceID, OnSuccessListener<DocumentSnapshot> onSuccess, OnFailureListener onFailure) {
         db.collection("users").document(deviceID).get()
                 .addOnSuccessListener(onSuccess)
@@ -100,7 +126,7 @@ public class FirebaseConnector {
     }
 
     /**
-     *
+     * add event information to DB
      * @param deviceID
      * @param eventID
      * @param eventDetails
@@ -127,6 +153,11 @@ public class FirebaseConnector {
                 });
     }
 
+    /**
+     * add a joined event to a user's profile on DB
+     * @param deviceID
+     * @param eventID
+     */
     public void addJoinedEvent(String deviceID, String eventID) {
         // Adds eventID to the joinedEvents array under the user's document
         db.collection("users").document(deviceID)
@@ -240,12 +271,11 @@ public class FirebaseConnector {
 
 
     /**
-     *
+     * get all organizer events using their userID
+     * Resource for callback: https://www.baeldung.com/java-callback-functions
      * @param userID
      * @param callback
      */
-    // See OrganizerHashedQrListFragment.java for how to use
-    // Resource for callback: https://www.baeldung.com/java-callback-functions
     public void getOrganizerEventsList(String userID, GetOrganizerEventsCallback callback) {
         ArrayList<Event> events = new ArrayList<>();
 
@@ -360,7 +390,7 @@ public class FirebaseConnector {
     }
 
     /**
-     *
+     * get a user's joined events list from DB
      * @param userID
      * @param onSuccess
      * @param onFailure
@@ -431,10 +461,17 @@ public class FirebaseConnector {
                             String firstName = doc.getString("firstName");
                             String lastName = doc.getString("lastName");
                             String profilePic = doc.getString("profilePictureUrl");
+
+                            // Handle potential null values for latitude and longitude
+                            Double latitudeObj = doc.getDouble("entrantlatitude");
+                            Double longitudeObj = doc.getDouble("entrantlongitude");
+
+                            double latitude = latitudeObj != null ? latitudeObj : 0.0;
+                            double longitude = longitudeObj != null ? longitudeObj : 0.0;
                             Log.d("Firestore WaitlistEntrants", "waitlist_" + status + " - user received with ID: " + userID);
 
                             // Now we create the object:
-                            EntrantProfile entrant = new EntrantProfile(userID, firstName, lastName, email, phone, profilePic, notifs, status);
+                            EntrantProfile entrant = new EntrantProfile(userID, firstName, lastName, email, phone, profilePic, notifs, status, latitude, longitude);
                             entrants.add(entrant);
                         }
 
@@ -448,50 +485,28 @@ public class FirebaseConnector {
     }
 
     /**
-     * method to get all the userIDs in a waitlist and add a new document on firebase which contains the message
+     * method to get all the userIDs in a waitlist
      * @param eventID
      * @param waitlist
-     * @param message
      * @param callback
      */
-    public void RetrieveAndStoreUserIDs(String eventID, String waitlist, String message, FirestoreCallback callback) {
-        // Firestore database reference
+    public void RetrieveUserIDsFromEvent(String eventID, String waitlist, FirestoreCallback callback) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        // Reference to the "events -> eventID -> waitlist" collection
+        // ref document "events -> eventID -> waitlist" collection
         CollectionReference waitlistRef = db.collection("events")
                 .document(eventID)
                 .collection(waitlist);
 
-        // Fetch user IDs from the specified waitlist collection
         waitlistRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 ArrayList<String> userIDs = new ArrayList<>();
                 for (QueryDocumentSnapshot document : task.getResult()) {
-                    // Add each document ID (userID) to the list
                     userIDs.add(document.getId());
                 }
 
-                // Create a map for the "notifications" data
-                Map<String, Object> notificationData = new HashMap<>();
-                notificationData.put("message", message); // organizer message
-                notificationData.put("userIDs", userIDs); // list of user IDs
-
-                // Write the data to the "notifications -> eventID" document
-                db.collection("notifications")
-                        .document(eventID)
-                        .set(notificationData)
-                        .addOnSuccessListener(aVoid -> {
-                            // Success callback
-                            callback.onSuccess(userIDs.toArray(new String[0]));
-                        })
-                        .addOnFailureListener(e -> {
-                            // Failure callback for writing to the database
-                            callback.onFailure(e);
-                        });
-
+                callback.onSuccess(userIDs.toArray(new String[0]));
             } else {
-                // Failure callback for retrieving user IDs
                 callback.onFailure(task.getException());
             }
         });

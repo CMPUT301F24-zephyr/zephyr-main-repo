@@ -16,6 +16,9 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 
+/**
+ * QRGenerator class to generate QR codes with eventID as the parameter used
+ */
 public class QRGenerator {
     //FirebaseConnector fireCon;
     FirebaseFirestore db = FirebaseFirestore.getInstance();

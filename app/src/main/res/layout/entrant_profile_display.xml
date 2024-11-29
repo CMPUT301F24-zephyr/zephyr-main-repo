@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backgroundColor">
+    android:background="@drawable/background_gradient">
 
 
     <TextView
@@ -32,14 +32,14 @@
         app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imageView11"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_bias="0.088"
         app:srcCompat="@drawable/rectangle" />
 
     <TextView
         android:id="@+id/location_prompt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="LOCATION"
+        android:text="Location:"
         android:textColor="@color/white"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/info_background"
@@ -53,7 +53,7 @@
         android:id="@+id/first_name_prompt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="FIRST NAME"
+        android:text="First Name:"
         android:textColor="@color/white"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/info_background"
@@ -68,7 +68,7 @@
         android:layout_width="259dp"
         android:layout_height="43dp"
         android:backgroundTint="@color/white"
-        android:hint="FIRST_NAME"
+        android:hint="First Name"
         android:inputType="text"
         android:textColor="@color/white"
         android:textColorHint="@color/buttonGrey"
@@ -85,7 +85,7 @@
         android:id="@+id/last_name_prompt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="LAST NAME"
+        android:text="Last Name:"
         android:textColor="@color/white"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/info_background"
@@ -100,7 +100,7 @@
         android:layout_width="259dp"
         android:layout_height="39dp"
         android:backgroundTint="@color/white"
-        android:hint="LAST_NAME"
+        android:hint="Last Name"
         android:inputType="text"
         android:textColor="@color/white"
         android:textColorHint="@color/buttonGrey"
@@ -113,12 +113,11 @@
         app:layout_constraintVertical_bias="0.275" />
 
 
-
     <TextView
         android:id="@+id/phone_prompt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="PHONE"
+        android:text="Phone:"
         android:textColor="@color/white"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/info_background"
@@ -133,7 +132,7 @@
         android:layout_width="266dp"
         android:layout_height="44dp"
         android:backgroundTint="@color/white"
-        android:hint="PHONE NUMBER"
+        android:hint="Phone Number"
         android:inputType="phone"
         android:textColor="@color/white"
         android:textColorHint="@color/buttonGrey"
@@ -150,7 +149,7 @@
         android:id="@+id/email_prompt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="EMAIL"
+        android:text="Email:"
         android:textColor="@color/white"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/info_background"
@@ -184,9 +183,11 @@
         android:fontFamily="@font/poppins"
         android:text="Tap picture to edit!"
         android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/profile_text" />
+        app:layout_constraintTop_toBottomOf="@id/profile_text"
+        app:layout_constraintVertical_bias="0.015" />
 
     <Button
         android:id="@+id/remove_pfp"
@@ -204,18 +205,22 @@
         android:id="@+id/imageView11"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:clickable="true"
-        android:focusable="true"
+        android:layout_marginTop="4dp"
         android:background="@drawable/circle_shape"
+        android:clickable="true"
         android:clipToOutline="true"
+        android:focusable="true"
         android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tap_to_edit"
+        app:layout_constraintVertical_bias="0.029"
         app:srcCompat="@drawable/profile" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/update_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/buttonPurple"

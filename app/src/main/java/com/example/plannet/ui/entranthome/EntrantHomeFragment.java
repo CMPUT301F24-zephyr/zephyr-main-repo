@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,7 +37,7 @@ public class EntrantHomeFragment extends Fragment {
 
     private FragmentHomeEntrantBinding binding;
     private EntrantHomeViewModel entrantHomeViewModel;
-
+    private Button adminButton;
 
 
     /**
@@ -70,6 +71,7 @@ public class EntrantHomeFragment extends Fragment {
         // Inflate the layout for this fragment and set up View Binding
         binding = FragmentHomeEntrantBinding.inflate(inflater, container, false);
 //        binding.buttonAdminn.setVisibility(View.INVISIBLE);
+        adminButton = binding.buttonAdminn;
         String userID = Settings.Secure.getString(requireContext().getContentResolver(), Settings.Secure.ANDROID_ID);
         checkIfUserIsAdmin(userID);
 
@@ -147,7 +149,9 @@ public class EntrantHomeFragment extends Fragment {
                             (String) userInfo.get("email"),
                             (String) userInfo.get("phone"),
                             (String) userInfo.get("profilePictureUrl"),
-                            userInfo.get("notifsActivated") != null && (Boolean) userInfo.get("notifsActivated")
+                            userInfo.get("notifsActivated") != null && (Boolean) userInfo.get("notifsActivated"),
+                            userInfo.get("latitude") != null ? (Double) userInfo.get("latitude") : 0.0,
+                            userInfo.get("longitude") != null ? (Double) userInfo.get("longitude") : 0.0
                     );
 
                     // Fetch and populate joined events into waitlists
@@ -201,7 +205,7 @@ public class EntrantHomeFragment extends Fragment {
         });
 
         // admin button
-        binding.buttonAdminn.setOnClickListener(v -> {
+        adminButton.setOnClickListener(v -> {
             NavController navController = Navigation.findNavController(v);
             navController.navigate(R.id.action_entranthome_to_admin);
         });
@@ -220,14 +224,17 @@ public class EntrantHomeFragment extends Fragment {
         // fetch profile picture from Firebase every time the view is loaded (in case the user changes it)
         firebaseConnector.getUserInfo(userID,
                 userInfo -> {
-                    String profilePictureUrl = (String) userInfo.get("profilePictureUrl");
-                    if (profilePictureUrl != null && !profilePictureUrl.isEmpty()) {
-                        Log.d("EntrantHomeFragment", "Loading profile picture with URL: " + profilePictureUrl);
-                        loadProfilePicture(profilePictureUrl);
+                    if (isAdded() && binding != null) { // Ensure the fragment is still attached
+                        String profilePictureUrl = (String) userInfo.get("profilePictureUrl");
+                        if (profilePictureUrl != null && !profilePictureUrl.isEmpty()) {
+                            Log.d("EntrantHomeFragment", "Loading profile picture with URL: " + profilePictureUrl);
+                            loadProfilePicture(profilePictureUrl);
+                        } else {
+                            Log.d("EntrantHomeFragment", "No profile picture uploaded, generating profile picture from name: " + userID);
+                            generateDefaultProfilePic(userID);
+                        }
                     } else {
-                        // If not, get default profile picture from a web API that generates pictures using a seed
-                        Log.d("EntrantHomeFragment", "No profile picture uploaded, generating profile picture from name: " + userID);
-                        generateDefaultProfilePic(userID);
+                        Log.e("EntrantHomeFragment", "Fragment is not attached or binding is null");
                     }
                 },
                 error -> Log.e("EntrantHomeFragment", "Failed to refresh profile picture", error)
@@ -253,7 +260,7 @@ public class EntrantHomeFragment extends Fragment {
                             isAdmin = true;
                             // Show admin button here
                             //
-                            binding.buttonAdminn.setVisibility(View.VISIBLE);
+                            adminButton.setVisibility(View.VISIBLE);
                             break;
                         }
                     }
@@ -279,10 +286,14 @@ public class EntrantHomeFragment extends Fragment {
      *      The user ID to generate the picture from
      */
     private void generateDefaultProfilePic(String username) {
-        Glide.with(this)
-                .load("https://robohash.org/" + username + ".png")
-                .placeholder(R.drawable.profile)
-                .into(binding.profilePicture);
+        if (binding != null) {
+            Glide.with(this)
+                    .load("https://robohash.org/" + username + ".png")
+                    .placeholder(R.drawable.profile)
+                    .into(binding.profilePicture);
+        } else {
+            Log.e("EntrantHomeFragment", "Binding is null in generateDefaultProfilePic");
+        }
     }
 
     /**
