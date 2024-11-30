@@ -14,27 +14,29 @@ public class LotterySystem {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     /**
      * Performs a lottery draw to randomly select a number of participants from the pending waitlist.
+     * Returns a list of profiles that are selected.
+     * @param numToDraw
+     *      The number of participants to draw
+     * @param pendingWaitlist
+     *      A list of EntrantProfiles to draw from
+     * @return
+     *      A list of EntrantProfiles that are selected
      */
-    public List<EntrantProfile> drawParticipants(EventWaitlistPending pendingWaitlist, int numToDraw) {
+    public List<EntrantProfile> drawParticipants(List<EntrantProfile> pendingWaitlist, int numToDraw) {
         Random random = new Random();
 
         List<EntrantProfile> selectedParticipants = new ArrayList<>();
-        List<EntrantProfile> waitingList = pendingWaitlist.getWaitlistEntrants();// Get the pending entreants from the waiting list
 
         // Ensure we do not draw more participants than the number of entrants in the waiting list
-        if (numToDraw > waitingList.size()) {
-            numToDraw = waitingList.size();
+        if (numToDraw > pendingWaitlist.size()) {
+            numToDraw = pendingWaitlist.size();
         }
 
         // Randomly select participants until we have draw the number of people we want
         while (selectedParticipants.size() < numToDraw) {
-            int randomIndex = random.nextInt(waitingList.size());
-            EntrantProfile selectedEntrant = waitingList.get(randomIndex);
-
-            //check the selected list to make sure there is no duplication
-            if (!selectedParticipants.contains(selectedEntrant)) {
-                selectedParticipants.add(selectedEntrant);
-            }
+            int randomIndex = random.nextInt(pendingWaitlist.size());
+            EntrantProfile selectedEntrant = pendingWaitlist.remove(randomIndex);  // .remove is like .pop() in other languages
+            selectedParticipants.add(selectedEntrant);
         }
 
         return selectedParticipants;
@@ -109,7 +111,8 @@ public class LotterySystem {
         // Ensure there are entrants left in the pending list
         //if there are still entrants left, repeat the steps of adding and removing entrants
         if (!pendingList.isEmpty()) {
-            EntrantProfile newParticipant = drawParticipants(pendingWaitlist, 1).get(0);// Randomly select one entrant
+            // Jon changed pendingWaitlist on this line to PendingList. It was causing errors.
+            EntrantProfile newParticipant = drawParticipants(pendingList, 1).get(0);// Randomly select one entrant
             chosenWaitlist.addChosenEntrant(newParticipant);
             pendingWaitlist.removeEntrant(newParticipant);
 

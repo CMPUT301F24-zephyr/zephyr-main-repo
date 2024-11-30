@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:context=".ui.orglottery.OrganizerRunLottery"
     android:background="@drawable/background_gradient">
 
     <TextView
@@ -80,21 +81,6 @@
         app:layout_constraintHorizontal_bias="0.1"
         app:layout_constraintStart_toStartOf="@+id/purple_box"
         app:layout_constraintTop_toTopOf="@+id/purple_box"
-        app:layout_constraintBottom_toTopOf="@id/checkbox_add_chosen"/>
-
-    <CheckBox
-        android:id="@+id/checkbox_add_chosen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:buttonTint="@color/buttonPurple"
-        android:fontFamily="@font/poppins"
-        android:text="Add to &quot;Chosen&quot; list"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/purple_box"
-        app:layout_constraintStart_toStartOf="@+id/purple_box"
-        app:layout_constraintTop_toBottomOf="@+id/amount_prompt"
         app:layout_constraintBottom_toTopOf="@id/clarification"/>
 
     <TextView
@@ -102,12 +88,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins"
-        android:text="Entrants will be chosen from current waiting list."
+        android:text="Entrants will be chosen from current waiting list.\n\nChosen entrants will be removed from pending."
         android:textColor="@color/white"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="@+id/purple_box"
         app:layout_constraintStart_toStartOf="@+id/purple_box"
-        app:layout_constraintTop_toBottomOf="@+id/checkbox_add_chosen"
+        app:layout_constraintTop_toBottomOf="@+id/amount_prompt"
         app:layout_constraintBottom_toTopOf="@id/draw_button"/>
 
     <EditText
@@ -130,5 +116,15 @@
         app:layout_constraintStart_toEndOf="@+id/amount_prompt"
         app:layout_constraintTop_toTopOf="@+id/amount_prompt" />
 
-
+    <ImageView
+        android:id="@+id/back_arrow"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="@+id/title"
+        app:layout_constraintEnd_toStartOf="@+id/title"
+        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/back_arrow" />
 </androidx.constraintlayout.widget.ConstraintLayout>
