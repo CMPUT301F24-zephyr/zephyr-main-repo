@@ -64,7 +64,7 @@ public class OrganizerProfile {
     public void removeEvent(Event event) {
         events.remove(event);
     }
-
+    
     public ArrayList<Event> getEvents() {
         return events;
     }
