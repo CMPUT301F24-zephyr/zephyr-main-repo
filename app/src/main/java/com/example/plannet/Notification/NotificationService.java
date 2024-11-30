@@ -12,7 +12,11 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class NotificationService extends Service {
 
@@ -72,26 +76,52 @@ public class NotificationService extends Service {
 
     public void startListeningForNotifications() {
         db.collection("notifications")
-                .document(userID)//.whereArrayContains("userIDs", userID)
+                .document(userID)
+                .collection("Notifications")
                 .addSnapshotListener((snapshots, error) -> {
                     if (error != null) {
-                        error.printStackTrace();
+                        Log.e("NotificationService", "Error listening for notifications", error);
                         return;
                     }
 
-                    if (snapshots != null && snapshots.exists()) {
-                        String title = snapshots.getString("title");
-                        String body = snapshots.getString("body");
-                        Log.d("NotificationService", "New notification detected: " + title);
-                        showSystemNotification(title, body);
+                    if (snapshots != null) {
+                        for (DocumentSnapshot doc : snapshots.getDocuments()) {
+                            String title = doc.getString("title");
+                            String body = doc.getString("body");
+                            String type = doc.getString("type");
+                            String docId = doc.getId();
 
-                        db.collection("notifications").document(userID)
-                                .delete()
-                                .addOnSuccessListener(aVoid -> Log.d("NotificationService", "Notification deleted for userID: " + userID))
-                                .addOnFailureListener(e -> Log.e("NotificationService", "Error deleting notification", e));
+                            Log.d("NotificationService", "New notification detected: " + title);
+                            showSystemNotification(title, body);
+
+                            if ("Invite".equals(type)) {
+                                // Add invite to invites subcollection
+                                Map<String, Object> inviteData = new HashMap<>();
+                                inviteData.put("eventName", title);
+                                inviteData.put("location", body);
+                                inviteData.put("status", "pending");
+
+                                db.collection("notifications")
+                                        .document(userID)
+                                        .collection("invites")
+                                        .add(inviteData)
+                                        .addOnSuccessListener(aVoid -> Log.d("NotificationService", "Invite added to subcollection"))
+                                        .addOnFailureListener(e -> Log.e("NotificationService", "Error adding invite to subcollection", e));
+                            }
+
+                            // Delete notification when unloaded
+                            db.collection("notifications")
+                                    .document(userID)
+                                    .collection("Notifications")
+                                    .document(docId)
+                                    .delete()
+                                    .addOnSuccessListener(aVoid -> Log.d("NotificationService", "Notification deleted for userID: " + userID))
+                                    .addOnFailureListener(e -> Log.e("NotificationService", "Error deleting notification", e));
+                        }
                     }
                 });
     }
+
 
     private void showSystemNotification(String title, String body) {
         Log.d("NotificationService", "Displaying notification with message: " + title);
