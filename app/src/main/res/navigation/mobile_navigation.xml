@@ -246,6 +246,9 @@
         <action
             android:id="@+id/action_organizerRunLottery_to_organizerLotteryManager"
             app:destination="@id/organizerLotteryManager" />
+        <action
+            android:id="@+id/action_organizerRunLottery_to_navigation_orghome"
+            app:destination="@id/navigation_orghome" />
     </fragment>
 
 

@@ -101,22 +101,14 @@ public class OrganizerRunLottery extends Fragment {
                     else {
                         List<EntrantProfile> selected = new ArrayList<>(lotto.drawParticipants(pending, Integer.parseInt(howMany)));
                         for (EntrantProfile entrant: selected){
-                            removeFromPending(entrant, event);
-                            addToChosen(entrant, event);
+                            dbConnector.moveToWaitlist(event.getEventID(), entrant.getUserId());
                         }
+                        Toast.makeText(getContext(), "Success! " + selected.size() + "Entrants chosen.", Toast.LENGTH_SHORT).show();
+                        // Navigate back to home
+                        NavController navController = Navigation.findNavController(v);
+                        navController.navigate(R.id.action_organizerRunLottery_to_navigation_orghome);
                     }
                 });
-            }
-            if (event != null) {
-                // Bundle the event again to send to new page
-                Bundle passedEventBundle = new Bundle();
-                Log.d("Organizer View Event", "Bundling event with name: " + event.getEventName());
-                passedEventBundle.putSerializable("event", event);
-
-                // Navigate to the new fragment
-                NavController navController = Navigation.findNavController(v);
-                // Don't forget to pass the bundle!
-                navController.navigate(R.id.action_organizerViewEventFragment_to_organizerViewEntrantsFragment, passedEventBundle);
             }
             else {
                 // Somehow the user got to this page and the event did not bundle
@@ -125,16 +117,6 @@ public class OrganizerRunLottery extends Fragment {
         });
 
         return root;
-    }
-
-    private void addToChosen(EntrantProfile entrant, Event event) {
-        // leaving errors here so we see it
-        THIS NEEDS TO BE IMPLEMENTED
-    }
-
-    private void removeFromPending(EntrantProfile entrant, Event event) {
-        // leaving errors here so we see it
-        THIS NEEDS TO BE IMPLEMENTED
     }
 
     @Override
