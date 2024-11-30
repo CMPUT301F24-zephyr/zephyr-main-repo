@@ -6,24 +6,13 @@ import com.example.plannet.Event.Event;
 
 import java.util.ArrayList;
 
-/**
- * Stores the information about an organizer, including their user ID, the facility they own,
- * An arraylist of all their QR code hashes, and an arraylist of their events.
- */
 public class OrganizerProfile {
     private String userID;
     private Facility facility;
     private ArrayList<String> qrCodeHashes;
     private ArrayList<Event> events;
 
-    /**
-     * Coonstructor. Initializes an organizer profile with a user ID and a facility.
-     *
-     * @param userID
-     *      The user id of the organizer.
-     * @param facility
-     *      The facility managed by the organizer.
-     */
+    // Constructor
     public OrganizerProfile(String userID, Facility facility) {
         this.userID = userID;
         this.facility = facility;
@@ -64,7 +53,7 @@ public class OrganizerProfile {
     public void removeEvent(Event event) {
         events.remove(event);
     }
-
+    
     public ArrayList<Event> getEvents() {
         return events;
     }
