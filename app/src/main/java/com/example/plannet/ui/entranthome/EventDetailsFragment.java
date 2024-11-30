@@ -127,7 +127,7 @@ public class EventDetailsFragment extends Fragment {
                                             Toast.makeText(getContext(), "Successfully added to pending waitlist (both user and event).", Toast.LENGTH_SHORT).show();
                                             //Call helper function to queue Notification
                                             EntrantNotifications notifications = new EntrantNotifications();
-                                            notifications.queueNotification(userID, "Congrats1", "You have been added to the pending waitlist for " + title.getText().toString());
+                                            notifications.queueNotification(userID, "Congrats!", "You have been added to the pending waitlist for " + title.getText().toString(), null);
                                         },
                                         waitlistFailure -> {
                                             Toast.makeText(getContext(), "Failed to update user's pending waitlist.", Toast.LENGTH_SHORT).show();
