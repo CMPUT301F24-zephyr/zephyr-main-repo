@@ -23,6 +23,10 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class NotificationManagerFragment extends Fragment {
+    /**
+     * this is where the organizer chooses one of their events to send notifications
+     * to its registered entrants
+     */
     private FragmentOrganizerNotificationManagerBinding binding;
     private FirebaseConnector dbConnector = new FirebaseConnector();
     @Override

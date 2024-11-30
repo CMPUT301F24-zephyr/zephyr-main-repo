@@ -16,19 +16,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+import com.example.plannet.ArrayAdapters.AdminEventListAdapter;
+import com.example.plannet.ArrayAdapters.AdminFacilityListAdapter;
 import com.example.plannet.ArrayAdapters.AdminImageListAdapter;
+import com.example.plannet.ArrayAdapters.AdminUserListAdapter;
+import com.example.plannet.Organizer.Facility;
 import com.example.plannet.R;
 import com.example.plannet.databinding.FragmentHomeAdminBinding;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -40,15 +43,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
-/**
- * admin fragment with list dialogs to show the intended tasks
- * Sources:
- * https://javascript.plainenglish.io/introduction-to-firebase-storage-2-retrieve-delete-files-3875f11e6a89
- * https://www.geeksforgeeks.org/custom-arrayadapter-with-listview-in-android/
- * https://firebase.google.com/docs/storage/web/download-files
- */
+
 public class AdminHomeFragment extends Fragment {
+    /**
+     * admin fragment with list dialogs to show the intended tasks
+     * Sources:
+     * https://javascript.plainenglish.io/introduction-to-firebase-storage-2-retrieve-delete-files-3875f11e6a89
+     * https://www.geeksforgeeks.org/custom-arrayadapter-with-listview-in-android/
+     * https://firebase.google.com/docs/storage/web/download-files
+     */
 
     private FragmentHomeAdminBinding binding;
 
@@ -86,6 +91,9 @@ public class AdminHomeFragment extends Fragment {
             getAllEventsWithMapping().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     Pair<ArrayList<String>, Map<String, String>> result = task.getResult();
+                    // using mapping and updating both objects synchrounosly to help with
+                    // deleting entries with names as fields
+                    // similar to a dictionary in python
                     ArrayList<String> eventNames = result.first;
                     Map<String, String> nameToIdMap = result.second;
 
@@ -103,7 +111,7 @@ public class AdminHomeFragment extends Fragment {
         binding.viewAllFacilities.setOnClickListener(v -> {
             fetchFacilitiesFromFirebase().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
-                    ArrayList<String> facilities = task.getResult();
+                    ArrayList<Facility> facilities = task.getResult();
                     if (!facilities.isEmpty()) {
                         showFacilitiesDialog("Facilities", facilities);
                     } else {
@@ -180,7 +188,7 @@ public class AdminHomeFragment extends Fragment {
                     ArrayList<String> users = task.getResult();
                     if (!users.isEmpty()) {
                         // show the users in a dialog or update UI
-                        showListDialog("Users", "users", users);
+                        showUsersDialog("Users", "users", users);
                     } else {
                         // empty list case
                         Toast.makeText(requireContext(), "No users found.", Toast.LENGTH_SHORT).show();
@@ -198,7 +206,7 @@ public class AdminHomeFragment extends Fragment {
     }
 
     /**
-     * Show a dialog with a list of items and a delete option (works for qr+users)
+     * Show a dialog with a list of items and a delete option (works for qr)
      * @param title
      * @param items
      */
@@ -223,6 +231,52 @@ public class AdminHomeFragment extends Fragment {
                         // delete from Firebase
                         deleteEntryFromDatabase(selectedItem, collection, success -> {
                             if (success) {
+                                // update UI after successful deletion
+                                items.remove(position);
+                                adapter.notifyDataSetChanged();
+                                Toast.makeText(requireContext(), "Deleted: " + selectedItem, Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(requireContext(), "Failed to delete: " + selectedItem, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    })
+                    .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                    .show();
+        });
+
+        builder.setView(listView);
+        builder.setNegativeButton("Close", (dialog, which) -> dialog.dismiss());
+        builder.show();
+    }
+
+    /**
+     * get userIDs and names and add to dialog
+     * @param title
+     * @param collection
+     * @param items
+     */
+    private void showUsersDialog(String title, String collection, ArrayList<String> items) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle(title);
+
+        // Adapter to display the list of items
+        AdminUserListAdapter adapter = new AdminUserListAdapter(requireContext(), items);
+
+        ListView listView = new ListView(requireContext());
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener((parent, view, position, id) -> {
+            String selectedItem = items.get(position);
+
+            // ask user to confirm deletion
+            new AlertDialog.Builder(requireContext())
+                    .setTitle("Delete Entry")
+                    .setMessage("Are you sure you want to delete " + selectedItem + "?")
+                    .setPositiveButton("Delete", (dialog, which) -> {
+                        // delete from Firebase
+                        deleteEntryFromDatabase(selectedItem, collection, success -> {
+                            if (success) {
+                                Log.e("removeUser", "selectedItem value = " + selectedItem);
                                 // update UI after successful deletion
                                 items.remove(position);
                                 adapter.notifyDataSetChanged();
@@ -329,7 +383,7 @@ public class AdminHomeFragment extends Fragment {
                         taskCompletionSource.setResult(imageUrls);
                     });
                 } else {
-                    taskCompletionSource.setResult(imageUrls); // No images found
+                    taskCompletionSource.setResult(imageUrls);
                 }
             } else {
                 taskCompletionSource.setException(task.getException());
@@ -344,46 +398,37 @@ public class AdminHomeFragment extends Fragment {
      * @param title
      * @param items
      */
-    private void showFacilitiesDialog(String title, ArrayList<String> items) {
+    private void showFacilitiesDialog(String title, ArrayList<Facility> items) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle(title);
 
-        // Adapter to display the list of items
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, items);
+        //custom FacilityAdapter
+        AdminFacilityListAdapter adapter = new AdminFacilityListAdapter(requireContext(), items);
 
         ListView listView = new ListView(requireContext());
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener((parent, view, position, id) -> {
-            String selectedItem = items.get(position);
+            Facility selectedFacility = items.get(position);
 
-            // Extract facilityName and facilityLocation from the selected item
-            String[] parts = selectedItem.split(" - ");
-            if (parts.length != 2) {
-                Toast.makeText(requireContext(), "Invalid facility format.", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            String facilityName = parts[0];
-            String facilityLocation = parts[1];
+            String facilityName = selectedFacility.getFacilityName();
+            String facilityLocation = selectedFacility.getFacilityLocation();
 
-            // Ask user to confirm deletion
             new AlertDialog.Builder(requireContext())
                     .setTitle("Delete Entry")
-                    .setMessage("Are you sure you want to delete " + selectedItem + "?")
+                    .setMessage("Are you sure you want to delete " + facilityName + " at " + facilityLocation + "?")
                     .setPositiveButton("Delete", (dialog, which) -> {
-                        // retrieve userID with selected facility then call deleteFacilityFromUser
                         getUserIdForFacility(facilityName, facilityLocation).addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
                                 String userId = task.getResult();
                                 if (userId != null) {
                                     deleteFacilityFromUser(userId, success -> {
                                         if (success) {
-                                            // Update UI after successful deletion
                                             items.remove(position);
                                             adapter.notifyDataSetChanged();
-                                            Toast.makeText(requireContext(), "Deleted: " + selectedItem, Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(requireContext(), "Deleted: " + facilityName + " at " + facilityLocation, Toast.LENGTH_SHORT).show();
                                         } else {
-                                            Toast.makeText(requireContext(), "Failed to delete: " + selectedItem, Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(requireContext(), "Failed to delete: " + facilityName + " at " + facilityLocation, Toast.LENGTH_SHORT).show();
                                         }
                                     });
                                 } else {
@@ -405,6 +450,11 @@ public class AdminHomeFragment extends Fragment {
 
     /**
      * delete an entry from a collection on firebase
+     * side note: calling this method from the showUsersDialog, it will delete all the fields
+     * in the document, but the main issue is the documentID to delete will stay on DB
+     * as a "ghost" document. reason is the subcollections that the document carries
+     * but the app/db will treat the document as non-existent
+     * i.e. the deleted user will go through FirstTimeUserFragment as a new user
      */
     private void deleteEntryFromDatabase(String documentId, String collection, OnDeleteCompleteListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -480,16 +530,16 @@ public class AdminHomeFragment extends Fragment {
      * fetch facility map objects from Firebase and populate into ArrayList<String>
      * @return
      */
-    private Task<ArrayList<String>> fetchFacilitiesFromFirebase() {
+    private Task<ArrayList<Facility>> fetchFacilitiesFromFirebase() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference usersCollection = db.collection("users");
 
-        TaskCompletionSource<ArrayList<String>> taskCompletionSource = new TaskCompletionSource<>();
+        TaskCompletionSource<ArrayList<Facility>> taskCompletionSource = new TaskCompletionSource<>();
 
         usersCollection.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 QuerySnapshot querySnapshot = task.getResult();
-                ArrayList<String> facilities = new ArrayList<>();
+                ArrayList<Facility> facilities = new ArrayList<>();
 
                 if (querySnapshot != null) {
                     for (DocumentSnapshot document : querySnapshot.getDocuments()) {
@@ -498,7 +548,7 @@ public class AdminHomeFragment extends Fragment {
                             String facilityName = (String) facility.get("name");
                             String facilityLocation = (String) facility.get("location");
                             if (facilityName != null && facilityLocation != null) {
-                                facilities.add(facilityName + " - " + facilityLocation);
+                                facilities.add(new Facility(facilityName, facilityLocation));
                             }
                         }
                     }
@@ -513,6 +563,13 @@ public class AdminHomeFragment extends Fragment {
         return taskCompletionSource.getTask();
     }
 
+    /**
+     * deletes an event from the database
+     * @param eventName
+     * @param nameToIdMap
+     * @param collection
+     * @param listener
+     */
     private void deleteEventFromDatabase(String eventName, Map<String, String> nameToIdMap, String collection, OnDeleteCompleteListener listener) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String documentId = nameToIdMap.get(eventName); // Get the document ID using the eventName
@@ -641,7 +698,7 @@ public class AdminHomeFragment extends Fragment {
         builder.setTitle(title);
 
         // Adapter to display the list of items
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, items);
+        AdminEventListAdapter adapter = new AdminEventListAdapter(requireContext(), items, nameToIdMap);
 
         ListView listView = new ListView(requireContext());
         listView.setAdapter(adapter);

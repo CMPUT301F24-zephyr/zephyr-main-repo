@@ -22,6 +22,10 @@ import com.google.android.material.navigation.NavigationBarView;
 
 
 public class MainActivity extends AppCompatActivity {
+    /**
+     * the main activity of the app (the heart of the app)
+     * where everything that constantly runs is here
+     */
     // view model to transfer userID
     private MainActivityViewModel mainActivityViewModel;
     FirebaseConnector db = new FirebaseConnector();

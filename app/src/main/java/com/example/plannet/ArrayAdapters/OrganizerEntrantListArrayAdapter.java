@@ -48,12 +48,21 @@ public class OrganizerEntrantListArrayAdapter extends ArrayAdapter<EntrantProfil
 
     }
 
+    /**
+     * gets the count of the filtered list
+     * @return
+     */
     @Override
     public int getCount() {
         // We must override this function in case a filter is applied
         return filtered.size();
     }
 
+    /**
+     * gets item details from position
+     * @param position
+     * @return
+     */
     @Nullable
     @Override
     public EntrantProfile getItem(int position) {
@@ -61,6 +70,10 @@ public class OrganizerEntrantListArrayAdapter extends ArrayAdapter<EntrantProfil
         return filtered.get(position);
     }
 
+    /**
+     * add all filters to a single filter
+     * @param collection
+     */
     @Override
     public void addAll(@NonNull Collection<? extends EntrantProfile> collection) {
         super.addAll(collection);

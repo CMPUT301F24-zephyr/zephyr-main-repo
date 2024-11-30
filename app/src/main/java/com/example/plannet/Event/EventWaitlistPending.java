@@ -3,6 +3,7 @@ package com.example.plannet.Event;
 import com.example.plannet.Entrant.EntrantProfile;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Stores a list of pending entrants on the waitlist for an event (not yet chosen by lottery).
@@ -68,5 +69,9 @@ public class EventWaitlistPending {
             return true;
         }
         return false;
+    }
+
+    public List<EntrantProfile> getWaitlistEntrants() {
+        return new ArrayList<>(waitlistEntrants); // Return a copy to protect encapsulation
     }
 }

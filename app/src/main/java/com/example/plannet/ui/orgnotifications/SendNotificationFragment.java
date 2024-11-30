@@ -5,11 +5,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.plannet.Event.Event;
@@ -30,7 +29,7 @@ public class SendNotificationFragment extends Fragment {
     private FragmentOrganizerSendNotificationBinding binding;
     FirebaseConnector fireCon = new FirebaseConnector();
     private Event event = null;  // Default null for error catching
-
+    private String checked_list;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -55,11 +54,32 @@ public class SendNotificationFragment extends Fragment {
         }
 
         String eventID = event.getEventID();
-        CheckBox waitingListCheckBox = binding.checkboxWaitingList;
-        CheckBox selectedEntrantsCheckBox = binding.checkboxSelectedEntrants;
-        CheckBox cancelledEntrantsCheckBox = binding.checkboxCancelledEntrants;
+        SwitchCompat waitingListSwitch = binding.switchWaitingList;
+        SwitchCompat selectedEntrantsSwitch = binding.switchSelectedEntrants;
+        SwitchCompat cancelledEntrantsSwitch = binding.switchCancelledEntrants;
 
-
+        // Listeners for switches
+        waitingListSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                selectedEntrantsSwitch.setChecked(false);
+                cancelledEntrantsSwitch.setChecked(false);
+                checked_list = "waitlist_pending";
+            }
+        });
+        selectedEntrantsSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                waitingListSwitch.setChecked(false);
+                cancelledEntrantsSwitch.setChecked(false);
+                checked_list = "waitlist_chosen";
+            }
+        });
+        cancelledEntrantsSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                waitingListSwitch.setChecked(false);
+                selectedEntrantsSwitch.setChecked(false);
+                checked_list = "waitlist_declined";
+            }
+        });
         // back button listener
         binding.backArrow.setOnClickListener(v -> requireActivity().onBackPressed());
 
@@ -70,28 +90,16 @@ public class SendNotificationFragment extends Fragment {
             String title = binding.titleInput.getText().toString();
 
             // make a switch case/if statements depending on waitlist checks.
-            boolean isWaitingListChecked = waitingListCheckBox.isChecked();
-            boolean isSelectedEntrantsChecked = selectedEntrantsCheckBox.isChecked();
-            boolean isCancelledEntrantsChecked = cancelledEntrantsCheckBox.isChecked();
+            boolean isWaitingListChecked = waitingListSwitch.isChecked();
+            boolean isSelectedEntrantsChecked = selectedEntrantsSwitch.isChecked();
+            boolean isCancelledEntrantsChecked = cancelledEntrantsSwitch.isChecked();
             if (body.isEmpty() || title.isEmpty()) {
                 Toast.makeText(getContext(), "Must write a title/body message!", Toast.LENGTH_SHORT).show();
             } else {
-
-                if (isWaitingListChecked) {
-                    // send notif to pending users (ones who just signed up)
-                    sendNotification(eventID, "waitlist_pending", title, body);
-                }
-                if (isSelectedEntrantsChecked) {
-                    // send notif to selected/lottery winners entrants
-                    sendNotification(eventID, "waitlist_selected", title, body);
-                }
-                if (isCancelledEntrantsChecked) {
-                    // send notif to cancelled/rejected entrants
-                    // this is simply waitlist_pending - waitlist_selected
-                    sendNotification(eventID, "waitlist_cancelled", title, body);
-                }
-                if (!isWaitingListChecked && !isSelectedEntrantsChecked && !isCancelledEntrantsChecked){
+                if (!isWaitingListChecked && !isSelectedEntrantsChecked && !isCancelledEntrantsChecked) {
                     Toast.makeText(getContext(), "Must make a selection first!", Toast.LENGTH_SHORT).show();
+                } else {
+                    sendNotification(eventID, checked_list, title, body);
                 }
             }
         });
@@ -100,7 +108,10 @@ public class SendNotificationFragment extends Fragment {
     }
 
     private void sendNotification(String eventID, String waitlist, String title, String body) {
-        // Send notifications to entrants in specific waitlists
+        /**
+         * Send notifications to entrants in specific waitlists
+         * with a title and body message
+         */
         fireCon.RetrieveUserIDsFromEvent(eventID, waitlist, new FirestoreCallback() {
             @Override
             public void onSuccess(String[] userIDs) {
