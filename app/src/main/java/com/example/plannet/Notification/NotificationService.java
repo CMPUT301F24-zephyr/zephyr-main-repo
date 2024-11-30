@@ -4,7 +4,6 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
-import android.content.pm.ServiceInfo;
 import android.os.Build;
 import android.os.IBinder;
 import android.provider.Settings;
@@ -13,7 +12,6 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
-import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class NotificationService extends Service {
@@ -25,13 +23,20 @@ public class NotificationService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        startForegroundService();
+        //startForegroundService();
         Log.d("NotificationService", "Service started");
         userID = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         Log.d("NotificationService", "UserID: " + userID);
         db = FirebaseFirestore.getInstance();
+        if (db != null) {
+            Log.d("NotificationHandler", "Firestore initialized successfully.");}
         createNotificationChannel();
+        testNotification();
         startListeningForNotifications();
+    }
+
+    public void testNotification() {
+        showSystemNotification("Test Title", "This is a test notification");
     }
 
     private void createNotificationChannel() {
@@ -48,24 +53,24 @@ public class NotificationService extends Service {
         }
     }
 
-    private void startForegroundService() {
-        // Build the notification
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("Notification Service Running")
-                .setContentText("Listening for updates...")
-                .setSmallIcon(android.R.drawable.ic_dialog_info)
-                .setPriority(NotificationCompat.PRIORITY_LOW);
+//    private void startForegroundService() {
+//        // Build the notification
+//        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
+//                .setContentTitle("Notification Service Running")
+//                .setContentText("Listening for updates...")
+//                .setSmallIcon(android.R.drawable.ic_dialog_info)
+//                .setPriority(NotificationCompat.PRIORITY_LOW);
+//
+//        // Start the service in the foreground
+////        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) { // Android 10+
+////            startForeground(1, notificationBuilder.build(), ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC);
+////        } else {
+////            startForeground(1, notificationBuilder.build());
+////        }
+//    }
 
-        // Start the service in the foreground
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) { // Android 10+
-            startForeground(1, notificationBuilder.build(), ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC);
-        } else {
-            startForeground(1, notificationBuilder.build());
-        }
-    }
 
-
-    private void startListeningForNotifications() {
+    public void startListeningForNotifications() {
         db.collection("notifications")
                 .document(userID)//.whereArrayContains("userIDs", userID)
                 .addSnapshotListener((snapshots, error) -> {
@@ -74,7 +79,7 @@ public class NotificationService extends Service {
                         return;
                     }
 
-                    if (snapshots != null) {
+                    if (snapshots != null && snapshots.exists()) {
                         String title = snapshots.getString("title");
                         String body = snapshots.getString("body");
                         Log.d("NotificationService", "New notification detected: " + title);
@@ -90,12 +95,12 @@ public class NotificationService extends Service {
 
     private void showSystemNotification(String title, String body) {
         Log.d("NotificationService", "Displaying notification with message: " + title);
-
+//
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        if (manager == null) {
-            Log.e("NotificationService", "NotificationManager is null. Cannot display notification.");
-            return;
-        }
+//        if (manager == null) {
+//            Log.e("NotificationService", "NotificationManager is null. Cannot display notification.");
+//            return;
+//        }
 
         // Build and display the notification
         NotificationCompat.Builder notification = new NotificationCompat.Builder(this, CHANNEL_ID)
@@ -104,11 +109,9 @@ public class NotificationService extends Service {
                 .setSmallIcon(android.R.drawable.ic_dialog_info)
                 .setPriority(NotificationCompat.PRIORITY_HIGH);
 
-        try {
+        if (manager != null) {
             manager.notify((int) System.currentTimeMillis(), notification.build());
-            Log.d("NotificationService", "Notification displayed successfully.");
-        } catch (Exception e) {
-            Log.e("NotificationService", "Error displaying notification: ", e);
+            Log.d("NotificationHandler", "Notification displayed successfully.");
         }
     }
 

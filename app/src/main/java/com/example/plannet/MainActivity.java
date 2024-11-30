@@ -1,10 +1,7 @@
 package com.example.plannet;
 
 import android.content.Intent;
-import static androidx.core.content.ContentProviderCompat.requireContext;
 
-import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -21,9 +18,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import com.example.plannet.databinding.ActivityMainBinding;
-import com.google.android.material.bottomnavigation.LabelVisibilityMode;
 import com.google.android.material.navigation.NavigationBarView;
-import com.google.firebase.FirebaseApp;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -41,14 +36,11 @@ public class MainActivity extends AppCompatActivity {
         // Initialize SharedViewModel
         mainActivityViewModel = new ViewModelProvider(this).get(MainActivityViewModel.class);
 
-        // Start the notification service, consider other APIs for now
+        // Start the notification service
         Intent serviceIntent = new Intent(this, NotificationService.class);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(serviceIntent);
-        } else {
-            startService(serviceIntent);
-        }
+        startService(serviceIntent);
 
+        Log.d("MainActivity", "NotificationHandler service started.");
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
