@@ -37,14 +37,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins"
-        android:text="Hashed QR Codes"
+        android:text="Your Events"
         android:textColor="@color/white"
         android:textSize="20sp"
-        app:layout_constraintTop_toBottomOf="@id/title_underline"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.01"/>
+        app:layout_constraintTop_toBottomOf="@id/title_underline"
+        app:layout_constraintVertical_bias="0.01" />
 
     <ListView
         android:id="@+id/event_list"

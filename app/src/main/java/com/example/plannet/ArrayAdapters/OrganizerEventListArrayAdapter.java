@@ -62,8 +62,8 @@ public class OrganizerEventListArrayAdapter extends ArrayAdapter<Event> {
         Event event = getItem(position);
 
         // Set the data to show in the TextView
-        TextView qrData = convertView.findViewById(R.id.hashed_qr_data);
-        TextView eventDetailsTextView = convertView.findViewById(R.id.event_details);
+        TextView qrData = convertView.findViewById(R.id.event_details);
+        TextView eventDetailsTextView = convertView.findViewById(R.id.hashed_qr_data);
         if (event != null) {
             qrData.setText(event.getEventID());
             eventDetailsTextView.setText(event.getEventName());
