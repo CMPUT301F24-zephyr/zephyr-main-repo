@@ -2,6 +2,9 @@ package com.example.plannet.Notification;
 
 
 public class Invite {
+    /**
+     * this class is for sending invitations to user notifs
+     */
     private String id;// Unique identifier for the invite
     private String eventID; // ID of the  event
     private String eventTitle; // Title of the event
@@ -12,7 +15,14 @@ public class Invite {
     public Invite() {
     }
 
-    //Constructor
+    /**
+     * constructor for Invite to get event info
+     * @param id
+     * @param eventID
+     * @param eventTitle
+     * @param eventLocation
+     * @param status
+     */
     public Invite(String id, String eventID, String eventTitle, String eventLocation, String status) {
         this.id = id;
         this.eventID = eventID;

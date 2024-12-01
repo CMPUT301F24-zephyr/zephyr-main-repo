@@ -13,6 +13,9 @@ import com.example.plannet.R;
 import java.util.ArrayList;
 
 public class AdminFacilityListAdapter extends ArrayAdapter<Facility> {
+    /**
+     * adapter class for displaying facilities in admin mode
+     */
     private final Context context;
     private final ArrayList<Facility> facilities;
 

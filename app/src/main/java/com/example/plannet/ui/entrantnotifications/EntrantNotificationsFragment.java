@@ -175,22 +175,5 @@ public class EntrantNotificationsFragment extends Fragment {
                 })
                 .addOnFailureListener(e -> Log.e("Firestore", "Error fetching invites", e));
     }
-
-    private void navToEventDetails(Invite invite) {
-        // Pass event ID and status to entrantViewEventFragment
-        Bundle bundle = new Bundle();
-        bundle.putString("eventID", invite.getEventID());
-        bundle.putString("eventStatus", invite.getStatus());
-
-        entrantViewEventFragment eventFragment = new entrantViewEventFragment();
-        eventFragment.setArguments(bundle);
-
-        requireActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, eventFragment)
-                .addToBackStack(null)
-                .commit();
-    }
-
 }
 

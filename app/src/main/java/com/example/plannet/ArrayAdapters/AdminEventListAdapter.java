@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class AdminEventListAdapter extends ArrayAdapter<String> {
+    /**
+     * adapter class for displaying events in admin mode
+     */
     private final Context context;
     private final ArrayList<String> eventNames;
     private final Map<String, String> nameToIdMap;
