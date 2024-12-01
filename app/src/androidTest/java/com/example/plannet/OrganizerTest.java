@@ -70,6 +70,9 @@ public class OrganizerTest {
 //        onView(withId(R.id.buttonDraw)).check(matches(isDisplayed()));
     }
 
+    /**
+     * testing navigation to entrant home
+     */
     @Test
     public void testNavigationToEntrantHomeFragment() {
         // back to entrant fragment
@@ -78,6 +81,9 @@ public class OrganizerTest {
         onView(withId(R.id.scan_qr_button))
                 .check(matches(isDisplayed()));
     }
+    /**
+     * testing navigation to create event fragment
+     */
     @Test
     public void testOrganizerCreateEventFragment() {
         onView(withId(R.id.buttonNewEvent)).perform(click());
@@ -85,16 +91,26 @@ public class OrganizerTest {
         onView(withId(R.id.generate_qr_button)).check(matches(isDisplayed()));
     }
 
+    /**
+     * testing admin button is invisible
+     */
     @Test
     public void testAdminButtonVisibility() {
         // should be hidden since emulator IP is not in firebase (hidden by default)
         onView(withId(R.id.button_admin)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.GONE)));
     }
+
+    /**
+     * testing facility name display at top
+     */
     @Test
     public void testFacilityNameDisplay() {
         onView(withId(R.id.title)).check(matches(withText("Facility: Not Set"))); // Default text
     }
 
+    /**
+     * simulate creating an event
+     */
     @Test
     public void testCreateEvent() {
         // goto to OrganizerCreateEventFragment

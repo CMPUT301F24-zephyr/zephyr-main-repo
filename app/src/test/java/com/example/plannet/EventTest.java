@@ -9,12 +9,17 @@ import static org.junit.Assert.*;
 import com.example.plannet.Event.Event;
 
 public class EventTest {
-
+    /**
+     * testing for Event class and its attributes
+     */
     private Event event;
     private Date eventDate;
     private Date regStartDate;
     private Date regEndDate;
 
+    /**
+     * creating a mock event
+     */
     @Before
     public void setUp() {
         eventDate = new Date();
@@ -23,6 +28,9 @@ public class EventTest {
         event = new Event("Mock Event", "100", 50, 0, eventDate, regEndDate, regStartDate, "very cool description", true, "Rogers Place");
     }
 
+    /**
+     * testing event constructor
+     */
     @Test
     public void testEventConstructor() {
         assertEquals("Mock Event", event.getEventName());
@@ -34,6 +42,9 @@ public class EventTest {
         assertEquals("Rogers Place", event.getFacility());
     }
 
+    /**
+     * generate an event ID and check if it starts with its name with no space/lowercase
+     */
     @Test
     public void testGenerateEventID() {
         String eventID = event.generateEventID();
@@ -41,6 +52,9 @@ public class EventTest {
         assertTrue(eventID.startsWith("testevent"));
     }
 
+    /**
+     * testing some setters and getters
+     */
     @Test
     public void testSettersAndGetters() {
         event.setEventName("New Event Name");
