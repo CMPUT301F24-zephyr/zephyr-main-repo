@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_home_to_admin"
             app:destination="@id/navigation_adminhome" />
+        <action
+            android:id="@+id/action_navigation_orghome_to_organizerLotteryManager"
+            app:destination="@id/organizerLotteryManager" />
 
     </fragment>
 
@@ -222,6 +225,30 @@
         <action
             android:id="@+id/action_adminHome_to_userMode"
             app:destination="@id/navigation_entranthome" />
+    </fragment>
+    <fragment
+        android:id="@+id/organizerLotteryManager"
+        android:name="com.example.plannet.ui.orglottery.OrganizerLotteryManager"
+        android:label="fragment_organizer_lottery_manager"
+        tools:layout="@layout/fragment_organizer_lottery_manager" >
+        <action
+            android:id="@+id/action_organizerLotteryManager_to_organizerRunLottery"
+            app:destination="@id/organizerRunLottery" />
+        <action
+            android:id="@+id/action_organizerLotteryManager_to_navigation_orghome"
+            app:destination="@id/navigation_orghome" />
+    </fragment>
+    <fragment
+        android:id="@+id/organizerRunLottery"
+        android:name="com.example.plannet.ui.orglottery.OrganizerRunLottery"
+        android:label="fragment_organizer_run_lottery"
+        tools:layout="@layout/fragment_organizer_run_lottery" >
+        <action
+            android:id="@+id/action_organizerRunLottery_to_organizerLotteryManager"
+            app:destination="@id/organizerLotteryManager" />
+        <action
+            android:id="@+id/action_organizerRunLottery_to_navigation_orghome"
+            app:destination="@id/navigation_orghome" />
     </fragment>
 
 
