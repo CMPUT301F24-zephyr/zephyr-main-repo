@@ -25,14 +25,15 @@
 
     <ImageView
         android:id="@+id/info_background"
-        android:layout_width="391dp"
+        android:layout_width="361dp"
         android:layout_height="303dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imageView11"
         app:layout_constraintVertical_bias="0.088"
+
         app:srcCompat="@drawable/rectangle" />
 
 
