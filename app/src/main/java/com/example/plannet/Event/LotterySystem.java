@@ -114,7 +114,7 @@ public class LotterySystem {
                         entrantNotifications.queueNotification(
                                 entrant.getUserId(),
                                 "Better Luck Next Time!",
-                                "Unfortuantely, you weren't chosen for the event " + eventName + "this round.",
+                                "Unfortunately, you weren't chosen for the event " + eventName + "this round.",
                                 eventId
                         );
                     }
@@ -184,8 +184,11 @@ public class LotterySystem {
                                     "Congrats! You have been chosen for the event: " + eventName + ". Please respond to your invitation.",
                                     eventId
                             );
+                        } else {
+                            System.err.println("Event does not exist: " + eventId);
                         }
-                    });
+                    })
+                    .addOnFailureListener(e -> System.err.println("Error fetching event name: " + e.getMessage()));
 
             return newParticipant;
         }
