@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     private MainActivityViewModel mainActivityViewModel;
     FirebaseConnector db = new FirebaseConnector();
     private ActivityMainBinding binding;
-//    private FirebaseConnector db;
     private boolean check = true;
 
     @Override
