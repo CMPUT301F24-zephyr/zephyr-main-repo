@@ -137,15 +137,18 @@ public class entrantViewEventFragment extends Fragment {
                             (regEndDate != null ? dateFormat.format(regEndDate.toDate()) : "N/A"));
 
 
-                    String posterPath = (String) eventData.get("eventPoster");
-                    if (posterPath != null && !posterPath.isEmpty()) {
-                        Glide.with(this)
-                                .load(posterPath)
-                                .placeholder(R.drawable.no_poster)
-                                .into(posterImageView);
-                    } else {
-                        posterImageView.setImageResource(R.drawable.no_poster);
-                    }
+                    firebaseConnector.getPicture("poster", "posters/" + eventId + ".jpg",
+                            URL -> {
+                                Log.d("Entrant View Event", "Poster downloaded for event from Firebase.");
+                                Glide.with(this)
+                                        .load(URL)
+                                        .placeholder(R.drawable.no_poster)
+                                        .into(posterImageView);
+                            },
+                            exception -> {
+                                posterImageView.setImageResource(R.drawable.no_poster);
+                                Log.d("Entrant View Event", "No poster exists for event.");
+                            });
                 },
                 error -> {
 

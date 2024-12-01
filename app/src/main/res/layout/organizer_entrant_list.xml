@@ -11,11 +11,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins"
+        android:ellipsize="end"
+        android:lines="1"
+        android:layout_marginLeft="60dp"
         android:text="Event: Fetching..."
         android:textColor="@color/white"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.02" />
@@ -59,7 +61,7 @@
 
     <Button
         android:id="@+id/waitlisted_button"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins"
         android:text="Waiting"
@@ -72,7 +74,7 @@
 
     <Button
         android:id="@+id/chosen_button"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins"
         android:text="Chosen"
@@ -85,7 +87,7 @@
 
     <Button
         android:id="@+id/enrolled_button"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins"
         android:text="Enrolled"
@@ -98,7 +100,7 @@
 
     <Button
         android:id="@+id/cancelled_button"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins"
         android:text="Declined"
