@@ -135,6 +135,41 @@ public class OrganizerRunLottery extends Fragment {
                                     });
                         }
 
+                        // Notify remaining waitlist entrants
+                        dbConnector.getEventWaitlistEntrants(event.getEventID(), "pending", remainingWaitlist -> {
+                            if (remainingWaitlist != null && !remainingWaitlist.isEmpty()) {
+                                for (EntrantProfile remainingEntrant : remainingWaitlist) {
+                                    db.collection("events")
+                                            .document(event.getEventID())
+                                            .get()
+                                            .addOnSuccessListener(documentSnapshot -> {
+                                                if (documentSnapshot.exists()) {
+                                                    String eventName = documentSnapshot.getString("eventName");
+
+                                                    if (eventName != null && !eventName.isEmpty()) {
+                                                        EntrantNotifications entrantNotifications = new EntrantNotifications();
+                                                        entrantNotifications.queueNotification(
+                                                                remainingEntrant.getUserId(),
+                                                                eventName,
+                                                                "We're sorry! You were not chosen for the event: " + eventName + ". Thank you for your interest.",
+                                                                event.getEventID()
+                                                        );
+                                                    } else {
+                                                        Log.e("OrganizerRunLottery", "Event name is null or empty for eventID: " + event.getEventID());
+                                                    }
+                                                } else {
+                                                    Log.e("OrganizerRunLottery", "Event document does not exist for eventID: " + event.getEventID());
+                                                }
+                                            })
+                                            .addOnFailureListener(e -> {
+                                                Log.e("OrganizerRunLottery", "Failed to fetch event details for notification", e);
+                                            });
+                                }
+                            } else {
+                                Log.d("OrganizerRunLottery", "No remaining entrants in the waitlist.");
+                            }
+                        });
+
                         Toast.makeText(getContext(), "Success! " + selected.size() + "Entrants chosen.", Toast.LENGTH_SHORT).show();
                         // Navigate back to home
                         NavController navController = Navigation.findNavController(v);
