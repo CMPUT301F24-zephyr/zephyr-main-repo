@@ -93,17 +93,6 @@ public class FirebaseConnector {
                 .addOnFailureListener(onFailure);
     }
 
-    /**
-     * check if device is already on DB
-     * @param deviceID
-     * @param onSuccess
-     * @param onFailure
-     */
-    public void checkIfDeviceExists(String deviceID, OnSuccessListener<DocumentSnapshot> onSuccess, OnFailureListener onFailure) {
-        db.collection("users").document(deviceID).get()
-                .addOnSuccessListener(onSuccess)
-                .addOnFailureListener(onFailure);
-    }
 
     /**
      * add OR update a facility name/location to DB
@@ -155,23 +144,6 @@ public class FirebaseConnector {
                 })
                 .addOnFailureListener(e -> {
                     Log.e("FirebaseConnector", "Error adding event details to events collection with ID: " + eventID, e);
-                });
-    }
-
-    /**
-     * add a joined event to a user's profile on DB
-     * @param deviceID
-     * @param eventID
-     */
-    public void addJoinedEvent(String deviceID, String eventID) {
-        // Adds eventID to the joinedEvents array under the user's document
-        db.collection("users").document(deviceID)
-                .update("joinedEvents", FieldValue.arrayUnion(eventID))
-                .addOnSuccessListener(aVoid -> {
-                    Log.d("FirebaseConnector", "EventID " + eventID + " added to joinedEvents for user: " + deviceID);
-                })
-                .addOnFailureListener(e -> {
-                    Log.e("FirebaseConnector", "Failed to add eventID to joinedEvents", e);
                 });
     }
 

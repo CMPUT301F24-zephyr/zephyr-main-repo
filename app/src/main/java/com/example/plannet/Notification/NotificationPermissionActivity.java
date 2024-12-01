@@ -13,7 +13,9 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class NotificationPermissionActivity extends AppCompatActivity {
-
+    /**
+     * grabs permissions from user for notifications
+     */
     private static final int REQUEST_NOTIFICATION_PERMISSION = 101;
 
     @Override

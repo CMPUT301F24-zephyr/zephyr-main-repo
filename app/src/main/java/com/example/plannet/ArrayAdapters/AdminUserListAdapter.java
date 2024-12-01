@@ -16,6 +16,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 
 public class AdminUserListAdapter extends ArrayAdapter<String> {
+    /**
+     * adapter class for displaying user list in admin mode
+     */
     private final Context context;
     private final ArrayList<String> userIDs;
 
