@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_gradient"
-    android:padding="16dp">
+    android:background="@drawable/background_gradient">
 
     <ImageView
         android:id="@+id/profile_picture"
@@ -50,7 +49,8 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/buttonGrey"
         android:fontFamily="@font/poppins"
-        android:text="PENDING"
+        android:text="Pending"
+        android:textSize="14sp"
         android:textAllCaps="false"
         app:layout_constraintEnd_toStartOf="@+id/filter_chosen"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,7 +62,9 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/buttonGrey"
         android:fontFamily="@font/poppins"
-        android:text="ACCEPTED"
+        android:text="Accepted"
+        android:textSize="14sp"
+        android:textAllCaps="false"
         app:layout_constraintEnd_toStartOf="@+id/filter_declined"
         app:layout_constraintStart_toEndOf="@+id/filter_chosen"
         app:layout_constraintTop_toBottomOf="@+id/my_events_label" />
@@ -73,7 +75,9 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/buttonGrey"
         android:fontFamily="@font/poppins"
-        android:text="CHOSEN"
+        android:text="Chosen"
+        android:textAllCaps="false"
+        android:textSize="14sp"
         app:layout_constraintEnd_toStartOf="@+id/filter_accepted"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/filter_pending"
@@ -85,7 +89,9 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/buttonGrey"
         android:fontFamily="@font/poppins"
-        android:text="DECLINED"
+        android:text="Declined"
+        android:textAllCaps="false"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/filter_accepted"
         app:layout_constraintTop_toBottomOf="@+id/my_events_label" />
@@ -122,10 +128,10 @@
         android:layout_height="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/profile_picture"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.14"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_bias="0.01999998"
         app:srcCompat="@drawable/back_arrow" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
