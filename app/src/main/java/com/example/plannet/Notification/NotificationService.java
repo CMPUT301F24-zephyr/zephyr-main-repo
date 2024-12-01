@@ -5,7 +5,6 @@ import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.ServiceInfo;
 import android.os.Build;
 import android.os.IBinder;
 import android.provider.Settings;
@@ -14,8 +13,11 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
-import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class NotificationService extends Service {
     /**
@@ -34,10 +36,10 @@ public class NotificationService extends Service {
         userID = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
         Log.d("NotificationService", "UserID: " + userID);
         db = FirebaseFirestore.getInstance();
+        if (db != null) {
+            Log.d("NotificationHandler", "Firestore initialized successfully.");}
         createNotificationChannel();
-        startForegroundService();
         promptEnableNotifications();
-
         startListeningForNotifications();
     }
 
@@ -58,24 +60,7 @@ public class NotificationService extends Service {
         }
     }
 
-    /**
-     * starts foreground services to listen for updates in the foreground
-     */
-    private void startForegroundService() {
-        // Build the notification
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("Notification Service Running")
-                .setContentText("Listening for updates...")
-                .setSmallIcon(android.R.drawable.ic_dialog_info)
-                .setPriority(NotificationCompat.PRIORITY_LOW);
 
-        // Start the service in the foreground
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            startForeground(1, notificationBuilder.build(), ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC);
-        } else {
-            startForeground(1, notificationBuilder.build());
-        }
-    }
 
 
     /**
@@ -83,23 +68,49 @@ public class NotificationService extends Service {
      */
     private void startListeningForNotifications() {
         db.collection("notifications")
-                .document(userID)//.whereArrayContains("userIDs", userID)
+                .document(userID)
+                .collection("Notifications")
                 .addSnapshotListener((snapshots, error) -> {
                     if (error != null) {
-                        error.printStackTrace();
+                        Log.e("NotificationService", "Error listening for notifications", error);
                         return;
                     }
 
                     if (snapshots != null) {
-                        String title = snapshots.getString("title");
-                        String body = snapshots.getString("body");
-                        Log.d("NotificationService", "New notification detected: " + title);
-                        showSystemNotification(title, body);
+                        for (DocumentSnapshot doc : snapshots.getDocuments()) {
+                            String title = doc.getString("title");
+                            String body = doc.getString("body");
+                            String eventID = doc.getString("eventID");
+                            String docId = doc.getId();
 
-                        db.collection("notifications").document(userID)
-                                .delete()
-                                .addOnSuccessListener(aVoid -> Log.d("NotificationService", "Notification deleted for userID: " + userID))
-                                .addOnFailureListener(e -> Log.e("NotificationService", "Error deleting notification", e));
+                            Log.d("NotificationService", "New notification detected: " + title);
+                            showSystemNotification(title, body);
+
+                            if (eventID != null) {
+                                // Add invite to invites subcollection
+                                Map<String, Object> inviteData = new HashMap<>();
+                                inviteData.put("eventName", title);
+                                inviteData.put("body", body);
+                                inviteData.put("status", "pending");
+                                inviteData.put("eventID", eventID);
+
+                                db.collection("notifications")
+                                        .document(userID)
+                                        .collection("invites")
+                                        .add(inviteData)
+                                        .addOnSuccessListener(aVoid -> Log.d("NotificationService", "Invite added to subcollection"))
+                                        .addOnFailureListener(e -> Log.e("NotificationService", "Error adding invite to subcollection", e));
+                            }
+
+                            // Delete notification when unloaded
+                            db.collection("notifications")
+                                    .document(userID)
+                                    .collection("Notifications")
+                                    .document(docId)
+                                    .delete()
+                                    .addOnSuccessListener(aVoid -> Log.d("NotificationService", "Notification deleted for userID: " + userID))
+                                    .addOnFailureListener(e -> Log.e("NotificationService", "Error deleting notification", e));
+                        }
                     }
                 });
     }
@@ -111,12 +122,12 @@ public class NotificationService extends Service {
      */
     private void showSystemNotification(String title, String body) {
         Log.d("NotificationService", "Displaying notification with message: " + title);
-
+//
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        if (manager == null) {
-            Log.e("NotificationService", "NotificationManager is null. Cannot display notification.");
-            return;
-        }
+//        if (manager == null) {
+//            Log.e("NotificationService", "NotificationManager is null. Cannot display notification.");
+//            return;
+//        }
 
         // Build and display the notification
         NotificationCompat.Builder notification = new NotificationCompat.Builder(this, CHANNEL_ID)

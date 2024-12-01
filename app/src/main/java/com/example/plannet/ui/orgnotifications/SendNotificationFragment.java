@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import com.example.plannet.Event.Event;
 import com.example.plannet.FirebaseConnector;
 import com.example.plannet.FirestoreCallback;
+import com.example.plannet.Notification.EntrantNotifications;
 import com.example.plannet.databinding.FragmentOrganizerSendNotificationBinding;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -117,19 +118,12 @@ public class SendNotificationFragment extends Fragment {
             public void onSuccess(String[] userIDs) {
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+                EntrantNotifications notifications = new EntrantNotifications();
                 for (String userID : userIDs) {
                     Log.d("SendNotification", "User ID: " + userID);
 
-                    // notification data in a Map
-                    Map<String, Object> notificationData = new HashMap<>();
-                    notificationData.put("title", title);
-                    notificationData.put("body", body);
-
-                    db.collection("notifications")
-                            .document(userID)
-                            .set(notificationData)
-                            .addOnSuccessListener(aVoid -> Log.d("SendNotification", "Notification sent to: " + userID))
-                            .addOnFailureListener(e -> Log.e("SendNotification", "Failed to send notification to " + userID, e));
+                    // Queue Notification
+                    notifications.queueNotification(userID, title, body, null);
                 }
 
                 Toast.makeText(getContext(), "Notifications sent successfully!", Toast.LENGTH_SHORT).show();

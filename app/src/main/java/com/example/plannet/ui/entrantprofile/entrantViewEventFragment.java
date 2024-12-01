@@ -36,6 +36,8 @@ public class entrantViewEventFragment extends Fragment {
 
     private FirebaseConnector firebaseConnector;
     private String currentStatus = null; // Store the user's current status in the event
+    private String inviteID = null;
+
 
     private TextView titleTextView, facilityNameTextView, eventDatesTextView, costTextView;
 
@@ -78,7 +80,8 @@ public class entrantViewEventFragment extends Fragment {
         if (getArguments() != null) {
             String eventId = getArguments().getString("eventID");
             String userId = Settings.Secure.getString(requireContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-            currentStatus = getArguments().getString("eventStatus"); // Use the passed status if available
+            currentStatus = getArguments().getString("eventStatus");
+            inviteID = getArguments().getString("inviteID");// Use the passed status if available
 
             if (eventId != null) {
                 // Fetch detailed event information from Firebase
@@ -166,7 +169,7 @@ public class entrantViewEventFragment extends Fragment {
         // Show "Decline" button for "accepted" waitlist
         else if ("accepted".equals(currentStatus)) {
             actionButton.setText("Decline");
-            actionButton.setOnClickListener(v -> moveToWaitlist(eventId, userId, "declined", "accepted",actionButton));
+            actionButton.setOnClickListener(v -> moveToWaitlist(eventId, inviteID, userId, "declined", "accepted",actionButton));
             actionButton.setVisibility(View.VISIBLE);
         }
         // Hide the button for other waitlist types
@@ -187,11 +190,11 @@ public class entrantViewEventFragment extends Fragment {
 
         // "Accept" button for "chosen" status
         if ("chosen".equals(status)) {
-            builder.setPositiveButton("Accept", (dialog, which) -> moveToWaitlist(eventId, userId, "accepted", "chosen",actionButton));
+            builder.setPositiveButton("Accept", (dialog, which) -> moveToWaitlist(eventId, inviteID, userId, "accepted", "chosen",actionButton));
         }
 
         // "Decline" button for both "chosen" and "accepted" statuses
-        builder.setNegativeButton("Decline", (dialog, which) -> moveToWaitlist(eventId, userId, "declined", "chosen",actionButton));
+        builder.setNegativeButton("Decline", (dialog, which) -> moveToWaitlist(eventId, inviteID, userId, "declined", "chosen",actionButton));
 
         // Cancel button
         builder.setNeutralButton("Cancel", (dialog, which) -> dialog.dismiss());
@@ -226,7 +229,8 @@ public class entrantViewEventFragment extends Fragment {
                 error -> Log.e("unregisterForEvent", "Failed to remove user from event's pending waitlist.", error));
     }
 
-    private void moveToWaitlist(String eventId, String userId, String newStatus, String oldStatus, Button actionButton) {
+    private void moveToWaitlist(String eventId, String inviteID, String userId, String newStatus, String oldStatus, Button actionButton) {
+        handleInviteAction(userId, inviteID, newStatus);
         if (eventId == null || userId == null) {
             Toast.makeText(getContext(), "Missing event or user ID.", Toast.LENGTH_SHORT).show();
             return;
@@ -306,10 +310,20 @@ public class entrantViewEventFragment extends Fragment {
                     Log.e("unregisterForEvent", "Error fetching event details", error);
                 });
     }
+    /**
+     * Updates the invite status in Firebase.
+     */
+    private void handleInviteAction(String userID, String inviteID, String action) {
+        firebaseConnector.updateInviteStatus(userID, inviteID, action,
+                () -> {
+                    Log.d("InviteAction", "Invite " + action + " successfully.");
+                },
+                error -> {
+                    Log.e("InviteAction", "Error updating invite status.", error);
+                });
+    }
+
 }
-
-
-
 
 //    private void showAcceptDeclineDialog(String eventId, String userId, Button actionButton) {
 //        if (eventId == null || userId == null) {

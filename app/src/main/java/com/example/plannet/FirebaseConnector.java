@@ -3,6 +3,8 @@ package com.example.plannet;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.core.util.Consumer;
+
 import com.example.plannet.Event.Event;
 import com.example.plannet.Entrant.EntrantProfile;
 import com.google.android.gms.tasks.Task;
@@ -729,6 +731,45 @@ public class FirebaseConnector {
                 },
                 error -> {
                     Log.e("unregisterForEvent", "Error fetching event details", error);
+                });
+    }
+    /**
+     * Updates the status of an invite.
+     *
+     * @param userID       The ID of the user (document in Firestore).
+     * @param inviteID     The ID of the invite to update.
+     * @param newStatus    The new status of the invite (e.g., "accepted" or "declined").
+     * @param onSuccess    Callback for successful operation.
+     * @param onFailure    Callback for failure.
+     */
+    public void updateInviteStatus(String userID, String inviteID, String newStatus,
+                                   Runnable onSuccess, Consumer<Exception> onFailure) {
+        db.collection("notifications")
+                .document(userID)
+                .collection("invites")
+                .document(inviteID)
+                .update("status", newStatus)
+                .addOnSuccessListener(aVoid -> {
+                    Log.d("FirebaseConnector", "Invite status updated to: " + newStatus);
+
+                    // Step 2: Delete the invite after the status is updated
+                    db.collection("notifications")
+                            .document(userID)
+                            .collection("invites")
+                            .document(inviteID)
+                            .delete()
+                            .addOnSuccessListener(deleteVoid -> {
+                                Log.d("FirebaseConnector", "Invite deleted successfully.");
+                                onSuccess.run();
+                            })
+                            .addOnFailureListener(deleteError -> {
+                                Log.e("FirebaseConnector", "Failed to delete invite.", deleteError);
+                                onFailure.accept(deleteError);
+                            });
+                })
+                .addOnFailureListener(error -> {
+                    Log.e("FirebaseConnector", "Failed to update invite status.", error);
+                    onFailure.accept(error);
                 });
     }
 }
