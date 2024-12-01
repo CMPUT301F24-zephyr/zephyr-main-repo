@@ -48,6 +48,7 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCurc_3wlH-brmfWeh4290cjgGh8lyKzHk" />
+        <activity android:name=".Notification.NotificationPermissionActivity" />
 
         <activity
             android:name=".MainActivity"
