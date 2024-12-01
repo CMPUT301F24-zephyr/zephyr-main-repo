@@ -116,12 +116,15 @@ public class OrganizerViewEventFragment extends Fragment {
                 // We want to set all the fields so it displays correctly
                 binding.title.setText("Event: " + event.getEventName());
                 binding.facilityName.setText(event.getFacility());
+                Log.e("OrganizerViewEvent", event.getRegistrationStartDate() + " " + event.getRegistrationDateDeadline());
+
                 if (event.getRegistrationStartDate().equals(event.getRegistrationDateDeadline())){
+                    Log.e("OrganizerViewEvent", event.getRegistrationStartDate() + " " + event.getRegistrationDateDeadline());
                     // The event is only 1 day long
                     binding.eventDates.setText("Event Date: " + formatter.format(event.getEventDate()));
                 }
                 else {
-                    binding.eventDates.setText("Event Dates: " + formatter.format(event.getEventDate()) + " - " + formatter.format(event.getRegistrationStartDate()));
+                    binding.eventDates.setText("From: " + formatter.format(event.getEventDate()) + " to " + formatter.format(event.getRegistrationStartDate()));
                 }
                 binding.capacity.setText("Capacity: [" + String.valueOf(event.getMaxEntrants()) + "]");
                 if (event.getPrice() == "0" || event.getPrice() == ""){
