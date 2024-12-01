@@ -22,6 +22,7 @@ import com.example.plannet.Notification.EntrantNotifications;
 import com.example.plannet.R;
 import com.example.plannet.databinding.FragmentOrganizerRunLotteryBinding;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,6 +117,7 @@ public class OrganizerRunLottery extends Fragment {
                                             String eventName = documentSnapshot.getString("eventName");
 
                                             if (eventName != null && !eventName.isEmpty()) {
+                                                Log.d("LotteryDebug", "Queueing not notification for entrant: " + entrant.getUserId() + ", Event: " + event.getEventID());
                                                 EntrantNotifications entrantNotifications = new EntrantNotifications();
                                                 entrantNotifications.queueNotification(
                                                         entrant.getUserId(),
@@ -135,43 +137,35 @@ public class OrganizerRunLottery extends Fragment {
                                     });
                         }
 
-                        // Notify remaining waitlist entrants
-                        dbConnector.getEventWaitlistEntrants(event.getEventID(), "pending", remainingWaitlist -> {
-                            if (remainingWaitlist != null && !remainingWaitlist.isEmpty()) {
-                                for (EntrantProfile remainingEntrant : remainingWaitlist) {
-                                    db.collection("events")
-                                            .document(event.getEventID())
-                                            .get()
-                                            .addOnSuccessListener(documentSnapshot -> {
-                                                if (documentSnapshot.exists()) {
-                                                    String eventName = documentSnapshot.getString("eventName");
-
-                                                    if (eventName != null && !eventName.isEmpty()) {
-                                                        EntrantNotifications entrantNotifications = new EntrantNotifications();
-                                                        entrantNotifications.queueNotification(
-                                                                remainingEntrant.getUserId(),
-                                                                eventName,
-                                                                "We're sorry! You were not chosen for the event: " + eventName + ". Thank you for your interest.",
-                                                                null
-                                                        );
-                                                    } else {
-                                                        Log.e("OrganizerRunLottery", "Event name is null or empty for eventID: " + event.getEventID());
-                                                    }
-                                                } else {
-                                                    Log.e("OrganizerRunLottery", "Event document does not exist for eventID: " + event.getEventID());
-                                                }
-                                            })
-                                            .addOnFailureListener(e -> {
-                                                Log.e("OrganizerRunLottery", "Failed to fetch event details for notification", e);
-                                            });
-                                }
-                            } else {
-                                Log.d("OrganizerRunLottery", "No remaining entrants in the waitlist.");
-                            }
-                        });
-
                         Toast.makeText(getContext(), "Success! " + selected.size() + "Entrants chosen.", Toast.LENGTH_SHORT).show();
-                        // Navigate back to home
+
+                        // Notify remaining waitlist entrants
+                        db.collection("events")
+                                .document(event.getEventID())
+                                .collection("waitlist_pending")
+                                .get()
+                                .addOnSuccessListener(querySnapshot -> {
+                                    for (QueryDocumentSnapshot doc : querySnapshot) {
+                                        EntrantProfile remainingEntrant = doc.toObject(EntrantProfile.class);
+
+                                        // Ensure this entrant is not in the selected list
+                                        boolean isRejected = selected.stream().noneMatch(chosen -> chosen.getUserId().equals(remainingEntrant.getUserId()));
+
+                                        if (isRejected) {
+                                            EntrantNotifications entrantNotifications = new EntrantNotifications();
+                                            entrantNotifications.queueNotification(
+                                                    remainingEntrant.getUserId(),
+                                                    event.getEventName(),
+                                                    "We're sorry! You were not chosen for the event: " + event.getEventName() + ". Thank you for your interest.",
+                                                    null
+                                            );
+                                            Log.d("OrganizerRunLottery", "Notification sent to rejected entrant: " + remainingEntrant.getUserId());
+                                        }
+                                    }
+                                    Log.d("OrganizerRunLottery", "All rejection notifications queued.");
+                                })
+                                .addOnFailureListener(e -> Log.e("OrganizerRunLottery", "Failed to fetch pending entrants for rejection notifications", e));
+
                         NavController navController = Navigation.findNavController(v);
                         navController.navigate(R.id.action_organizerRunLottery_to_navigation_orghome);
                     }
