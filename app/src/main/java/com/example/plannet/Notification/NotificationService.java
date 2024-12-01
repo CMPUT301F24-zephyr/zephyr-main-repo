@@ -90,7 +90,7 @@ public class NotificationService extends Service {
                                 // Add invite to invites subcollection
                                 Map<String, Object> inviteData = new HashMap<>();
                                 inviteData.put("eventName", title);
-                                inviteData.put("location", body);
+                                inviteData.put("body", body);
                                 inviteData.put("status", "pending");
                                 inviteData.put("eventID", eventID);
 

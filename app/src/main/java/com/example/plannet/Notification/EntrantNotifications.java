@@ -26,7 +26,7 @@ public class EntrantNotifications {
      * @param title The notification title.
      * @param body The notification message.
      */
-    public void queueNotification(String userID, String title, String body, @Nullable String type) {
+    public void queueNotification(String userID, String title, String body, @Nullable String eventID) {
         if (userID == null ||title== null || body== null) {
             Log.e("EntrantNotifications", "Invalid input.");
             return;
@@ -36,7 +36,7 @@ public class EntrantNotifications {
         Map<String, Object> notification = new HashMap<>();
         notification.put("title", title);
         notification.put("body", body);
-        notification.put("type", type);
+        notification.put("eventID", eventID);
 
 
         firebaseDB.collection("notifications")
