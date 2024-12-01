@@ -2,7 +2,8 @@ package com.example.plannet.Notification;
 
 
 public class Invite {
-    private String id; // Unique identifier for the invite
+    private String id;// Unique identifier for the invite
+    private String eventID; // ID of the  event
     private String eventTitle; // Title of the event
     private String eventLocation; // Location of the event
     private String status; // Status of the invite
@@ -12,8 +13,9 @@ public class Invite {
     }
 
     //Constructor
-    public Invite(String id, String eventTitle, String eventLocation, String status) {
+    public Invite(String id, String eventID, String eventTitle, String eventLocation, String status) {
         this.id = id;
+        this.eventID = eventID;
         this.eventTitle = eventTitle;
         this.eventLocation = eventLocation;
         this.status = status;
@@ -26,6 +28,12 @@ public class Invite {
 
     public void setId(String id) {
         this.id = id;
+    }
+    public String getEventID() {
+        return eventID;
+    }
+    public void setEventID(String eventID) {
+        this.eventID = eventID;
     }
 
     public String getEventTitle() {

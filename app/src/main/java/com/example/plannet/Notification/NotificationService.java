@@ -80,18 +80,19 @@ public class NotificationService extends Service {
                         for (DocumentSnapshot doc : snapshots.getDocuments()) {
                             String title = doc.getString("title");
                             String body = doc.getString("body");
-                            String type = doc.getString("type");
+                            String eventID = doc.getString("eventID");
                             String docId = doc.getId();
 
                             Log.d("NotificationService", "New notification detected: " + title);
                             showSystemNotification(title, body);
 
-                            if ("Invite".equals(type)) {
+                            if (eventID != null) {
                                 // Add invite to invites subcollection
                                 Map<String, Object> inviteData = new HashMap<>();
                                 inviteData.put("eventName", title);
                                 inviteData.put("location", body);
                                 inviteData.put("status", "pending");
+                                inviteData.put("eventID", eventID);
 
                                 db.collection("notifications")
                                         .document(userID)

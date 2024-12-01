@@ -44,6 +44,7 @@ public class InviteListArrayAdapter extends ArrayAdapter<Invite> {
         if (invite != null) {
             eventTitle.setText(invite.getEventTitle());
             eventStatus.setText(invite.getStatus());
+
         }
 
         return convertView;

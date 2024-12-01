@@ -131,6 +131,9 @@
         android:name="com.example.plannet.ui.entrantnotifications.EntrantNotificationsFragment"
         android:label="Entrant Notifications"
         tools:layout="@layout/fragment_entrant_notifications">
+        <action
+            android:id="@+id/action_notifications_to_viewEventFragment"
+            app:destination="@id/entrant_View_Event_Fragment" />
     </fragment>
 
     <fragment

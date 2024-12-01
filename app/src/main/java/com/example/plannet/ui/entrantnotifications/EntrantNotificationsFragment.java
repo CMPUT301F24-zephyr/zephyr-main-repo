@@ -10,6 +10,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import android.provider.Settings;
 import android.util.Log;
@@ -25,6 +27,7 @@ import com.example.plannet.Notification.NotificationService;
 import com.example.plannet.ArrayAdapters.InviteListArrayAdapter;
 import com.example.plannet.Notification.Invite;
 import com.example.plannet.R;
+import com.example.plannet.ui.entrantprofile.entrantViewEventFragment;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
@@ -101,8 +104,31 @@ public class EntrantNotificationsFragment extends Fragment {
         inviteListView.setAdapter(inviteAdapter);
 
         inviteListView.setOnItemClickListener((parent, view1, position, id) -> {
+        if (position >= 0 && position < inviteList.size()) {
             Invite selectedInvite = inviteList.get(position);
-            showInviteDialog(selectedInvite);
+
+            if (selectedInvite != null) {
+                Log.d("InviteListFragment", "Selected Invite: " + selectedInvite);
+
+                Bundle bundle = new Bundle();
+                bundle.putString("eventID", selectedInvite.getEventID());
+                if (selectedInvite.getStatus().equals("pending")) {
+                    bundle.putString("eventStatus", "chosen");
+                }
+                else {
+                    bundle.putString("eventStatus", selectedInvite.getStatus());
+                }
+                bundle.putString("inviteID", selectedInvite.getId());
+
+                Log.d("InviteListFragment", "Bundle Content: " + bundle.toString());
+
+                NavController navController = Navigation.findNavController(view);
+                navController.navigate(R.id.action_notifications_to_viewEventFragment, bundle);
+            } else {
+                Log.e("InviteListFragment", "Selected Invite is null!");
+            }
+        }
+
         });
 
         loadInvites();
@@ -139,47 +165,32 @@ public class EntrantNotificationsFragment extends Fragment {
                     inviteList.clear();
                     for (DocumentSnapshot doc : queryDocumentSnapshots) {
                         String inviteID = doc.getId();
+                        String eventID = doc.getString("eventID");
                         String eventTitle = doc.getString("eventName");
                         String eventLocation = doc.getString("location");
                         String status = doc.getString("status");
-                        inviteList.add(new Invite(inviteID, eventTitle, eventLocation, status));
+                        inviteList.add(new Invite(inviteID, eventID, eventTitle, eventLocation, status));
                     }
                     inviteAdapter.notifyDataSetChanged();
                 })
                 .addOnFailureListener(e -> Log.e("Firestore", "Error fetching invites", e));
     }
 
-    private void showInviteDialog(Invite invite) {
-        new AlertDialog.Builder(requireContext())
-                .setTitle("Invitation")
-                .setMessage("Event: " + invite.getEventTitle() + "\nLocation: " + invite.getEventLocation())
-                .setPositiveButton("Accept", (dialog, which) -> handleInviteAction(invite, "accepted"))
-                .setNegativeButton("Decline", (dialog, which) -> handleInviteAction(invite, "declined"))
-                .show();
+    private void navToEventDetails(Invite invite) {
+        // Pass event ID and status to entrantViewEventFragment
+        Bundle bundle = new Bundle();
+        bundle.putString("eventID", invite.getEventID());
+        bundle.putString("eventStatus", invite.getStatus());
+
+        entrantViewEventFragment eventFragment = new entrantViewEventFragment();
+        eventFragment.setArguments(bundle);
+
+        requireActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container, eventFragment)
+                .addToBackStack(null)
+                .commit();
     }
 
-    private void handleInviteAction(Invite invite, String action) {
-        firebaseDB.collection("notifications")
-                .document(userID)
-                .collection("invites")
-                .document(invite.getId())
-                .get()
-                .addOnSuccessListener(doc -> {
-                    if (doc.exists()) {
-                        firebaseDB.collection("notifications")
-                                .document(userID)
-                                .collection("invites")
-                                .document(doc.getId())
-                                .update("status", action)
-                                .addOnSuccessListener(aVoid -> {
-                                    Log.d("InviteAction", "Invite " + action + " successfully.");
-                                    loadInvites();
-                                })
-                                .addOnFailureListener(e -> Log.e("InviteAction", "Error updating invite status", e));
-                    }
-                })
-                .addOnFailureListener(e -> Log.e("InviteAction", "Error fetching invite", e));
-    }
 }
 
-}
