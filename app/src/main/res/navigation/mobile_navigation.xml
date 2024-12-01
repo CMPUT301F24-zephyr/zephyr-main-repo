@@ -10,9 +10,9 @@
         android:name="com.example.plannet.ui.orghome.OrganizerHomeFragment"
         android:label="@string/title_orghome"
         tools:layout="@layout/fragment_home_organizer">
-            <action
-                android:id="@+id/action_home_to_createEvent"
-                app:destination="@id/navigation_organizer_create_event" />
+        <action
+            android:id="@+id/action_home_to_createEvent"
+            app:destination="@id/navigation_organizer_create_event" />
         <action
             android:id="@+id/action_home_to_entrant"
             app:destination="@id/navigation_entranthome" />
