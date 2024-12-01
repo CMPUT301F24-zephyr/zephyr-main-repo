@@ -14,8 +14,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.example.plannet.Entrant.EntrantDBConnector;
 import com.example.plannet.Entrant.EntrantProfile;
+import com.example.plannet.FirebaseConnector;
 import com.example.plannet.Notification.EntrantNotifications;
 import com.example.plannet.R;
 import com.example.plannet.ui.entrantnotifications.EntrantNotificationsFragment;
@@ -31,13 +33,14 @@ public class EventDetailsFragment extends Fragment {
     private Button registerButton;
     private ImageView backArrow, poster;
     private EntrantDBConnector dbConnector;
+    private FirebaseConnector firebaseConnector;
     private String eventID;
     private String userID;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.entrant_view_event, container, false);
         dbConnector = new EntrantDBConnector();
-
+        firebaseConnector = new FirebaseConnector();
 
         title = root.findViewById(R.id.title);
         facilityName = root.findViewById(R.id.facility_name);
@@ -74,6 +77,22 @@ public class EventDetailsFragment extends Fragment {
 
         backArrow.setOnClickListener(v -> requireActivity().onBackPressed());
         registerButton.setOnClickListener(v -> registerForEvent());
+
+        if (eventBundle != null) {
+            Log.d("View Event", "Event found with name: " + eventBundle.getString("eventName"));
+            // get poster
+            firebaseConnector.getPicture("poster", "posters/" + eventID + ".jpg",
+                    URL -> {
+                        Log.d("Entrant View Event", "Poster downloaded for event from Firebase.");
+                        Glide.with(this)
+                                .load(URL)
+                                .placeholder(R.drawable.no_poster)
+                                .into(poster);
+                    },
+                    exception -> {
+                        Log.d("Entrant View Event", "No poster exists for event.");
+                    });
+        }
 
         return root;
     }
@@ -124,9 +143,9 @@ public class EventDetailsFragment extends Fragment {
 
                                 dbConnector.updateWaitlist(userID, "pending", eventID, eventData,
                                         waitlistSuccess -> {
-                                            Toast.makeText(getContext(), "Successfully added to pending waitlist (both user and event).", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getContext(), "Successfully added to pending waitlist.", Toast.LENGTH_SHORT).show();
                                             EntrantNotifications notifications = new EntrantNotifications();
-                                            notifications.queueNotification(userID, "Congrats1", "You have been added to the pending waitlist for " + title.getText().toString());
+                                            notifications.queueNotification(userID, "Congrats!", "You have been added to the pending waitlist for " + title.getText().toString());
                                         },
                                         waitlistFailure -> {
                                             Toast.makeText(getContext(), "Failed to update user's pending waitlist.", Toast.LENGTH_SHORT).show();

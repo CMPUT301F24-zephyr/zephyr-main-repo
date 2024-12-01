@@ -258,8 +258,8 @@ public class entrantViewEventFragment extends Fragment {
                         declinedEntrantData.put("phone", userInfo.getOrDefault("phone", "N/A"));
                         declinedEntrantData.put("profilePictureUrl", userInfo.getOrDefault("profilePictureUrl", null));
                         declinedEntrantData.put("notificationsEnabled", userInfo.getOrDefault("notifsActivated", false));
-                        declinedEntrantData.put("entrantlatitude", userInfo.getOrDefault("latitude", "N/A"));
-                        declinedEntrantData.put("entrantlongitude", userInfo.getOrDefault("longitude", "N/A"));
+                        declinedEntrantData.put("entrantlatitude", userInfo.getOrDefault("latitude", null));
+                        declinedEntrantData.put("entrantlongitude", userInfo.getOrDefault("longitude", null));
 
                         //remove the entrant from the old waitlist in events
                         firebaseConnector.removeDataFromWaitlist(eventId, userId, oldStatus,

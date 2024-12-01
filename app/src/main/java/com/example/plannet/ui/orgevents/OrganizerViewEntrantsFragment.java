@@ -72,7 +72,7 @@ public class OrganizerViewEntrantsFragment extends Fragment {
                 binding.title.setText("Event: " + event.getEventName());
 
                 // Get entrants
-                List<String> statuses = List.of("pending", "chosen", "enrolled", "cancelled");
+                List<String> statuses = List.of("pending", "chosen", "enrolled", "declined");
                 for (String status : statuses) {
                     // Get entrants for each status
                     dbConnector.getEventWaitlistEntrants(event.getEventID(), status, entrants -> {
@@ -135,15 +135,15 @@ public class OrganizerViewEntrantsFragment extends Fragment {
             adapter.filter(filters);
         });
 
-        // Cancelled
+        // Cancelled/declined
         binding.cancelledButton.setOnClickListener(v -> {
-            if (filters.contains("cancelled")){
+            if (filters.contains("declined")){
                 // This button is active, we are making it inactive/removing the filter.
-                filters.remove("cancelled");
+                filters.remove("declined");
                 binding.cancelledButton.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.buttonGrey)));
             }
             else {
-                filters.add("cancelled");
+                filters.add("declined");
                 binding.cancelledButton.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.cancelled)));
             }
             // Once the filters are properly set:

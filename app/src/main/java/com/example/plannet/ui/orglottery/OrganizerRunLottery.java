@@ -101,9 +101,9 @@ public class OrganizerRunLottery extends Fragment {
                     else {
                         List<EntrantProfile> selected = new ArrayList<>(lotto.drawParticipants(pending, Integer.parseInt(howMany)));
                         for (EntrantProfile entrant: selected){
-                            dbConnector.moveToWaitlist(event.getEventID(), entrant.getUserId());
+                            dbConnector.moveToWaitlist(event.getEventID(), entrant.getUserId(), "pending", "chosen");
                         }
-                        Toast.makeText(getContext(), "Success! " + selected.size() + "Entrants chosen.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Success! " + selected.size() + " Entrants chosen.", Toast.LENGTH_SHORT).show();
                         // Navigate back to home
                         NavController navController = Navigation.findNavController(v);
                         navController.navigate(R.id.action_organizerRunLottery_to_navigation_orghome);
