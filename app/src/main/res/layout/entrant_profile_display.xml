@@ -25,15 +25,17 @@
 
     <ImageView
         android:id="@+id/info_background"
-        android:layout_width="391dp"
+        android:layout_width="361dp"
         android:layout_height="303dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imageView11"
         app:layout_constraintVertical_bias="0.088"
+
         app:srcCompat="@drawable/rectangle" />
+
 
     <TextView
         android:id="@+id/location_prompt"
@@ -44,10 +46,10 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/info_background"
         app:layout_constraintEnd_toEndOf="@+id/info_background"
-        app:layout_constraintHorizontal_bias="0.088"
+        app:layout_constraintHorizontal_bias="0.147"
         app:layout_constraintStart_toStartOf="@+id/info_background"
         app:layout_constraintTop_toTopOf="@+id/info_background"
-        app:layout_constraintVertical_bias="0.846" />
+        app:layout_constraintVertical_bias="0.8" />
 
     <TextView
         android:id="@+id/first_name_prompt"
@@ -58,15 +60,15 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/info_background"
         app:layout_constraintEnd_toEndOf="@+id/info_background"
-        app:layout_constraintHorizontal_bias="0.04"
+        app:layout_constraintHorizontal_bias="0.103"
         app:layout_constraintStart_toStartOf="@+id/info_background"
         app:layout_constraintTop_toTopOf="@+id/info_background"
-        app:layout_constraintVertical_bias="0.113" />
+        app:layout_constraintVertical_bias="0.144" />
 
     <EditText
         android:id="@+id/first_name_edit"
-        android:layout_width="259dp"
-        android:layout_height="43dp"
+        android:layout_width="236dp"
+        android:layout_height="39dp"
         android:backgroundTint="@color/white"
         android:hint="First Name"
         android:inputType="text"
@@ -75,10 +77,10 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/info_background"
         app:layout_constraintEnd_toEndOf="@+id/info_background"
-        app:layout_constraintHorizontal_bias="0.894"
+        app:layout_constraintHorizontal_bias="0.838"
         app:layout_constraintStart_toStartOf="@+id/info_background"
         app:layout_constraintTop_toTopOf="@+id/info_background"
-        app:layout_constraintVertical_bias="0.081" />
+        app:layout_constraintVertical_bias="0.121" />
 
 
     <TextView
@@ -90,14 +92,14 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/info_background"
         app:layout_constraintEnd_toEndOf="@+id/info_background"
-        app:layout_constraintHorizontal_bias="0.052"
+        app:layout_constraintHorizontal_bias="0.103"
         app:layout_constraintStart_toStartOf="@+id/info_background"
         app:layout_constraintTop_toTopOf="@+id/info_background"
-        app:layout_constraintVertical_bias="0.291" />
+        app:layout_constraintVertical_bias="0.284" />
 
     <EditText
         android:id="@+id/last_name_edit"
-        android:layout_width="259dp"
+        android:layout_width="236dp"
         android:layout_height="39dp"
         android:backgroundTint="@color/white"
         android:hint="Last Name"
@@ -107,10 +109,10 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/info_background"
         app:layout_constraintEnd_toEndOf="@+id/info_background"
-        app:layout_constraintHorizontal_bias="0.907"
+        app:layout_constraintHorizontal_bias="0.838"
         app:layout_constraintStart_toStartOf="@+id/info_background"
         app:layout_constraintTop_toTopOf="@+id/info_background"
-        app:layout_constraintVertical_bias="0.275" />
+        app:layout_constraintVertical_bias="0.276" />
 
 
     <TextView
@@ -122,15 +124,15 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/info_background"
         app:layout_constraintEnd_toEndOf="@+id/info_background"
-        app:layout_constraintHorizontal_bias="0.148"
+        app:layout_constraintHorizontal_bias="0.19"
         app:layout_constraintStart_toStartOf="@+id/info_background"
         app:layout_constraintTop_toTopOf="@+id/info_background"
-        app:layout_constraintVertical_bias="0.467" />
+        app:layout_constraintVertical_bias="0.43" />
 
     <EditText
         android:id="@+id/phone_edit"
-        android:layout_width="266dp"
-        android:layout_height="44dp"
+        android:layout_width="236dp"
+        android:layout_height="39dp"
         android:backgroundTint="@color/white"
         android:hint="Phone Number"
         android:inputType="phone"
@@ -139,11 +141,10 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/info_background"
         app:layout_constraintEnd_toEndOf="@+id/info_background"
-        app:layout_constraintHorizontal_bias="0.937"
+        app:layout_constraintHorizontal_bias="0.838"
         app:layout_constraintStart_toStartOf="@+id/info_background"
         app:layout_constraintTop_toTopOf="@+id/info_background"
-        app:layout_constraintVertical_bias="0.46" />
-
+        app:layout_constraintVertical_bias="0.458" />
 
     <TextView
         android:id="@+id/email_prompt"
@@ -154,15 +155,15 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/info_background"
         app:layout_constraintEnd_toEndOf="@+id/info_background"
-        app:layout_constraintHorizontal_bias="0.162"
+        app:layout_constraintHorizontal_bias="0.204"
         app:layout_constraintStart_toStartOf="@+id/info_background"
         app:layout_constraintTop_toTopOf="@+id/info_background"
-        app:layout_constraintVertical_bias="0.654" />
+        app:layout_constraintVertical_bias="0.622" />
 
     <EditText
         android:id="@+id/email_edit"
-        android:layout_width="268dp"
-        android:layout_height="49dp"
+        android:layout_width="236dp"
+        android:layout_height="39dp"
         android:backgroundTint="@color/white"
         android:hint="email@example.com"
         android:inputType="textEmailAddress"
@@ -171,10 +172,10 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/info_background"
         app:layout_constraintEnd_toEndOf="@+id/info_background"
-        app:layout_constraintHorizontal_bias="0.951"
+        app:layout_constraintHorizontal_bias="0.838"
         app:layout_constraintStart_toStartOf="@+id/info_background"
         app:layout_constraintTop_toTopOf="@+id/info_background"
-        app:layout_constraintVertical_bias="0.669" />
+        app:layout_constraintVertical_bias="0.632" />
 
     <TextView
         android:id="@+id/tap_to_edit"
@@ -227,7 +228,6 @@
         android:text="UPDATE INFO"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/info_background"
         app:layout_constraintVertical_bias="0.0" />
@@ -239,9 +239,9 @@
         android:text="Update Location"
         app:layout_constraintBottom_toBottomOf="@+id/info_background"
         app:layout_constraintEnd_toEndOf="@+id/info_background"
-        app:layout_constraintHorizontal_bias="0.525"
+        app:layout_constraintHorizontal_bias="0.599"
         app:layout_constraintStart_toStartOf="@+id/info_background"
         app:layout_constraintTop_toTopOf="@+id/info_background"
-        app:layout_constraintVertical_bias="0.886" />
+        app:layout_constraintVertical_bias="0.831" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
