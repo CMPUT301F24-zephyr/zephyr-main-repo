@@ -152,7 +152,7 @@ public class OrganizerRunLottery extends Fragment {
                                                                 remainingEntrant.getUserId(),
                                                                 eventName,
                                                                 "We're sorry! You were not chosen for the event: " + eventName + ". Thank you for your interest.",
-                                                                event.getEventID()
+                                                                null
                                                         );
                                                     } else {
                                                         Log.e("OrganizerRunLottery", "Event name is null or empty for eventID: " + event.getEventID());
