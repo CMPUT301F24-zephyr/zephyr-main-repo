@@ -1,6 +1,7 @@
 package com.example.plannet.Event;
 
 
+import com.example.plannet.Notification.EntrantNotifications;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.example.plannet.Entrant.EntrantProfile;
@@ -57,6 +58,23 @@ public class LotterySystem {
             // Remove from pending list in memory
             pendingWaitlist.removeEntrant(entrant);
 
+            // Queue Notification
+            db.collection("events")
+                    .document(eventId)
+                    .get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
+                            String eventName = documentSnapshot.getString("eventName");
+                            EntrantNotifications entrantNotifications = new EntrantNotifications();
+                            entrantNotifications.queueNotification(
+                                    entrant.getUserId(),
+                                    eventName,
+                                    "Congrats! You have been chosen for the event: " + eventName + ". Please respond to your invitation.",
+                                    eventId
+                            );
+                        }
+                    });
+
             // Update Firestore: Add to chosen list
             db.collection("events")
                     .document(eventId)
@@ -70,6 +88,7 @@ public class LotterySystem {
                     .update("pendingEntrants", FieldValue.arrayRemove(entrant))
                     .addOnSuccessListener(aVoid -> System.out.println("Participant removed from pending list: " + entrant.getName()))
                     .addOnFailureListener(e -> System.err.println("Error removing from pending list: " + e.getMessage()));
+
         }
     }
 
@@ -82,7 +101,24 @@ public class LotterySystem {
 
         String eventId = rejectedWaitlist.getEventID();
         chosenWaitlist.removeChosenEntrant(entrant);  // Remove from chosen list
-        rejectedWaitlist.addEntrant(entrant);         // Add to rejected list
+        rejectedWaitlist.addEntrant(entrant);         // Add to rejected
+
+        // Queue Notification
+        db.collection("events")
+                .document(eventId)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        String eventName = documentSnapshot.getString("eventName");
+                        EntrantNotifications entrantNotifications = new EntrantNotifications();
+                        entrantNotifications.queueNotification(
+                                entrant.getUserId(),
+                                "Better Luck Next Time!",
+                                "Unfortunately, you weren't chosen for the event " + eventName + "this round.",
+                                eventId
+                        );
+                    }
+                });
 
         // Update Firestore: Remove from chosen list
         db.collection("events")
@@ -97,6 +133,7 @@ public class LotterySystem {
                 .update("rejectedEntrants", FieldValue.arrayUnion(entrant))
                 .addOnSuccessListener(aVoid -> System.out.println("Participant added to rejected list: " + entrant.getName()))
                 .addOnFailureListener(e -> System.err.println("Error adding to rejected list: " + e.getMessage()));
+
     }
 
     /**
@@ -132,6 +169,26 @@ public class LotterySystem {
                     .update("pendingEntrants", FieldValue.arrayRemove(newParticipant))
                     .addOnSuccessListener(aVoid -> System.out.println("Participant removed from pending list: " + newParticipant.getName()))
                     .addOnFailureListener(e -> System.err.println("Error removing from pending list: " + e.getMessage()));
+
+            // Queue Notification
+            db.collection("events")
+                    .document(eventId)
+                    .get()
+                    .addOnSuccessListener(documentSnapshot -> {
+                        if (documentSnapshot.exists()) {
+                            String eventName = documentSnapshot.getString("eventName");
+                            EntrantNotifications entrantNotifications = new EntrantNotifications();
+                            entrantNotifications.queueNotification(
+                                    newParticipant.getUserId(),
+                                    eventName,
+                                    "Congrats! You have been chosen for the event: " + eventName + ". Please respond to your invitation.",
+                                    eventId
+                            );
+                        } else {
+                            System.err.println("Event does not exist: " + eventId);
+                        }
+                    })
+                    .addOnFailureListener(e -> System.err.println("Error fetching event name: " + e.getMessage()));
 
             return newParticipant;
         }

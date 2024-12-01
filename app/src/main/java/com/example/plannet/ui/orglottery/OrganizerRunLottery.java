@@ -18,8 +18,10 @@ import com.example.plannet.Entrant.EntrantProfile;
 import com.example.plannet.Event.Event;
 import com.example.plannet.Event.LotterySystem;
 import com.example.plannet.FirebaseConnector;
+import com.example.plannet.Notification.EntrantNotifications;
 import com.example.plannet.R;
 import com.example.plannet.databinding.FragmentOrganizerRunLotteryBinding;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +33,8 @@ public class OrganizerRunLottery extends Fragment {
     private FragmentOrganizerRunLotteryBinding binding;
     private Event event = null;  // Default null for error catching
     private FirebaseConnector dbConnector = new FirebaseConnector();
+    private String eventId;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     /**
      * onCreateView for what happens when the view is first created.
@@ -100,10 +104,38 @@ public class OrganizerRunLottery extends Fragment {
                     }
                     else {
                         List<EntrantProfile> selected = new ArrayList<>(lotto.drawParticipants(pending, Integer.parseInt(howMany)));
-                        for (EntrantProfile entrant: selected){
+                        for (EntrantProfile entrant : selected) {
                             dbConnector.moveToWaitlist(event.getEventID(), entrant.getUserId(), "pending", "chosen");
+
+                            // Queue Notification
+                            db.collection("events")
+                                    .document(event.getEventID()) // Fixed extra parenthesis
+                                    .get()
+                                    .addOnSuccessListener(documentSnapshot -> {
+                                        if (documentSnapshot.exists()) {
+                                            String eventName = documentSnapshot.getString("eventName");
+
+                                            if (eventName != null && !eventName.isEmpty()) {
+                                                EntrantNotifications entrantNotifications = new EntrantNotifications();
+                                                entrantNotifications.queueNotification(
+                                                        entrant.getUserId(),
+                                                        eventName,
+                                                        "Congrats! You have been chosen for the event: " + eventName + ". Please respond to your invitation.",
+                                                        event.getEventID()
+                                                );
+                                            } else {
+                                                Log.e("OrganizerRunLottery", "Event name is null or empty for eventID: " + event.getEventID());
+                                            }
+                                        } else {
+                                            Log.e("OrganizerRunLottery", "Event document does not exist for eventID: " + event.getEventID());
+                                        }
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        Log.e("OrganizerRunLottery", "Failed to fetch event details for notification", e);
+                                    });
                         }
-                        Toast.makeText(getContext(), "Success! " + selected.size() + " Entrants chosen.", Toast.LENGTH_SHORT).show();
+
+                        Toast.makeText(getContext(), "Success! " + selected.size() + "Entrants chosen.", Toast.LENGTH_SHORT).show();
                         // Navigate back to home
                         NavController navController = Navigation.findNavController(v);
                         navController.navigate(R.id.action_organizerRunLottery_to_navigation_orghome);
