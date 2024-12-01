@@ -1,11 +1,12 @@
-package com.example.plannet.Entrant;
-
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
+//package com.example.plannet.Entrant;
+//
+//import com.google.firebase.firestore.FirebaseFirestore;
+//
+//import java.util.ArrayList;
+//import java.util.List;
+//import java.util.Random;
+//
+//// COMMENTED OUT DUE TO ERRORS! Uncomment if needed
 //
 //public class EntrantLotterySystem {
 //

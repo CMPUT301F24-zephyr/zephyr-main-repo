@@ -325,8 +325,6 @@ public class entrantViewEventFragment extends Fragment {
 
 }
 
-
-
 //    private void showAcceptDeclineDialog(String eventId, String userId, Button actionButton) {
 //        if (eventId == null || userId == null) {
 //            Toast.makeText(getContext(), "Missing event or user ID.", Toast.LENGTH_SHORT).show();
