@@ -105,7 +105,7 @@ public class OrganizerRunLottery extends Fragment {
                     else {
                         List<EntrantProfile> selected = new ArrayList<>(lotto.drawParticipants(pending, Integer.parseInt(howMany)));
                         for (EntrantProfile entrant : selected) {
-                            dbConnector.moveToWaitlist(event.getEventID(), entrant.getUserId());
+                            dbConnector.moveToWaitlist(event.getEventID(), entrant.getUserId(), "pending", "chosen");
 
                             // Queue Notification
                             db.collection("events")

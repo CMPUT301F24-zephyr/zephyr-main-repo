@@ -124,8 +124,8 @@ public class OrganizerEntrantListArrayAdapter extends ArrayAdapter<EntrantProfil
                     status.setText("Enrolled");
                     status.setTextColor(ContextCompat.getColor(getContext(), R.color.enrolled));
                     break;
-                case "cancelled":
-                    status.setText("Cancelled");
+                case "declined":
+                    status.setText("Declined");
                     status.setTextColor(ContextCompat.getColor(getContext(), R.color.cancelled));
                     break;
             }

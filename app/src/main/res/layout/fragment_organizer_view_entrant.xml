@@ -241,6 +241,20 @@
         app:layout_constraintBottom_toBottomOf="@id/location_title"
         app:srcCompat="@drawable/map_icon" />
 
+    <Button
+        android:id="@+id/cancel_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins"
+        android:text="Cancel"
+        android:backgroundTint="@color/cancelled"
+        android:textAllCaps="false"
+        android:visibility="invisible"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/invite_title"
+        app:layout_constraintEnd_toStartOf="@id/invite_text"
+        app:layout_constraintStart_toEndOf="@id/invite_title"
+        app:layout_constraintTop_toTopOf="@+id/invite_title" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

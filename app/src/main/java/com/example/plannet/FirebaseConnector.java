@@ -652,16 +652,18 @@ public class FirebaseConnector {
 
     /**
      * Copied code from entrantViewEventFragment for moving entrants between waitlists when lottery is run.
-     * newStatus is hardcoded as "chosen" and oldstatus is hardcoded as "pending"
+     * Also used for moving entrants if they are cancelled by an organizer
      *
      * @param eventId
      *      Id of the event
      * @param userId
      *      ID of the user
+     * @param oldStatus
+     *      The original status of the user waitlist (i.e. "pending")
+     * @param newStatus
+     *      The new status of the user waitlist (i.e. "chosen")
      */
-    public void moveToWaitlist(String eventId, String userId) {
-        String newStatus = "chosen";
-        String oldStatus = "pending";
+    public void moveToWaitlist(String eventId, String userId, String oldStatus, String newStatus) {
         getUserEventsByID(eventId,
                 eventData -> {
 
@@ -688,23 +690,23 @@ public class FirebaseConnector {
                         declinedEntrantData.put("phone", userInfo.getOrDefault("phone", "N/A"));
                         declinedEntrantData.put("profilePictureUrl", userInfo.getOrDefault("profilePictureUrl", null));
                         declinedEntrantData.put("notificationsEnabled", userInfo.getOrDefault("notifsActivated", false));
-                        declinedEntrantData.put("entrantlatitude", userInfo.getOrDefault("latitude", "N/A"));
-                        declinedEntrantData.put("entrantlongitude", userInfo.getOrDefault("longitude", "N/A"));
+                        declinedEntrantData.put("entrantlatitude", userInfo.getOrDefault("latitude", null));
+                        declinedEntrantData.put("entrantlongitude", userInfo.getOrDefault("longitude", null));
 
                         //remove the entrant from the old waitlist in events
                         removeDataFromWaitlist(eventId, userId, oldStatus,
                                 success -> {
-                                    Log.d("unregisterForEvent", "Successfully removed user from event's pending waitlist.");
+                                    Log.d("unregisterForEvent", "Successfully removed user from event's "+ oldStatus +" waitlist.");
 
                                     //remove the old waitlist entry from the user's collection
                                     removeUserWaitlistEvent(userId, oldStatus, eventId,
                                             removed -> {
-                                                Log.d("FirebaseConnector moveToWaitlist", "Successfully removed pending waitlist from user's collection.");
+                                                Log.d("FirebaseConnector moveToWaitlist", "Successfully removed "+ oldStatus +" waitlist from user's collection.");
 
                                                 //add entrant to the "declined" waitlist in events
                                                 addDataToWaitlist(eventId, userId, declinedEntrantData, newStatus,
                                                         added -> {
-                                                            Log.d("FirebaseConnector moveToWaitlist", "Successfully added user to event's declined waitlist.");
+                                                            Log.d("FirebaseConnector moveToWaitlist", "Successfully added user to event's "+ newStatus +"  waitlist.");
 
                                                             //update user's waitlist entry for "declined"
                                                             Map<String, Object> declinedWaitlistData = new HashMap<>();
@@ -724,9 +726,9 @@ public class FirebaseConnector {
                                                         },
                                                         error -> Log.e("FirebaseConnector moveToWaitlist", "Failed to change waitlist.", error));
                                             },
-                                            error -> Log.e("FirebaseConnector moveToWaitlist", "Failed to remove pending waitlist from user's collection.", error));
+                                            error -> Log.e("FirebaseConnector moveToWaitlist", "Failed to remove "+oldStatus+" waitlist from user's collection.", error));
                                 },
-                                error -> Log.e("FirebaseConnector moveToWaitlist", "Failed to remove user from event's pending waitlist.", error));
+                                error -> Log.e("FirebaseConnector moveToWaitlist", "Failed to remove user from event's "+oldStatus+" waitlist.", error));
                     }, error -> Log.e("FirebaseConnector moveToWaitlist", "Error fetching user profile", error));
                 },
                 error -> {

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.bumptech.glide.Glide;
 import com.example.plannet.ArrayAdapters.OrganizerEntrantListArrayAdapter;
 import com.example.plannet.Entrant.EntrantProfile;
 import com.example.plannet.Event.Event;
@@ -78,8 +80,29 @@ public class OrganizerViewEntrantInfoFragment extends Fragment {
                 binding.lastnameText.setText(entrant.getLastName());
                 binding.phoneText.setText(entrant.getPhoneNumber());
                 binding.emailText.setText(entrant.getEmail());
-                // Remember to add functionality for clicking the map and seeing their location
-                //binding.profilePicture.setImageResource(NEW IMAGE);  // Remember to change the profile picture when that is implemented!
+                // Profile Picture
+                dbConnector.getPicture("profile", entrant.getUserId(),
+                        URL -> {
+                            Glide.with(this)
+                                    .load(URL)
+                                    .placeholder(R.drawable.profile)
+                                    .into((ImageView) this.getView().findViewById(R.id.profile_picture));
+                        },
+                        exception -> {
+                            Glide.with(this)
+                                    .load("https://robohash.org/" + entrant.getUserId() + ".png")
+                                    .placeholder(R.drawable.profile)
+                                    .into((ImageView) this.getView().findViewById(R.id.profile_picture));
+                        });
+                // Cancel button functionality if user is pending
+                if (entrant.getWaitlistStatus() == "chosen") {
+                    // Make cancel button visible
+                    binding.cancelButton.setVisibility(View.VISIBLE);
+                }
+                else {
+                    // Entrant is any other type
+                    binding.cancelButton.setVisibility(View.GONE);
+                }
             }
         }
         // set on click listener for map_icon to send to Map fragment class with latitude+longitude in viewmodel and show on map
@@ -126,6 +149,13 @@ public class OrganizerViewEntrantInfoFragment extends Fragment {
             } else {
                 Log.e("Organizer View Entrant Info", "Binding is null in back arrow listener.");
             }
+        });
+
+        // button listener for cancel button
+        binding.cancelButton.setOnClickListener(v -> {
+            dbConnector.moveToWaitlist(event.getEventID(), entrant.getUserId(), "chosen", "declined");
+            binding.inviteText.setText("DECLINED");
+            Toast.makeText(requireContext(), "Updated entrant status (chosen -> declined)!", Toast.LENGTH_SHORT).show();
         });
 
         return root;
