@@ -746,6 +746,10 @@ public class FirebaseConnector {
      */
     public void updateInviteStatus(String userID, String inviteID, String newStatus,
                                    Runnable onSuccess, Consumer<Exception> onFailure) {
+        if (inviteID == null || inviteID.isEmpty()) {
+            Log.e("FirebaseConnector", "Invalid document path: inviteId is null or empty.");
+            return;
+        }
         db.collection("notifications")
                 .document(userID)
                 .collection("invites")

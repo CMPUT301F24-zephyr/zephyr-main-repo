@@ -63,7 +63,7 @@ public class EventDetailsFragment extends Fragment {
             end_date.setText(eventBundle.getString("registrationDateDeadline"));
             eventDates.setText("Event Dates: " + eventBundle.getString("registrationStartDate") + " to " + eventBundle.getString("eventDate"));
             capacity.setText("Capacity: " + eventBundle.getInt("maxEntrants"));
-            cost.setText("Cost: " + eventBundle.getString("price"));
+            cost.setText("Cost: $" + eventBundle.getString("price"));
             end_date.setText(eventBundle.getString("registrationDateDeadline"));
             descriptionWriting.setText(eventBundle.getString("description"));
             geolocation.setText(eventBundle.getString("geolocation"));
@@ -145,7 +145,7 @@ public class EventDetailsFragment extends Fragment {
                                         waitlistSuccess -> {
                                             Toast.makeText(getContext(), "Successfully added to pending waitlist.", Toast.LENGTH_SHORT).show();
                                             EntrantNotifications notifications = new EntrantNotifications();
-                                            notifications.queueNotification(userID, "Congrats!", "You have been added to the pending waitlist for " + title.getText().toString());
+                                            notifications.queueNotification(userID, "Congrats!", "You have been added to the pending waitlist for " + title.getText().toString(), null);
                                         },
                                         waitlistFailure -> {
                                             Toast.makeText(getContext(), "Failed to update user's pending waitlist.", Toast.LENGTH_SHORT).show();

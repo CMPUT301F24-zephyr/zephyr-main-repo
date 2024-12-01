@@ -122,7 +122,7 @@ public class entrantViewEventFragment extends Fragment {
                     facilityAddressTextView.setText("No Address Available"); // Placeholder if address is missing
                     descriptionTextView.setText((String) eventData.getOrDefault("description", "No Description"));
                     capacityTextView.setText("Capacity: " + eventData.getOrDefault("eventMaxEntrants", "N/A"));
-                    costTextView.setText("Cost: " + eventData.getOrDefault("eventPrice", "Free"));
+                    costTextView.setText("Cost: $" + eventData.getOrDefault("eventPrice", "Free"));
 
 
                     Timestamp startDate = (Timestamp) eventData.get("RunTimeStartDate");
