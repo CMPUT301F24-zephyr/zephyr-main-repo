@@ -39,24 +39,6 @@ public class EntrantDBConnector {
     }
 
 
-
-    /**
-     * Remove an entrant from a specified waitlist in the Firestore database.
-     *
-     * @param collectionPath
-     *      The path of the collection in Firestore where waitlist is stored.
-     * @param documentID
-     *      The string ID of the document to be removed.
-     * @param onSuccess
-     *      Triggered if the operation is successful.
-     * @param onFailure
-     *      Triggered if the operation is unsuccessful.
-     */
-    public void removeEntrantFromWaitlist(String collectionPath, String documentID,
-                                          OnSuccessListener<Void> onSuccess, OnFailureListener onFailure) {
-        fireCon.deleteData(collectionPath, documentID, onSuccess, onFailure);
-    }
-
     /**
      * Saves user information in the Firestore Database.
      *
@@ -115,19 +97,4 @@ public class EntrantDBConnector {
         // Add the eventID as a document within the "events" sub-collection
         fireCon.addData(collectionPath, eventID, eventData, onSuccess, onFailure);
     }
-
-
-    /**
-     * returns the pending waitlist of an event
-     * @param userID
-     * @param onSuccess
-     * @param onFailure
-     */
-    public void getPendingWaitlist(String userID, OnSuccessListener<List<Map<String, Object>>> onSuccess, OnFailureListener onFailure) {
-        String path = "users/" + userID + "/waitlists/pending/events";
-        fireCon.getSubCollection(path, onSuccess, onFailure);
-    }
-
-
-
 }

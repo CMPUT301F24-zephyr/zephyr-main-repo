@@ -88,55 +88,6 @@ public class EntrantHomeFragment extends Fragment {
 
     }
 
-    private void refreshWaitlists(String userID) {
-        FirebaseConnector firebaseConnector = new FirebaseConnector();
-        EntrantProfile profile = EntrantProfile.getInstance();
-
-        // Clear existing waitlists to avoid duplication
-        profile.getWaitlistPending().clearWaitlist();
-        profile.getWaitlistAccepted().clearWaitlist();
-        profile.getWaitlistRejected().clearWaitlist();
-
-        // Fetch and update Pending events
-        firebaseConnector.getUserEvents(userID, "pending",
-                events -> {
-                    if (events.isEmpty()) {
-                        Log.d("EntrantHomeFragment", "No pending events found for user: " + userID);
-                    } else {
-                        for (Map<String, Object> event : events) {
-                            Log.d("EntrantHomeFragment", "Fetched event: " + event);
-                            String eventID = (String) event.get("eventID");
-                            profile.getWaitlistPending().addWaitlist(eventID);
-                        }
-                    }
-                    Log.d("EntrantHomeFragment", "Pending events updated successfully.");
-                },
-                error -> Log.e("EntrantHomeFragment", "Failed to fetch pending events", error)
-        );
-
-        // Fetch and update Accepted events
-        firebaseConnector.getUserEvents(userID, "accepted",
-                events -> {
-                    for (Map<String, Object> event : events) {
-                        String eventID = (String) event.get("eventID");
-                        profile.getWaitlistAccepted().addWaitlist(eventID);
-                    }
-                    Log.d("EntrantHomeFragment", "Accepted events updated successfully.");
-                },
-                error -> Log.e("EntrantHomeFragment", "Failed to fetch accepted events", error));
-
-        // Fetch and update Declined events
-        firebaseConnector.getUserEvents(userID, "declined",
-                events -> {
-                    for (Map<String, Object> event : events) {
-                        String eventID = (String) event.get("eventID");
-                        profile.getWaitlistRejected().addWaitlist(eventID);
-                    }
-                    Log.d("EntrantHomeFragment", "Declined events updated successfully.");
-                },
-                error -> Log.e("EntrantHomeFragment", "Failed to fetch declined events", error));
-    }
-
     private void initializeEntrantProfile(String userID) {
         FirebaseConnector firebaseConnector = new FirebaseConnector();
 
@@ -165,7 +116,6 @@ public class EntrantHomeFragment extends Fragment {
                 },
                 error -> {
                     Log.e("EntrantHomeFragment", "Failed to fetch user info for EntrantProfile initialization", error);
-                    Toast.makeText(getContext(), "Failed to load user profile", Toast.LENGTH_SHORT).show();
                 }
         );
     }
