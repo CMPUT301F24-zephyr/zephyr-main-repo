@@ -1,0 +1,16 @@
+com.example.plannet
+com.example.plannet.ArrayAdapters
+com.example.plannet.Entrant
+com.example.plannet.Event
+com.example.plannet.Notification
+com.example.plannet.Organizer
+com.example.plannet.ui.adminhome
+com.example.plannet.ui.entranthome
+com.example.plannet.ui.entrantnotifications
+com.example.plannet.ui.entrantprofile
+com.example.plannet.ui.firsttimeuser
+com.example.plannet.ui.orgevents
+com.example.plannet.ui.orghome
+com.example.plannet.ui.orglottery
+com.example.plannet.ui.orgnotifications
+com.example.plannet.ui.orgprofile
