@@ -44,23 +44,14 @@ import org.junit.runner.RunWith;
 @LargeTest
 public class EntrantTest {
     @Rule
-    public ActivityScenarioRule<MainActivity> activityRule = new ActivityScenarioRule<>(MainActivity.class);
-    @Before
-    public void setUpPreferences() {
-        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        SharedPreferences sharedPreferences = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean("isFirstTime", false); //set first-time flag to false
-        editor.apply();
-    }
-
-    @After
-    public void clearPreferences() {
-        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        SharedPreferences sharedPreferences = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear(); //clear all preferences after each test
-        editor.apply();
+    public ActivityScenarioRule<MainActivity> activityRule = new ActivityScenarioRule<>(MainActivity.class);@Before
+    public void preSetup() {
+        // Handle notification permission popup
+        Espresso.onIdle();
+        UiDevice device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+        if (device.hasObject(By.text("Allow"))) {
+            device.findObject(By.text("Allow")).click();
+        }
     }
 
     @Test
