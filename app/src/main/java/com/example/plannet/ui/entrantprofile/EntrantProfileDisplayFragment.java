@@ -41,6 +41,7 @@ public class EntrantProfileDisplayFragment extends Fragment{
     private EntrantProfileViewModel entrantProfileViewModel;
     private String userID;
     private Uri selectedImageUri; // For the selected profile picture
+    private String profilePictureUrl = null;  // For saving currently existing profile picture
     private static final int PICK_IMAGE_REQUEST = 1001;
     private FusedLocationProviderClient fusedLocationClient;
     double latitude;
@@ -108,8 +109,7 @@ public class EntrantProfileDisplayFragment extends Fragment{
             binding.phoneEdit.setText((String) entrantInfo.get("phone"));
             binding.emailEdit.setText((String) entrantInfo.get("email"));
 
-
-            String profilePictureUrl = (String) entrantInfo.get("profilePictureUrl");
+            profilePictureUrl = (String) entrantInfo.get("profilePictureUrl");
             if (profilePictureUrl != null) {
                 // Use a library like Glide or Picasso to load the image
                 Glide.with(requireContext()).load(profilePictureUrl).into(binding.imageView11);
@@ -228,7 +228,7 @@ public class EntrantProfileDisplayFragment extends Fragment{
                     .addOnSuccessListener(taskSnapshot -> {
                         // Get the download URL and save it to the database
                         storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                            String profilePictureUrl = uri.toString();
+                            profilePictureUrl = uri.toString();
                             saveUserInfoToDatabase(firstName, lastName, phone, email, profilePictureUrl, latitude, longitude);
                         });
                     })
@@ -238,7 +238,7 @@ public class EntrantProfileDisplayFragment extends Fragment{
                     });
         } else {
             // Save user info without updating the profile picture
-            saveUserInfoToDatabase(firstName, lastName, phone, email, null, latitude, longitude);
+            saveUserInfoToDatabase(firstName, lastName, phone, email, profilePictureUrl, latitude, longitude);
         }
     }
 
