@@ -133,6 +133,7 @@ public class EntrantProfileDisplayFragment extends Fragment{
     private void defaultProfilePic(String username) {
         binding.removePfp.setVisibility(View.GONE);  // Cannot remove the default picture
         selectedImageUri = null;  // No image is selected, set this to null so default picture is not saved to firebase
+        profilePictureUrl = null;
 
         // Delete profile picture from firebase if it exists
         StorageReference ref = FirebaseStorage.getInstance().getReference("profile_pictures/" + username + ".jpg");
