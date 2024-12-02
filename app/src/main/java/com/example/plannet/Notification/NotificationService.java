@@ -19,11 +19,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * notification service that starts the service in the foreground for notification
+ * activity
+ */
 public class NotificationService extends Service {
-    /**
-     * notification service that starts the service in the foreground for notification
-     * activity
-     */
+
 
     private FirebaseFirestore db;
     private static final String CHANNEL_ID = "NotificationServiceChannel";

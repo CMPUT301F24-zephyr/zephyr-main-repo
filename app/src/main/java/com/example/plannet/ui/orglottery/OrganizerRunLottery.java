@@ -27,10 +27,11 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * this is where the organizer runs the lottery
+ */
 public class OrganizerRunLottery extends Fragment {
-    /**
-     * this is where the organizer runs the lottery
-     */
+
     private FragmentOrganizerRunLotteryBinding binding;
     private Event event = null;  // Default null for error catching
     private FirebaseConnector dbConnector = new FirebaseConnector();

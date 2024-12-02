@@ -13,10 +13,11 @@ import com.example.plannet.R;
 
 import java.util.ArrayList;
 
+/**
+ * Adapter for images (posters/avatars) to display in list dialog
+ */
 public class AdminImageListAdapter extends ArrayAdapter<String> {
-    /**
-     * Adapter for images (posters/avatars) to display in list dialog
-     */
+
     private Context context;
     private ArrayList<String> imageUrls;
 

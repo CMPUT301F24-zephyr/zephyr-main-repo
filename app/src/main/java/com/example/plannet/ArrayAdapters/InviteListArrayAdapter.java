@@ -15,6 +15,9 @@ import com.example.plannet.R;
 
 import java.util.ArrayList;
 
+/**
+ * adapter class for displaying invite list for users
+ */
 public class InviteListArrayAdapter extends ArrayAdapter<Invite> {
 
     /**

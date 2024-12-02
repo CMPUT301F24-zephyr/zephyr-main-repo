@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * lottery system class which selects entrants from a draw and sends notifications
+ */
 public class LotterySystem {
 
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();

@@ -12,10 +12,13 @@ import com.example.plannet.R;
 import java.util.ArrayList;
 import java.util.Map;
 
+/**
+ * Adapter class for displaying events in admin mode.
+ * This adapter takes a list of event names and maps them to their IDs.
+ * It inflates a custom layout to display the event details.
+ */
 public class AdminEventListAdapter extends ArrayAdapter<String> {
-    /**
-     * adapter class for displaying events in admin mode
-     */
+
     private final Context context;
     private final ArrayList<String> eventNames;
     private final Map<String, String> nameToIdMap;

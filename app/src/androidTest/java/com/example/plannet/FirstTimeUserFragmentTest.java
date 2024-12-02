@@ -18,6 +18,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+/**
+ * first time user fragment testing if userID is not in DB
+ */
 @RunWith(AndroidJUnit4.class)
 public class FirstTimeUserFragmentTest {
     @Rule

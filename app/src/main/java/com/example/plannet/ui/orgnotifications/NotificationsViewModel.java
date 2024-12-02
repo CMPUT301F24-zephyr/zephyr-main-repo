@@ -6,6 +6,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+/**
+ * NotificationsViewModel for transferring data such as userID
+ */
 public class NotificationsViewModel extends ViewModel {
 
     private final MutableLiveData<String> mText;

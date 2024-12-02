@@ -1,10 +1,11 @@
 package com.example.plannet.Notification;
 
 
+/**
+ * this class is for sending invitations to user notifs
+ */
 public class Invite {
-    /**
-     * this class is for sending invitations to user notifs
-     */
+
     private String id;// Unique identifier for the invite
     private String eventID; // ID of the  event
     private String eventTitle; // Title of the event
