@@ -26,6 +26,7 @@ import com.example.plannet.R;
 import com.example.plannet.databinding.EntrantProfileDisplayBinding;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.Priority;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -179,12 +180,12 @@ public class EntrantProfileDisplayFragment extends Fragment{
             return;
         }
 
-        fusedLocationClient.getLastLocation()
+        fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null)
                 .addOnSuccessListener(requireActivity(), location -> {
                     if (location != null) {
                         latitude = location.getLatitude();
                         longitude = location.getLongitude();
-                        Log.d("EntrantProfileFragment", "Latitude: " + latitude + ", Longitude: " + longitude);
+                        //Log.d("EntrantProfileFragment", "Latitude: " + latitude + ", Longitude: " + longitude);
                         Map<String, Object> userData = new HashMap<>();
                         userData.put("latitude", latitude);
                         userData.put("longitude", longitude);
