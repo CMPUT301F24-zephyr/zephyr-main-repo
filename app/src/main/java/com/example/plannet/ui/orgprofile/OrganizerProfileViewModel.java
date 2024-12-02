@@ -12,6 +12,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.Map;
 
+/**
+ * ViewModel to provide information such as if facilitydata exists or not
+ */
 public class OrganizerProfileViewModel extends ViewModel {
 
     private final MutableLiveData<Facility> facilityDetails = new MutableLiveData<>();

@@ -10,6 +10,9 @@ import com.google.firebase.firestore.SetOptions;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * related class to sending notifications to entrants in waitinglists/custom
+ */
 public class EntrantNotifications {
 
     private final FirebaseFirestore firebaseDB;

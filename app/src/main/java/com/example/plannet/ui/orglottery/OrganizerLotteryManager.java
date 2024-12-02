@@ -18,10 +18,11 @@ import com.example.plannet.FirebaseConnector;
 import com.example.plannet.R;
 import com.example.plannet.databinding.FragmentOrganizerLotteryManagerBinding;
 
+/**
+ * this is where the organizer chooses one of their events to run the lottery on
+ */
 public class OrganizerLotteryManager extends Fragment {
-    /**
-     * this is where the organizer chooses one of their events to run the lottery on
-     */
+
     private FragmentOrganizerLotteryManagerBinding binding;
     private FirebaseConnector dbConnector = new FirebaseConnector();
     @Override

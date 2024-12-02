@@ -46,14 +46,15 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 
+/**
+ * admin fragment with list dialogs to show the intended tasks
+ * Sources:
+ * https://javascript.plainenglish.io/introduction-to-firebase-storage-2-retrieve-delete-files-3875f11e6a89
+ * https://www.geeksforgeeks.org/custom-arrayadapter-with-listview-in-android/
+ * https://firebase.google.com/docs/storage/web/download-files
+ */
 public class AdminHomeFragment extends Fragment {
-    /**
-     * admin fragment with list dialogs to show the intended tasks
-     * Sources:
-     * https://javascript.plainenglish.io/introduction-to-firebase-storage-2-retrieve-delete-files-3875f11e6a89
-     * https://www.geeksforgeeks.org/custom-arrayadapter-with-listview-in-android/
-     * https://firebase.google.com/docs/storage/web/download-files
-     */
+
 
     private FragmentHomeAdminBinding binding;
 

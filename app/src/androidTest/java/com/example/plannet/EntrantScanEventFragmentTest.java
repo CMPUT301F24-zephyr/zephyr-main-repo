@@ -25,6 +25,9 @@ import org.mockito.Mockito;
 
 import java.util.Date;
 
+/**
+ * tests related to entrants scanning an event + details
+ */
 @RunWith(AndroidJUnit4.class)
 public class EntrantScanEventFragmentTest {
 

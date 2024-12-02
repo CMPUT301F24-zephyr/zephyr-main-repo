@@ -30,8 +30,6 @@ import java.util.Map;
  *  The fragment for event view details when user clicks on an event in their
  *  list
  */
-
-
 public class entrantViewEventFragment extends Fragment {
 
     private FirebaseConnector firebaseConnector;

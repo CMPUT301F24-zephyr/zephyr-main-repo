@@ -1,9 +1,10 @@
 package com.example.plannet.Event;
 
+/**
+ * all data related to events are in this class
+ */
 public class EventData {
-    /**
-     * all data related to events are in this class
-     */
+
     private String eventName;
     private String eventDescription;
     private String posterPath;

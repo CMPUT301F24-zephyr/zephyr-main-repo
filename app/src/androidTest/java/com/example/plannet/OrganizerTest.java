@@ -37,12 +37,13 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+/**
+ * testing organizer functionality exclusively
+ */
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class OrganizerTest {
-    /**
-     * testing organizer functionality exclusively
-     */
+
     @Rule
     public ActivityScenarioRule<MainActivity> activityRule = new ActivityScenarioRule<>(MainActivity.class);
 
